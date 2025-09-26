@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Recipe Finder + Nutrition Tracker — discover recipes by ingredient or diet, view nutrition, save favorites, plan meals, and generate shopping lists." />
+  <meta name="keywords" content="recipe finder, nutrition tracker, meal planner, shopping list, healthy recipes, Nigerian recipes" />
+  <meta name="author" content="Henry Osuagwu" />
+  <title>Recipe Finder + Nutrition Tracker</title>
+
+  <!-- Fonts + Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="images/favicon.png" >
+</head>
+<body>
+  <!-- SIDEBAR (hidden on mobile by default, toggled by hamburger) -->
+  <aside id="sidebar" class="sidebar" aria-hidden="true">
+    <div class="sidebar-top">
+      <div class="brand">
+        <svg class="brand-icon" width="36" height="36" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 2v7l7 7 7-7V2z" fill="currentColor"/>
+        </svg>
+        <div>
+          <h2>Recipe Finder</h2>
+          <small>+ Nutrition Tracker</small>
+        </div>
+      </div>
+      <button id="closeSidebar" class="icon-btn" aria-label="Close menu"><i data-lucide="x"></i></button>
+    </div>
+
+    <nav class="nav" aria-label="Primary">
+      <ul>
+        <li><a href="index.html"><i data-lucide="home"></i><span>Home</span></a></li>
+        <li><a href="recipes.html"><i data-lucide="book-open"></i><span>Recipes</span></a></li>
+        <li><a href="planner.html"><i data-lucide="calendar"></i><span>Planner</span></a></li>
+        <li><a href="shoppinglist.html"><i data-lucide="shopping-cart"></i><span>Shopping List</span></a></li>
+        <li><a href="about.html"><i data-lucide="info"></i><span>About</span></a></li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button id="logoutBtn" class="ghost">Sign out</button>
+    </div>
+  </aside>
+
+  <!-- PAGE -->
+  <div class="page">
+
+    <!-- HEADER -->
+    <header class="header">
+      <div class="left-controls">
+        <button id="openSidebar" class="hamburger" aria-label="Open menu"><i data-lucide="menu"></i></button>
+        <div class="logo" aria-hidden="true">
+          <i data-lucide="fork-knife" class="logo-icon"></i>
+          <div class="logo-text">
+            <strong>Recipe Finder</strong>
+            <span class="tagline">+ Nutrition Tracker</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-controls">
+        <button id="darkModeToggle" class="icon-btn" aria-pressed="false" aria-label="Toggle dark mode"><i data-lucide="moon"></i></button>
+        <button id="profileBtn" class="profile-btn" aria-label="Profile">
+          <i data-lucide="user"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="container">
+      <!-- Filters (mobile stacked, desktop left column) -->
+      <aside class="card filters" id="filtersCard" aria-labelledby="filtersHeading">
+        <h3 id="filtersHeading">Filters</h3>
+
+        <label for="searchInput" class="visually-hidden">Search recipes</label>
+        <div class="search-inline mobile-only">
+          <input id="searchInput" type="search" placeholder="Search recipes, e.g. jollof, chicken" autocomplete="off" />
+        </div>
+
+        <div class="field">
+          <label for="dietSelect">Diet Type</label>
+          <select id="dietSelect">
+            <option value="">Any</option>
+            <option value="vegan">Vegan</option>
+            <option value="vegetarian">Vegetarian</option>
+            <option value="keto">Keto</option>
+            <option value="gluten free">Gluten-Free</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="caloriesRange">Max calories: <span id="calLabel">800</span></label>
+          <input id="caloriesRange" type="range" min="100" max="1200" step="50" value="800" />
+        </div>
+
+        <div class="field">
+          <label for="cuisineInput">Cuisine</label>
+          <input id="cuisineInput" type="text" placeholder="e.g. Nigerian, Italian" />
+        </div>
+
+        <div class="quote-block">
+          <blockquote id="quoteText">Loading quote…</blockquote>
+          <div class="quote-controls">
+            <label for="quoteLang" class="small">Language</label>
+            <select id="quoteLang" aria-label="Quote language">
+              <option value="en">English</option>
+              <option value="yo">Yoruba</option>
+              <option value="ig">Igbo</option>
+              <option value="ha">Hausa</option>
+              <option value="ef">Efik/Ibibio</option>
+              <option value="tv">Tiv</option>
+            </select>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Recipes list (center column on desktop) -->
+      <section class="recipes" aria-labelledby="resultsHeading">
+        <div class="search-bar desktop-only">
+          <input id="searchInputDesktop" type="search" placeholder="Search recipes, ingredients or cuisine..." />
+        </div>
+
+        <div class="toolbar">
+          <div class="summary" id="resultSummary">Showing <span id="resultCount">0</span> recipes</div>
+          <div class="actions">
+            <button id="randomBtn" class="btn">Surprise Me</button>
+            <button id="favoritesToggle" class="btn ghost">Favorites</button>
+          </div>
+        </div>
+
+        <div id="recipeList" class="grid"></div>
+      </section>
+
+      <!-- Meal plan (right column on desktop) -->
+      <aside class="card meal-plan" aria-labelledby="plannerHeading">
+        <h3 id="plannerHeading">Meal Plan</h3>
+        <ul class="days">
+          <li>Monday <span class="slot" data-day="monday"></span></li>
+          <li>Tuesday <span class="slot" data-day="tuesday"></span></li>
+          <li>Wednesday <span class="slot" data-day="wednesday"></span></li>
+          <li>Thursday <span class="slot" data-day="thursday"></span></li>
+          <li>Friday <span class="slot" data-day="friday"></span></li>
+        </ul>
+        <div class="planner-actions">
+          <a href="planner.html" class="btn block">Open Planner</a>
+          <a id="shoppingListBtn" class="btn outline block" href="shoppinglist.html">Generate Shopping List</a>
+        </div>
+      </aside>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <p>© <span id="year"></span> Recipe Finder + Nutrition Tracker — Built with ❤️ by Henry Osuagwu</p>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/main.js" defer></script>
+  <script src="js/recipes.js" defer></script>
+  <script src="js/quotes.js" defer></script>
+
+  <script>
+    lucide.createIcons(); // render lucide icons
+  </script>
+</body>
+</html>
