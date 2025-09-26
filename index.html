@@ -16,11 +16,11 @@
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/responsive.css">
 
-  <!-- Favicon (placeholder) -->
+  <!-- Favicon -->
   <link rel="icon" href="images/favicon.png" >
 </head>
 <body>
-  <!-- SIDEBAR (hidden on mobile by default, toggled by hamburger) -->
+  <!-- SIDEBAR -->
   <aside id="sidebar" class="sidebar" aria-hidden="true">
     <div class="sidebar-top">
       <div class="brand">
@@ -74,9 +74,36 @@
       </div>
     </header>
 
+    <!-- HERO -->
+<section class="hero">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1><span class="highlight">Discover</span> Recipes. 
+        <br>Track <span class="highlight">Nutrition</span>. 
+        <br>Stay <span class="highlight">Healthy</span>.
+    </h1>
+    <p class="hero-sub">
+      From Nigerian classics to global favorites — plan your meals and eat smarter.
+    </p>
+
+    <!-- Search -->
+    <div class="hero-search">
+      <input type="search" placeholder="Search recipes, e.g. jollof, chicken..." />
+      <button><i data-lucide="search"></i> Search</button>
+    </div>
+
+    <!-- Extra CTAs -->
+    <div class="hero-cta">
+      <a href="recipes.html" class="btn">Browse Recipes</a>
+      <button id="randomHeroBtn" class="btn ghost">Surprise Me</button>
+    </div>
+  </div>
+</section>
+
+
     <!-- MAIN -->
     <main class="container">
-      <!-- Filters (mobile stacked, desktop left column) -->
+      <!-- Filters -->
       <aside class="card filters" id="filtersCard" aria-labelledby="filtersHeading">
         <h3 id="filtersHeading">Filters</h3>
 
@@ -87,13 +114,15 @@
 
         <div class="field">
           <label for="dietSelect">Diet Type</label>
-          <select id="dietSelect">
-            <option value="">Any</option>
-            <option value="vegan">Vegan</option>
-            <option value="vegetarian">Vegetarian</option>
-            <option value="keto">Keto</option>
-            <option value="gluten free">Gluten-Free</option>
-          </select>
+          <div class="select-wrapper">
+            <select id="dietSelect">
+              <option value="">Any</option>
+              <option value="vegan">Vegan</option>
+              <option value="vegetarian">Vegetarian</option>
+              <option value="keto">Keto</option>
+              <option value="gluten free">Gluten-Free</option>
+            </select>
+          </div>
         </div>
 
         <div class="field">
@@ -110,36 +139,70 @@
           <blockquote id="quoteText">Loading quote…</blockquote>
           <div class="quote-controls">
             <label for="quoteLang" class="small">Language</label>
-            <select id="quoteLang" aria-label="Quote language">
-              <option value="en">English</option>
-              <option value="yo">Yoruba</option>
-              <option value="ig">Igbo</option>
-              <option value="ha">Hausa</option>
-              <option value="ef">Efik/Ibibio</option>
-              <option value="tv">Tiv</option>
-            </select>
+            <div class="select-wrapper">
+              <select id="quoteLang" aria-label="Quote language">
+                <option value="en">English</option>
+                <option value="yo">Yoruba</option>
+                <option value="ig">Igbo</option>
+                <option value="ha">Hausa</option>
+                <option value="ef">Efik/Ibibio</option>
+                <option value="tv">Tiv</option>
+              </select>
+            </div>
           </div>
         </div>
       </aside>
 
-      <!-- Recipes list (center column on desktop) -->
+      <!-- Recipes -->
       <section class="recipes" aria-labelledby="resultsHeading">
         <div class="search-bar desktop-only">
           <input id="searchInputDesktop" type="search" placeholder="Search recipes, ingredients or cuisine..." />
         </div>
 
         <div class="toolbar">
-          <div class="summary" id="resultSummary">Showing <span id="resultCount">0</span> recipes</div>
+          <div class="summary" id="resultSummary">Showing <span id="resultCount">6</span> recipes</div>
           <div class="actions">
             <button id="randomBtn" class="btn">Surprise Me</button>
             <button id="favoritesToggle" class="btn ghost">Favorites</button>
           </div>
         </div>
 
-        <div id="recipeList" class="grid"></div>
+        <div id="recipeList" class="grid">
+
+          <!-- Example Recipe Card -->
+          <article class="recipe-card">
+            <div class="card-image">
+              <img src="images/jollof-rice.jpg" alt="Nigerian Jollof Rice">
+              <div class="overlay">
+                <button class="btn small">View Recipe</button>
+              </div>
+            </div>
+            <div class="card-body">
+              <h4 class="recipe-title">Nigerian Jollof Rice</h4>
+              <div class="recipe-meta">
+                <span class="badge"><i data-lucide="flame"></i> 550 cal</span>
+                <span class="badge"><i data-lucide="clock"></i> 45 mins</span>
+              </div>
+              <div class="stars">
+                <i data-lucide="star" class="active"></i>
+                <i data-lucide="star" class="active"></i>
+                <i data-lucide="star" class="active"></i>
+                <i data-lucide="star"></i>
+                <i data-lucide="star"></i>
+              </div>
+              <div class="recipe-actions">
+                <button class="btn outline block">Save</button>
+                <button class="btn block">Add to Planner</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Repeat more recipe-card blocks for other dishes -->
+
+        </div>
       </section>
 
-      <!-- Meal plan (right column on desktop) -->
+      <!-- Meal Plan -->
       <aside class="card meal-plan" aria-labelledby="plannerHeading">
         <h3 id="plannerHeading">Meal Plan</h3>
         <ul class="days">
@@ -158,8 +221,16 @@
 
     <!-- FOOTER -->
     <footer class="footer">
-      <p>© <span id="year"></span> Recipe Finder + Nutrition Tracker — Built with ❤️ by Henry Osuagwu</p>
+      <div class="footer-content">
+        <i data-lucide="fork-knife" class="footer-icon"></i>
+        <p>
+          © <span id="year"></span> Recipe Finder + Nutrition Tracker — All rights reserved. <br>
+          Built with ❤️ by Henry Osuagwu
+        </p>
+      </div>
+      <small id="lastModified"></small>
     </footer>
+
   </div>
 
   <!-- Scripts -->
@@ -168,7 +239,7 @@
   <script src="js/quotes.js" defer></script>
 
   <script>
-    lucide.createIcons(); // render lucide icons
+    lucide.createIcons();
   </script>
 </body>
 </html>

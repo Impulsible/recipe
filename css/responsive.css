@@ -1,0 +1,27 @@
+@media (min-width:768px){
+  .container{
+    grid-template-columns: 300px 1fr 300px;
+    align-items:start;
+    padding:1.2rem 1.5rem;
+  }
+
+  .search-inline.mobile-only{display:none}
+  .search-bar.desktop-only{display:block}
+  .search-bar.desktop-only input{padding:0.75rem 1rem;border-radius:14px}
+
+  .recipes .grid{
+    grid-template-columns: repeat(2, 1fr);
+    gap:1rem;
+  }
+
+  .header{padding:1rem 1.6rem}
+
+  .sidebar{display:block}
+  .sidebar.open{transform:translateX(0)}
+}
+
+@media (min-width:1100px){
+  .recipes .grid{
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
