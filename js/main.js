@@ -173,331 +173,175 @@ darkModeBtn?.addEventListener("click", () => {
   // ===== Lucide Icons Init =====
   if (window.lucide) lucide.createIcons();
 });
-// DOM Elements
-const categoryFilter = document.getElementById('categoryFilter');
-const dietFilter = document.getElementById('dietFilter');
-const applyBtn = document.getElementById('applyFilters');
-const clearBtn = document.getElementById('clearFilters');
-const searchInput = document.getElementById('searchInput');
 
-// Function: Apply filters
-function applyFilters() {
-  const category = categoryFilter.value;
-  const diet = dietFilter.value;
-  const search = searchInput.value.trim().toLowerCase();
+document.addEventListener("DOMContentLoaded", () => {
+  const categoryFilter = document.getElementById("categoryFilter");
+  const dietFilter = document.getElementById("dietFilter");
+  const applyBtn = document.getElementById("applyFilters");
+  const clearBtn = document.getElementById("clearFilters");
+  const recipeCards = document.querySelectorAll(".recipe-card");
 
-  alert(`Filters Applied:\nCategory: ${category || 'All'}\nDiet: ${diet || 'All'}\nSearch: ${search || 'None'}`);
+  // Function to filter cards based on dropdowns
+  function filterRecipes() {
+    const selectedCategory = categoryFilter.value;
+    const selectedDiet = dietFilter.value;
 
-  // TODO: Filter your recipes/cards dynamically here
-  // Example: filterRecipes({ category, diet, search });
-}
+    recipeCards.forEach(card => {
+      const cardCategory = card.dataset.category;
+      const cardDiet = card.dataset.diet;
 
-// Function: Clear filters
-function clearFilters() {
-  categoryFilter.value = '';
-  dietFilter.value = '';
-  searchInput.value = '';
+      // Show card if it matches both filters or if filter is empty
+      if ((selectedCategory === "" || cardCategory === selectedCategory) &&
+          (selectedDiet === "" || cardDiet === selectedDiet)) {
+        card.style.display = "block";
+      } else {
+        card.style.display = "none";
+      }
+    });
+  }
 
-  alert('Filters Cleared!');
-  // TODO: Reset your recipe/cards display here
-  // Example: showAllRecipes();
-}
+  // Apply button click
+  applyBtn?.addEventListener("click", filterRecipes);
 
-// Event listeners
-applyBtn.addEventListener('click', applyFilters);
-clearBtn.addEventListener('click', clearFilters);
+  // Clear button click
+  clearBtn?.addEventListener("click", () => {
+    categoryFilter.value = "";
+    dietFilter.value = "";
+    recipeCards.forEach(card => card.style.display = "block");
+  });
 
-// Mobile search: Enter key triggers Apply
-searchInput.addEventListener('keypress', e => {
-  if (e.key === 'Enter') applyFilters();
+  // Optional: Live filtering as user changes dropdowns
+  categoryFilter?.addEventListener("change", filterRecipes);
+  dietFilter?.addEventListener("change", filterRecipes);
 });
 
+const toggleBtn = document.getElementById('toggleFilters');
+const closeBtn = document.getElementById('closeFilters');
+const drawer = document.getElementById('filtersCard');
+const overlay = document.getElementById('drawerOverlay');
+const calRange = document.getElementById('caloriesRange');
+const calLabel = document.getElementById('calLabel');
 
-// ---------- CONSTANTS ----------
-const MEALDB_BASE = 'https://www.themealdb.com/api/json/v1/1';
-const EDAMAM_API = 'https://api.edamam.com/api/nutrition-data';
-const EDAMAM_APP_ID = 'YOUR_EDAMAM_APP_ID';
-const EDAMAM_APP_KEY = 'YOUR_EDAMAM_APP_KEY';
-const RATINGS_KEY = 'recipeRatings';
+// Toggle Drawer
+toggleBtn.addEventListener('click', () => {
+  drawer.classList.toggle('hidden');
+  overlay.classList.toggle('hidden');
+  toggleBtn.setAttribute('aria-expanded', !drawer.classList.contains('hidden'));
+});
 
-let recipes = [];
-let mealPlan = JSON.parse(localStorage.getItem('mealPlan')) || {};
+closeBtn.addEventListener('click', () => {
+  drawer.classList.add('hidden');
+  overlay.classList.add('hidden');
+  toggleBtn.setAttribute('aria-expanded', false);
+});
 
-// ---------- DOM ELEMENTS ----------
-const recipeList = document.getElementById('recipeList');
-const modalBody = document.getElementById('modalBody');
-const recipeModal = document.getElementById('recipeModal');
-const modalClose = document.getElementById('modalClose');
-// const searchInput = document.getElementById('searchInput'); // Removed duplicate declaration
-const searchBtn = document.getElementById('searchBtn');
-const randomBtn = document.getElementById('randomBtnToolbar');
-const favoritesBtn = document.getElementById('favoritesToggle');
-const slots = document.querySelectorAll('.meal-plan .slot');
+overlay.addEventListener('click', () => {
+  drawer.classList.add('hidden');
+  overlay.classList.add('hidden');
+  toggleBtn.setAttribute('aria-expanded', false);
+});
 
-// ---------- FETCH RECIPES ----------
-async function fetchRecipes(search = 'chicken') {
-  try {
-    const res = await fetch(`${MEALDB_BASE}/search.php?s=${search}`);
-    const data = await res.json();
-    if (!data.meals) return;
-    recipes = data.meals.map(meal => ({
-      id: meal.idMeal,
-      title: meal.strMeal,
-      description: meal.strCategory + ' | ' + meal.strArea,
-      img: meal.strMealThumb,
-      ingredients: getIngredients(meal),
-      instructions: meal.strInstructions.split(/\r?\n/),
-      favorite: false
-    }));
-    renderRecipes(recipes);
-  } catch (err) {
-    console.error('Error fetching recipes:', err);
+// Update calories label
+calRange.addEventListener('input', () => {
+  calLabel.textContent = calRange.value;
+});
+
+// Make drawer draggable via header only
+let isDragging = false;
+let offsetX = 0;
+let offsetY = 0;
+const header = document.getElementById('drawerHeader');
+
+header.addEventListener('mousedown', dragStart);
+header.addEventListener('touchstart', dragStart, { passive: false });
+
+function dragStart(e) {
+  // Prevent dragging when interacting with inputs inside header (if any)
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'BUTTON') return;
+
+  isDragging = true;
+  const rect = drawer.getBoundingClientRect();
+
+  if(e.type === 'mousedown') {
+    offsetX = e.clientX - rect.left;
+    offsetY = e.clientY - rect.top;
+    document.addEventListener('mousemove', dragMove);
+    document.addEventListener('mouseup', dragEnd);
+  } else {
+    offsetX = e.touches[0].clientX - rect.left;
+    offsetY = e.touches[0].clientY - rect.top;
+    document.addEventListener('touchmove', dragMove, { passive: false });
+    document.addEventListener('touchend', dragEnd);
   }
 }
 
-// ---------- EXTRACT INGREDIENTS ----------
-function getIngredients(meal) {
-  const ingredients = [];
-  for (let i=1; i<=20; i++) {
-    const ing = meal[`strIngredient${i}`];
-    const meas = meal[`strMeasure${i}`];
-    if (ing && ing.trim() !== '') ingredients.push(`${meas.trim()} ${ing.trim()}`);
-  }
-  return ingredients;
+function dragMove(e) {
+  if(!isDragging) return;
+  e.preventDefault(); // Only block default while dragging
+  let x = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+  let y = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+  drawer.style.left = `${x - offsetX}px`;
+  drawer.style.top = `${y - offsetY}px`;
 }
 
-// ---------- RENDER RECIPES ----------
-function renderRecipes(list) {
-  recipeList.innerHTML = '';
-  document.getElementById('resultCount').textContent = list.length;
-  document.getElementById('resultCountSummary').textContent = list.length;
+// Meal Plan JS
+const days = ['monday','tuesday','wednesday','thursday','friday'];
+const savedMeals = JSON.parse(localStorage.getItem('mealPlan') || '{}');
 
-  if (list.length === recipes.length) favoritesBtn.classList.remove('active');
-
-  list.forEach(recipe => {
-    const card = document.createElement('div');
-    card.className = 'recipe-card';
-    card.draggable = true;
-    card.dataset.id = recipe.id;
-    card.innerHTML = `
-      <img src="${recipe.img}" alt="${recipe.title}">
-      <div class="recipe-info">
-        <h3>${recipe.title}</h3>
-        <p>${recipe.description}</p>
-        <button class="add-btn" data-id="${recipe.id}">${recipe.favorite ? '❤️ Added' : '➕ Add'}</button>
-      </div>
-    `;
-    recipeList.appendChild(card);
-
-    // Open modal
-    card.querySelector('img').addEventListener('click', ()=>openModal(recipe));
-    card.querySelector('h3').addEventListener('click', ()=>openModal(recipe));
-
-    // Toggle favorite
-    card.querySelector('.add-btn').addEventListener('click', e=>{
-      e.stopPropagation();
-      recipe.favorite = !recipe.favorite;
-      renderRecipes(list);
-    });
-
-    // Drag events
-    card.addEventListener('dragstart', e=>{
-      e.dataTransfer.setData('text/plain', recipe.id);
-      e.dataTransfer.effectAllowed = 'copy';
-    });
+// Update buttons
+function updateButtons(){
+  document.querySelectorAll('.day-btn').forEach(btn=>{
+    const day = btn.dataset.day;
+    btn.textContent = day.charAt(0).toUpperCase() + day.slice(1);
+    if(savedMeals[day]) btn.textContent += `: ${savedMeals[day]}`;
   });
 }
 
-// ---------- FETCH NUTRITION ----------
-async function fetchNutritionFromIngredients(ingredientsArray) {
-  if (!ingredientsArray || ingredientsArray.length === 0) return null;
-  const ingrQuery = ingredientsArray.map(i=>encodeURIComponent(i)).join('&ingr=');
-  const url = `${EDAMAM_API}?app_id=${EDAMAM_APP_ID}&app_key=${EDAMAM_APP_KEY}&ingr=${ingrQuery}`;
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('Nutrition API error');
-    return await res.json();
-  } catch (err) {
-    console.error(err);
-    return null;
-  }
-}
-
-// ---------- MODAL ----------
-async function openModal(recipe) {
-  const savedRatings = JSON.parse(localStorage.getItem(RATINGS_KEY)) || {};
-  const rating = savedRatings[recipe.id] || 0;
-
-  const nutrition = await fetchNutritionFromIngredients(recipe.ingredients);
-
-  let nutritionHTML = '';
-  if (nutrition && nutrition.totalWeight) {
-    nutritionHTML = `
-      <ul>
-        <li>Calories: ${Math.round(nutrition.calories)}</li>
-        <li>Fat: ${Math.round(nutrition.totalNutrients.FAT?.quantity || 0)}g</li>
-        <li>Carbs: ${Math.round(nutrition.totalNutrients.CHOCDF?.quantity || 0)}g</li>
-        <li>Protein: ${Math.round(nutrition.totalNutrients.PROCNT?.quantity || 0)}g</li>
-      </ul>
-    `;
-  } else nutritionHTML = '<p>Nutrition info not available.</p>';
-
-  modalBody.innerHTML = `
-    <h2>${recipe.title}</h2>
-    <img src="${recipe.img}" alt="${recipe.title}">
-    <section><strong>Ingredients:</strong><ul>${recipe.ingredients.map(i=>`<li>${i}</li>`).join('')}</ul></section>
-    <section><strong>Nutrition Facts:</strong>${nutritionHTML}</section>
-    <section><strong>Instructions:</strong><ol>${recipe.instructions.map(i=>`<li>${i}</li>`).join('')}</ol></section>
-    <section><strong>Rating:</strong>
-      <div class="rating" data-id="${recipe.id}">
-        ${[1,2,3,4,5].map(n=>`<span class="star" data-value="${n}">${n<=rating?'★':'☆'}</span>`).join('')}
-      </div>
-    </section>
-  `;
-
-  modalBody.querySelectorAll('.star').forEach(star=>{
-    star.addEventListener('click', ()=>{
-      const value = star.dataset.value;
-      const id = star.parentElement.dataset.id;
-      const saved = JSON.parse(localStorage.getItem(RATINGS_KEY)) || {};
-      saved[id] = value;
-      localStorage.setItem(RATINGS_KEY, JSON.stringify(saved));
-      openModal(recipe);
-    });
-  });
-
-  recipeModal.classList.remove('hidden');
-}
-
-// Close modal
-modalClose.addEventListener('click', ()=>recipeModal.classList.add('hidden'));
-
-// ---------- SEARCH ----------
-function filterRecipes(query) {
-  query = query.toLowerCase().trim();
-  if (!query) return recipes;
-  return recipes.filter(r =>
-    r.title.toLowerCase().includes(query) ||
-    r.description.toLowerCase().includes(query)
-  );
-}
-
-searchBtn.addEventListener('click', ()=>renderRecipes(filterRecipes(searchInput.value)));
-searchInput.addEventListener('keyup', e=>{
-  if (e.key === 'Enter') renderRecipes(filterRecipes(searchInput.value));
-});
-
-// ---------- TOOLBAR ----------
-randomBtn.addEventListener('click', ()=>{
-  if (!recipes || recipes.length === 0) return;
-  const randomIndex = Math.floor(Math.random() * recipes.length);
-  openModal(recipes[randomIndex]);
-});
-
-favoritesBtn.addEventListener('click', ()=>{
-  const showingFavorites = favoritesBtn.classList.toggle('active');
-  let listToShow = recipes;
-  if (searchInput.value.trim() !== '') listToShow = filterRecipes(searchInput.value);
-  renderRecipes(showingFavorites ? listToShow.filter(r=>r.favorite) : listToShow);
-});
-
-// ---------- MEAL PLAN DRAG & DROP ----------
-slots.forEach(slot=>{
-  // Load saved
-  slot.textContent = mealPlan[slot.dataset.day] || '';
-
-  slot.addEventListener('dragover', e=>{
-    e.preventDefault();
-    slot.parentElement.classList.add('dragover');
-  });
-
-  slot.addEventListener('dragleave', e=>{
-    slot.parentElement.classList.remove('dragover');
-  });
-
-  slot.addEventListener('drop', e=>{
-    e.preventDefault();
-    slot.parentElement.classList.remove('dragover');
-    const recipeId = e.dataTransfer.getData('text/plain');
-    const recipe = recipes.find(r => r.id === recipeId);
-    if (recipe) {
-      slot.textContent = recipe.title;
-      mealPlan[slot.dataset.day] = recipe.title;
-      localStorage.setItem('mealPlan', JSON.stringify(mealPlan));
+// Day buttons click
+document.querySelectorAll('.day-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const day = btn.dataset.day;
+    const meal = prompt(`Enter your meal for ${day}:`, savedMeals[day] || '');
+    if(meal !== null){
+      savedMeals[day] = meal.trim();
+      localStorage.setItem('mealPlan', JSON.stringify(savedMeals));
+      updateButtons();
     }
   });
 });
 
-// ---------- INITIALIZE ----------
-fetchRecipes();
-document.getElementById('year').textContent = new Date().getFullYear();
-document.getElementById('lastModified').textContent = `Last Modified: ${document.lastModified}`;
+// Open Planner Modal
+const openPlannerBtn = document.getElementById('openPlannerBtn');
+const plannerModal = document.getElementById('plannerModal');
+const plannerList = document.getElementById('plannerList');
+const closePlanner = document.getElementById('closePlanner');
 
-const quoteText = document.getElementById('quoteText');
-const quoteLang = document.getElementById('quoteLang');
-const newQuoteBtn = document.getElementById('newQuoteBtn');
+openPlannerBtn.addEventListener('click', ()=>{
+  plannerList.innerHTML = '';
+  days.forEach(day=>{
+    const li = document.createElement('li');
+    li.textContent = `${day.charAt(0).toUpperCase() + day.slice(1)}: ${savedMeals[day] || '-'}`;
+    plannerList.appendChild(li);
+  });
+  plannerModal.classList.remove('hidden');
+});
 
-// Quotes in multiple languages
-const quotes = {
-  en: [
-    "The only way to do great work is to love what you do.",
-    "Life is 10% what happens to us and 90% how we react to it.",
-    "Happiness is not something ready made. It comes from your own actions."
-  ],
-  yo: [
-    "Ọ̀nà kan ṣoṣo lati ṣe iṣẹ nla ni lati fẹran ohun ti o ṣe.",
-    "Ìgbésí ayé jẹ́ 10% ohun tó ṣẹlẹ̀ sí wa àti 90% bí a ṣe ń fesi sí i.",
-    "Ayọ̀ kì í ṣe ohun tí a ti ṣètò; ó wá láti iṣẹ́ wa."
-  ],
-  ig: [
-    "Ụzọ naanị iji mee nnukwu ọrụ bụ ịhụ ọrụ gị n'anya.",
-    "Ndụ bụ pasentị 10 ihe na-eme anyị na pasentị 90 otú anyị si emetụta ya.",
-    "Ọṅụ abụghị ihe e kere eke; ọ si na omume anyị."
-  ],
-  ha: [
-    "Hanya guda ɗaya don yin babban aiki shine ka so abin da kake yi.",
-    "Rayuwa 10% abin da ke faruwa mana ne, 90% yadda muke mayar da martani.",
-    "Farinciki ba abu ne da aka riga aka shirya ba, yana fitowa daga ayyukan mu."
-  ],
-  ef: [
-    "Uforo ke esie emi ifiok ke idem mme idiok ifiok.",
-    "Idem mme ufok ke 10% etiok adia emi, 90% ke ufok idem ete.",
-    "Idim mmo ke idem mme idiok ifiok, enye ufok ikot ami."
-  ],
-  tv: [
-    "Se ior u tar ikyase a tar ayim kpishi eren.",
-    "Tsende i tar 10% eren, 90% i tar kwagh.",
-    "Ayor u tar eren u tar veen tar tiv."
-  ]
-};
+closePlanner.addEventListener('click', ()=>plannerModal.classList.add('hidden'));
+plannerModal.addEventListener('click', e=>{
+  if(e.target === plannerModal) plannerModal.classList.add('hidden');
+});
 
-// Pick random quote
-function getRandomQuote(lang = 'en') {
-  const list = quotes[lang] || quotes['en'];
-  const randomIndex = Math.floor(Math.random() * list.length);
-  return list[randomIndex];
-}
+// Shopping List
+const shoppingBtn = document.getElementById('shoppingListBtn');
+shoppingBtn.addEventListener('click', ()=>{
+  const meals = Object.values(savedMeals).filter(m=>m);
+  if(meals.length === 0){
+    alert("No meals added yet.");
+    return;
+  }
+  alert("Shopping List:\n" + meals.join('\n'));
+});
 
-// Render quote with fade animation
-function renderQuote() {
-  const lang = quoteLang.value;
-  quoteText.classList.add('fade-out');
-
-  setTimeout(() => {
-    quoteText.textContent = getRandomQuote(lang);
-    quoteText.classList.remove('fade-out');
-    quoteText.classList.add('fade-in');
-
-    setTimeout(() => {
-      quoteText.classList.remove('fade-in');
-    }, 500);
-  }, 300);
-}
-
-// Event listeners
-quoteLang.addEventListener('change', renderQuote);
-newQuoteBtn.addEventListener('click', renderQuote);
-
-// Initial load
-renderQuote();
+// Initialize
+updateButtons();
 

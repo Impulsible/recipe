@@ -20,7 +20,7 @@
   <script src="https://unpkg.com/lucide@latest" defer></script>
 
   <!-- STYLES -->
-  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/styles.css">
 
   <!-- FAVICON -->
   <link rel="icon" href="images/favicon.png">
@@ -168,16 +168,25 @@
     <a href="about.html"><i data-lucide="info"></i><span>About</span></a>
   </nav>
 
-      <section class="filters-wrapper">
-  <aside class="card filters" id="filtersCard" aria-labelledby="filtersHeading">
-    <h3 id="filtersHeading" class="filters-title">
-      <i data-lucide="sliders"></i> Filters
-    </h3>
+    <section class="filters-wrapper">
+  <!-- Toggle Button -->
+  <button id="toggleFilters" class="btn primary drawer-toggle" aria-expanded="false">
+    <i data-lucide="sliders"></i> Filters
+  </button>
+
+  <!-- Filter Drawer -->
+  <aside class="card filters-drawer hidden" id="filtersCard" aria-labelledby="filtersHeading">
+    <div class="drawer-header">
+      <h3 id="filtersHeading" class="filters-title">
+        <i data-lucide="sliders"></i> Filters
+      </h3>
+      <button id="closeFilters" class="btn-close" aria-label="Close Filters">&times;</button>
+    </div>
 
     <!-- Search -->
     <div class="field">
       <label for="searchInput">Search Recipes</label>
-      <input id="searchInput" type="search" placeholder="e.g. Jollof, Pasta...">
+      <input id="searchInput" type="search" placeholder="e.g. Jollof, Pasta..." aria-label="Search recipes">
     </div>
 
     <!-- Category -->
@@ -186,6 +195,9 @@
       <div class="select-wrapper">
         <select id="filterCategory">
           <option value="">All Categories</option>
+          <option value="breakfast">Breakfast</option>
+          <option value="lunch">Lunch</option>
+          <option value="dinner">Dinner</option>
         </select>
       </div>
     </div>
@@ -196,11 +208,14 @@
       <div class="select-wrapper">
         <select id="filterArea">
           <option value="">All Areas</option>
+          <option value="nigerian">Nigerian</option>
+          <option value="italian">Italian</option>
+          <option value="chinese">Chinese</option>
         </select>
       </div>
     </div>
 
-    <!-- Diet (local filter only) -->
+    <!-- Diet -->
     <div class="field">
       <label for="dietSelect">Diet</label>
       <div class="select-wrapper">
@@ -226,7 +241,12 @@
       <button id="clearFilters" class="btn outline">Clear</button>
     </div>
   </aside>
+
+  <!-- Overlay -->
+  <div id="drawerOverlay" class="drawer-overlay hidden"></div>
 </section>
+
+
 
        <div class="quote-block">
   <blockquote id="quoteText">Loading quote…</blockquote>
@@ -245,7 +265,6 @@
     <button id="newQuoteBtn" class="btn">🎲 New Quote</button>
   </div>
 </div>
-
 
         <!-- Actions -->
         <div class="filters-actions">
@@ -278,24 +297,33 @@
   <aside class="meal-plan card" aria-labelledby="plannerHeading">
     <h3 id="plannerHeading">Meal Plan</h3>
     <ul class="days">
-      <li>Monday <span class="slot" data-day="monday"></span></li>
-      <li>Tuesday <span class="slot" data-day="tuesday"></span></li>
-      <li>Wednesday <span class="slot" data-day="wednesday"></span></li>
-      <li>Thursday <span class="slot" data-day="thursday"></span></li>
-      <li>Friday <span class="slot" data-day="friday"></span></li>
-    </ul>
-    <div class="planner-actions">
-      <button id="openPlannerBtn" class="btn block">Open Planner</button>
-      <button id="shoppingListBtn" class="btn outline block">Generate Shopping List</button>
-    </div>
-  </aside>
+      <li><button class="day-btn" data-day="monday">Monday</button></li>
+      <li><button class="day-btn" data-day="tuesday">Tuesday</button></li>
+    <li><button class="day-btn" data-day="wednesday">Wednesday</button></li>
+    <li><button class="day-btn" data-day="thursday">Thursday</button></li>
+    <li><button class="day-btn" data-day="friday">Friday</button></li>
+  </ul>
+  <div class="planner-actions">
+    <button id="openPlannerBtn" class="btn block">Open Planner</button>
+    <button id="shoppingListBtn" class="btn outline block">Generate Shopping List</button>
+  </div>
+</aside>
+
+<!-- Planner Modal -->
+<div id="plannerModal" class="planner-modal hidden">
+  <div class="planner-content">
+    <button id="closePlanner" class="close-btn">&times;</button>
+    <h3>Your Meal Plan</h3>
+    <ul id="plannerList"></ul>
+  </div>
+</div>
 
 </main>
 
 <!-- Modal -->
-<div id="recipeModal" class="modal hidden" role="dialog" aria-modal="true">
+<div id="recipeModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalBody">
   <div class="modal-content">
-    <button id="modalClose" class="modal-close" aria-label="Close">&times;</button>
+    <button id="modalClose" class="modal-close">&times;</button>
     <div id="modalBody"></div>
   </div>
 </div>
@@ -319,5 +347,7 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => lucide.createIcons());
   </script>
+
+  
 </body>
 </html>
