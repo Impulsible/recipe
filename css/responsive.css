@@ -414,17 +414,45 @@ a {
 .hero-picture {
   display: block;
   width: 100%;
-  /* Fixed rectangular aspect ratio, e.g., 16:7 */
-  aspect-ratio: 16 / 7; 
   overflow: hidden;
   border-radius: 0.5rem; /* optional rounded corners */
 }
 
+/* Desktop: wide rectangle */
+@media (min-width: 1025px) {
+  .hero-picture {
+    aspect-ratio: 16 / 7; /* wide crop */
+  }
+  .hero-img {
+    object-position: center center; /* adjust focal point */
+  }
+}
+
+/* Tablet: medium rectangle */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .hero-picture {
+    aspect-ratio: 4 / 3; /* medium crop */
+  }
+  .hero-img {
+    object-position: center 40%; /* shift crop slightly if needed */
+  }
+}
+
+/* Mobile: vertical rectangle */
+@media (max-width: 600px) {
+  .hero-picture {
+    aspect-ratio: 3 / 4; /* tighter vertical crop */
+  }
+  .hero-img {
+    object-position: center 30%; /* adjust for mobile focus */
+  }
+}
+
+/* Image styling */
 .hero-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;      /* ensures the image fills the container without distortion */
-  object-position: center; /* center the crop, can adjust for “art-directed” focus */
+  object-fit: cover;
   display: block;
 }
 
