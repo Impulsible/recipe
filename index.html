@@ -1,245 +1,323 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- META -->
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="Recipe Finder + Nutrition Tracker — discover recipes by ingredient or diet, view nutrition, save favorites, plan meals, and generate shopping lists." />
-  <meta name="keywords" content="recipe finder, nutrition tracker, meal planner, shopping list, healthy recipes, Nigerian recipes" />
-  <meta name="author" content="Henry Osuagwu" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Recipe Finder + Nutrition Tracker — discover recipes by ingredient or diet, view nutrition facts, save favorites, plan meals, and generate shopping lists.">
+  <meta name="keywords" content="recipe finder, nutrition tracker, meal planner, shopping list, healthy recipes, Nigerian recipes, food app">
+  <meta name="author" content="Henry Osuagwu">
+
+  <!-- TITLE -->
   <title>Recipe Finder + Nutrition Tracker</title>
 
-  <!-- Fonts + Icons -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- PERFORMANCE -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="css/styles.css">
+  <!-- FONTS + ICONS -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest" defer></script>
+
+  <!-- STYLES -->
   <link rel="stylesheet" href="css/responsive.css">
 
-  <!-- Favicon -->
-  <link rel="icon" href="images/favicon.png" >
+  <!-- FAVICON -->
+  <link rel="icon" href="images/favicon.png">
+
+  <!-- SOCIAL META -->
+  <meta property="og:title" content="Recipe Finder + Nutrition Tracker">
+  <meta property="og:description" content="Discover recipes, track nutrition, save favorites, and plan healthy meals.">
+  <meta property="og:image" content="images/preview.png">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://yourwebsite.com/">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#ffcc00">
 </head>
 <body>
-  <!-- SIDEBAR -->
-  <aside id="sidebar" class="sidebar" aria-hidden="true">
-    <div class="sidebar-top">
-      <div class="brand">
-        <svg class="brand-icon" width="36" height="36" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M3 2v7l7 7 7-7V2z" fill="currentColor"/>
-        </svg>
-        <div>
-          <h2>Recipe Finder</h2>
-          <small>+ Nutrition Tracker</small>
-        </div>
-      </div>
-      <button id="closeSidebar" class="icon-btn" aria-label="Close menu"><i data-lucide="x"></i></button>
-    </div>
+  
+   
+  <!-- ================= HEADER ================= -->
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
 
-    <nav class="nav" aria-label="Primary">
-      <ul>
-        <li><a href="index.html"><i data-lucide="home"></i><span>Home</span></a></li>
-        <li><a href="recipes.html"><i data-lucide="book-open"></i><span>Recipes</span></a></li>
-        <li><a href="planner.html"><i data-lucide="calendar"></i><span>Planner</span></a></li>
-        <li><a href="shoppinglist.html"><i data-lucide="shopping-cart"></i><span>Shopping List</span></a></li>
-        <li><a href="about.html"><i data-lucide="info"></i><span>About</span></a></li>
-      </ul>
-    </nav>
-
-    <div class="sidebar-footer">
-      <button id="logoutBtn" class="ghost">Sign out</button>
-    </div>
-  </aside>
-
-  <!-- PAGE -->
-  <div class="page">
-
-    <!-- HEADER -->
-    <header class="header">
-      <div class="left-controls">
-        <button id="openSidebar" class="hamburger" aria-label="Open menu"><i data-lucide="menu"></i></button>
-        <div class="logo" aria-hidden="true">
-          <i data-lucide="fork-knife" class="logo-icon"></i>
-          <div class="logo-text">
-            <strong>Recipe Finder</strong>
-            <span class="tagline">+ Nutrition Tracker</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="right-controls">
-        <button id="darkModeToggle" class="icon-btn" aria-pressed="false" aria-label="Toggle dark mode"><i data-lucide="moon"></i></button>
-        <button id="profileBtn" class="profile-btn" aria-label="Profile">
-          <i data-lucide="user"></i>
+      <!-- Left: Logo + Sidebar -->
+      <div class="header-left">
+        <button id="menuBtn" class="icon-btn hamburger" aria-label="Open menu">
+          <i data-lucide="menu"></i>
         </button>
+        <a href="index.html" class="logo" aria-label="Recipe Finder Home">
+          <i data-lucide="fork-knife" class="logo-icon"></i>
+          <span class="logo-text">
+            <strong>Recipe Finder</strong>
+            <small class="tagline">+ Nutrition Tracker</small>
+          </span>
+        </a>
       </div>
-    </header>
 
-    <!-- HERO -->
+      <!-- Right: Quick Actions -->
+      <div class="header-right">
+        <button id="darkModeToggle" class="icon-btn" aria-pressed="false" aria-label="Toggle dark mode">
+          <i data-lucide="moon"></i>
+        </button>
+        <a href="profile.html" id="profileBtn" class="icon-btn profile-btn" aria-label="Profile">
+          <i data-lucide="user"></i>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ================= SIDEBAR ================= -->
+<aside id="sidebar" class="sidebar">
+  <div class="sidebar-top">
+    <div class="brand profile-section">
+      <i data-lucide="user"></i>
+      <div>
+        <h2 id="sidebarName">Guest</h2>
+        <small id="sidebarEmail">Not signed in</small>
+      </div>
+    </div>
+    <button id="closeSidebar" class="icon-btn" aria-label="Close menu">
+      <i data-lucide="x"></i>
+    </button>
+  </div>
+  
+  <nav>
+    <ul>
+      <li><a href="index.html"><i data-lucide="home"></i><span>Home</span></a></li>
+      <li><a href="recipes.html"><i data-lucide="book-open"></i><span>Recipes</span></a></li>
+      <li><a href="planner.html"><i data-lucide="calendar"></i><span>Planner</span></a></li>
+      <li><a href="shoppinglist.html"><i data-lucide="shopping-cart"></i><span>Shopping List</span></a></li>
+      <li><a href="about.html"><i data-lucide="info"></i><span>About</span></a></li>
+    </ul>
+  </nav>
+  <div class="sidebar-footer">
+    <button id="logoutBtn" class="ghost">Sign out</button>
+  </div>
+</aside>
+
+  <!-- BACKDROP -->
+  <div id="backdrop" class="backdrop"></div>
+
+  <!-- ================= HERO ================= -->
 <section class="hero">
   <div class="hero-overlay"></div>
+
+  <!-- Art-directed hero images -->
+  <picture>
+    <!-- Desktop: wide crop -->
+    <source media="(min-width: 1025px)" srcset="images/find.avif">
+    <!-- Tablet: medium crop -->
+    <source media="(min-width: 601px)" srcset="images/find.avif">
+    <!-- Mobile: tighter vertical crop -->
+    <img src="images/find.avif" 
+         alt="Fresh healthy meal on a kitchen table" 
+         class="hero-img">
+  </picture>
+
   <div class="hero-content">
-    <h1><span class="highlight">Discover</span> Recipes. 
-        <br>Track <span class="highlight">Nutrition</span>. 
-        <br>Stay <span class="highlight">Healthy</span>.
+    <h1>
+      Plan Smarter, Eat <span class="highlight">Healthier</span>.<br>
+      <span class="highlight">Discover</span> Recipes. Track <span class="highlight">Nutrition</span>.
     </h1>
     <p class="hero-sub">
-      From Nigerian classics to global favorites — plan your meals and eat smarter.
+      Every kitchen is a canvas. Every meal, a masterpiece.  
+      Start with what you have and create something unforgettable.
     </p>
 
-    <!-- Search -->
-    <div class="hero-search">
-      <input type="search" placeholder="Search recipes, e.g. jollof, chicken..." />
-      <button><i data-lucide="search"></i> Search</button>
-    </div>
-
-    <!-- Extra CTAs -->
     <div class="hero-cta">
-      <a href="recipes.html" class="btn">Browse Recipes</a>
-      <button id="randomHeroBtn" class="btn ghost">Surprise Me</button>
+      <a href="recipes.html" class="cta-btn">
+        🍲 Browse Recipes
+      </a>
+      <a href="planner.html" class="cta-btn outline">
+        📅 Open Planner
+      </a>
     </div>
   </div>
 </section>
 
-
-    <!-- MAIN -->
-    <main class="container">
-      <!-- Filters -->
-      <aside class="card filters" id="filtersCard" aria-labelledby="filtersHeading">
-        <h3 id="filtersHeading">Filters</h3>
-
-        <label for="searchInput" class="visually-hidden">Search recipes</label>
-        <div class="search-inline mobile-only">
-          <input id="searchInput" type="search" placeholder="Search recipes, e.g. jollof, chicken" autocomplete="off" />
-        </div>
-
-        <div class="field">
-          <label for="dietSelect">Diet Type</label>
-          <div class="select-wrapper">
-            <select id="dietSelect">
-              <option value="">Any</option>
-              <option value="vegan">Vegan</option>
-              <option value="vegetarian">Vegetarian</option>
-              <option value="keto">Keto</option>
-              <option value="gluten free">Gluten-Free</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="field">
-          <label for="caloriesRange">Max calories: <span id="calLabel">800</span></label>
-          <input id="caloriesRange" type="range" min="100" max="1200" step="50" value="800" />
-        </div>
-
-        <div class="field">
-          <label for="cuisineInput">Cuisine</label>
-          <input id="cuisineInput" type="text" placeholder="e.g. Nigerian, Italian" />
-        </div>
-
-        <div class="quote-block">
-          <blockquote id="quoteText">Loading quote…</blockquote>
-          <div class="quote-controls">
-            <label for="quoteLang" class="small">Language</label>
-            <div class="select-wrapper">
-              <select id="quoteLang" aria-label="Quote language">
-                <option value="en">English</option>
-                <option value="yo">Yoruba</option>
-                <option value="ig">Igbo</option>
-                <option value="ha">Hausa</option>
-                <option value="ef">Efik/Ibibio</option>
-                <option value="tv">Tiv</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      <!-- Recipes -->
-      <section class="recipes" aria-labelledby="resultsHeading">
-        <div class="search-bar desktop-only">
-          <input id="searchInputDesktop" type="search" placeholder="Search recipes, ingredients or cuisine..." />
-        </div>
-
-        <div class="toolbar">
-          <div class="summary" id="resultSummary">Showing <span id="resultCount">6</span> recipes</div>
-          <div class="actions">
-            <button id="randomBtn" class="btn">Surprise Me</button>
-            <button id="favoritesToggle" class="btn ghost">Favorites</button>
-          </div>
-        </div>
-
-        <div id="recipeList" class="grid">
-
-          <!-- Example Recipe Card -->
-          <article class="recipe-card">
-            <div class="card-image">
-              <img src="images/jollof-rice.jpg" alt="Nigerian Jollof Rice">
-              <div class="overlay">
-                <button class="btn small">View Recipe</button>
-              </div>
-            </div>
-            <div class="card-body">
-              <h4 class="recipe-title">Nigerian Jollof Rice</h4>
-              <div class="recipe-meta">
-                <span class="badge"><i data-lucide="flame"></i> 550 cal</span>
-                <span class="badge"><i data-lucide="clock"></i> 45 mins</span>
-              </div>
-              <div class="stars">
-                <i data-lucide="star" class="active"></i>
-                <i data-lucide="star" class="active"></i>
-                <i data-lucide="star" class="active"></i>
-                <i data-lucide="star"></i>
-                <i data-lucide="star"></i>
-              </div>
-              <div class="recipe-actions">
-                <button class="btn outline block">Save</button>
-                <button class="btn block">Add to Planner</button>
-              </div>
-            </div>
-          </article>
-
-          <!-- Repeat more recipe-card blocks for other dishes -->
-
-        </div>
-      </section>
-
-      <!-- Meal Plan -->
-      <aside class="card meal-plan" aria-labelledby="plannerHeading">
-        <h3 id="plannerHeading">Meal Plan</h3>
-        <ul class="days">
-          <li>Monday <span class="slot" data-day="monday"></span></li>
-          <li>Tuesday <span class="slot" data-day="tuesday"></span></li>
-          <li>Wednesday <span class="slot" data-day="wednesday"></span></li>
-          <li>Thursday <span class="slot" data-day="thursday"></span></li>
-          <li>Friday <span class="slot" data-day="friday"></span></li>
-        </ul>
-        <div class="planner-actions">
-          <a href="planner.html" class="btn block">Open Planner</a>
-          <a id="shoppingListBtn" class="btn outline block" href="shoppinglist.html">Generate Shopping List</a>
-        </div>
-      </aside>
-    </main>
-
-    <!-- FOOTER -->
-    <footer class="footer">
-      <div class="footer-content">
-        <i data-lucide="fork-knife" class="footer-icon"></i>
-        <p>
-          © <span id="year"></span> Recipe Finder + Nutrition Tracker — All rights reserved. <br>
-          Built with ❤️ by Henry Osuagwu
-        </p>
-      </div>
-      <small id="lastModified"></small>
-    </footer>
-
+  <!-- ================= MAIN ================= -->
+ <main class="page">
+  <div class="card welcome-card">
+    <h3>Welcome back, Henry 👋</h3>
+    <p>Discover new recipes, track your nutrition, and make healthy living simple.</p>
+    <a href="recipes.html" class="btn-primary">Find Recipes</a>
   </div>
 
-  <!-- Scripts -->
+  <div class="card highlights-card">
+    <h3>Today’s Highlights</h3>
+    <ul>
+      <li><span class="badge">🔥</span>1,800 calories logged</li>
+      <li><span class="badge">🥦</span>5 servings of veggies</li>
+      <li><span class="badge">💧</span>6 cups of water</li>
+    </ul>
+  </div>
+</main>
+
+
+  <!-- ================= BOTTOM NAV ================= -->
+  <nav class="bottom-nav">
+    <a href="index.html"><i data-lucide="home"></i><span>Home</span></a>
+    <a href="recipes.html"><i data-lucide="book-open"></i><span>Recipes</span></a>
+    <a href="planner.html"><i data-lucide="calendar"></i><span>Planner</span></a>
+    <a href="shoppinglist.html"><i data-lucide="shopping-cart"></i><span>List</span></a>
+    <a href="about.html"><i data-lucide="info"></i><span>About</span></a>
+  </nav>
+
+      <section class="filters-wrapper">
+  <aside class="card filters" id="filtersCard" aria-labelledby="filtersHeading">
+    <h3 id="filtersHeading" class="filters-title">
+      <i data-lucide="sliders"></i> Filters
+    </h3>
+
+    <!-- Search -->
+    <div class="field">
+      <label for="searchInput">Search Recipes</label>
+      <input id="searchInput" type="search" placeholder="e.g. Jollof, Pasta...">
+    </div>
+
+    <!-- Category -->
+    <div class="field">
+      <label for="filterCategory">Category</label>
+      <div class="select-wrapper">
+        <select id="filterCategory">
+          <option value="">All Categories</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Area / Cuisine -->
+    <div class="field">
+      <label for="filterArea">Cuisine / Area</label>
+      <div class="select-wrapper">
+        <select id="filterArea">
+          <option value="">All Areas</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Diet (local filter only) -->
+    <div class="field">
+      <label for="dietSelect">Diet</label>
+      <div class="select-wrapper">
+        <select id="dietSelect">
+          <option value="">Any</option>
+          <option value="vegan">Vegan</option>
+          <option value="vegetarian">Vegetarian</option>
+          <option value="keto">Keto</option>
+          <option value="gluten free">Gluten-Free</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Calories -->
+    <div class="field">
+      <label for="caloriesRange">Max Calories: <span id="calLabel">800</span></label>
+      <input id="caloriesRange" type="range" min="100" max="1200" step="50" value="800">
+    </div>
+
+    <!-- Actions -->
+    <div class="filter-actions">
+      <button id="applyFilters" class="btn primary">Apply</button>
+      <button id="clearFilters" class="btn outline">Clear</button>
+    </div>
+  </aside>
+</section>
+
+       <div class="quote-block">
+  <blockquote id="quoteText">Loading quote…</blockquote>
+  <div class="quote-controls">
+    <label for="quoteLang" class="small">Language</label>
+    <div class="select-wrapper">
+      <select id="quoteLang" aria-label="Quote language">
+        <option value="en">English</option>
+        <option value="yo">Yoruba</option>
+        <option value="ig">Igbo</option>
+        <option value="ha">Hausa</option>
+        <option value="ef">Efik/Ibibio</option>
+        <option value="tv">Tiv</option>
+      </select>
+    </div>
+    <button id="newQuoteBtn" class="btn">🎲 New Quote</button>
+  </div>
+</div>
+
+
+        <!-- Actions -->
+        <div class="filters-actions">
+          <button class="btn block" aria-label="Apply filters"><i data-lucide="check-circle"></i> Apply</button>
+          <button class="btn ghost block" aria-label="Reset filters"><i data-lucide="rotate-ccw"></i> Reset</button>
+        </div>
+      </aside>
+
+      <main class="main-content">
+
+  <!-- Recipes Section -->
+  <section class="recipes" aria-labelledby="resultsHeading">
+    <h2 id="resultsHeading">Recipes (<span id="resultCount">0</span>)</h2>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <input type="search" id="searchInput" placeholder="Search recipes..." aria-label="Search recipes">
+      <div class="actions">
+        <button id="randomBtnToolbar" class="btn">🎲 Surprise Me</button>
+        <button id="favoritesToggle" class="btn ghost">❤️ Favorites</button>
+      </div>
+    </div>
+
+    <!-- Recipe Grid -->
+    <div id="recipeList" class="recipe-grid" aria-live="polite"></div>
+    <div id="statusMsg" class="visually-hidden" aria-live="polite"></div>
+  </section>
+
+  <!-- Meal Plan -->
+  <aside class="meal-plan card" aria-labelledby="plannerHeading">
+    <h3 id="plannerHeading">Meal Plan</h3>
+    <ul class="days">
+      <li>Monday <span class="slot" data-day="monday"></span></li>
+      <li>Tuesday <span class="slot" data-day="tuesday"></span></li>
+      <li>Wednesday <span class="slot" data-day="wednesday"></span></li>
+      <li>Thursday <span class="slot" data-day="thursday"></span></li>
+      <li>Friday <span class="slot" data-day="friday"></span></li>
+    </ul>
+    <div class="planner-actions">
+      <button id="openPlannerBtn" class="btn block">Open Planner</button>
+      <button id="shoppingListBtn" class="btn outline block">Generate Shopping List</button>
+    </div>
+  </aside>
+
+</main>
+
+<!-- Modal -->
+<div id="recipeModal" class="modal hidden" role="dialog" aria-modal="true">
+  <div class="modal-content">
+    <button id="modalClose" class="modal-close" aria-label="Close">&times;</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+
+<!-- FOOTER -->
+<footer class="footer" role="contentinfo">
+  <div class="footer-content">
+    <i data-lucide="fork-knife" class="footer-icon"></i>
+    <p>
+      © <span id="year"></span> Recipe Finder + Nutrition Tracker — All rights reserved. <br>
+      Built with ❤️ by Henry Osuagwu
+    </p>
+  </div>
+  <small id="lastModified"></small>
+</footer>
+  <!-- SCRIPTS -->
   <script src="js/main.js" defer></script>
   <script src="js/recipes.js" defer></script>
   <script src="js/quotes.js" defer></script>
-
   <script>
-    lucide.createIcons();
+    document.addEventListener("DOMContentLoaded", () => lucide.createIcons());
   </script>
 </body>
 </html>

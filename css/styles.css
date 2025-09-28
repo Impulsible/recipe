@@ -2,56 +2,44 @@
    Root Variables (Light Mode)
    ========================= */
 :root {
-  --green: #4CAF50;
-  --orange: #FF9800;
+  --green: #4caf50;
+  --green-dark: #43a047;
+  --orange: #ff9800;
+  --orange-dark: #e68900;
   --bg: #ffffff;
   --card: #f7f7f7;
   --muted: #7a7a7a;
-  --text: #222222;
+  --text: #222;
   --radius: 12px;
   --shadow: 0 6px 18px rgba(16,24,40,0.06);
   --glass: rgba(255,255,255,0.6);
 }
 
-/* =========================
-   Dark Mode Overrides
-   ========================= */
+/* Dark Mode */
 body.dark {
   --bg: #0f1720;
   --card: #111827;
-  --text: #E6EEF6;
-  --muted: #9CA3AF;
+  --text: #e6eef6;
+  --muted: #9ca3af;
 }
 
 /* =========================
-   Global Reset & Base
+   Base Reset & Typography
    ========================= */
-* {
-  box-sizing: border-box;
-}
-html, body {
-  height: 100%;
-  overflow-x: hidden; /* 🚫 prevent horizontal scrolling */
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow-x: hidden; }
 body {
-  margin: 0;
   font-family: "Roboto", system-ui, Segoe UI, Helvetica, Arial, sans-serif;
   background: var(--bg);
   color: var(--text);
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  line-height: 1.45;
 }
 .visually-hidden {
   position: absolute !important;
-  height: 1px;
-  width: 1px;
-  overflow: hidden;
-  clip: rect(1px,1px,1px,1px);
-  white-space: nowrap;
-  border: 0;
-  padding: 0;
-  margin: -1px;
+  height: 1px; width: 1px;
+  overflow: hidden; clip: rect(1px,1px,1px,1px);
+  white-space: nowrap; border: 0;
 }
 
 /* =========================
@@ -65,8 +53,8 @@ body {
 .container {
   display: grid;
   grid-template-columns: 1fr;
-  padding: 1rem;
   gap: 1rem;
+  padding: 1rem;
 }
 
 /* =========================
@@ -76,109 +64,176 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.85rem 1rem;
-  background: linear-gradient(90deg, var(--green), #43a047);
+  padding: .85rem 1rem;
+  background: linear-gradient(90deg, var(--green), var(--green-dark));
   color: #fff;
   box-shadow: var(--shadow);
 }
-.left-controls {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
+.left-controls, .logo { display: flex; align-items: center; gap: .65rem; }
+.logo-icon { width: 36px; height: 36px; color: rgba(255,255,255,.95); }
+.logo-text strong { font-family: "Poppins", sans-serif; font-size: 1.05rem; }
+.logo-text .tagline { font-size: .75rem; opacity: .95; }
+.icon-btn, .hamburger, .profile-btn {
+  background: none; border: 0; padding: 8px;
+  border-radius: 10px; display: inline-flex;
+  align-items: center; justify-content: center;
+  color: inherit; cursor: pointer;
 }
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-.logo-icon {
-  width: 36px;
-  height: 36px;
-  color: rgba(255,255,255,0.95);
-}
-.logo-text strong {
-  font-family: "Poppins", sans-serif;
-  display: block;
-  font-size: 1.05rem;
-  line-height: 1;
-}
-.logo-text .tagline {
-  font-size: 0.75rem;
-  opacity: 0.95;
-}
-.icon-btn,
-.hamburger,
-.profile-btn {
-  background: transparent;
-  border: 0;
-  padding: 8px;
-  border-radius: 10px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: inherit;
-  cursor: pointer;
-}
-.icon-btn:focus,
-.hamburger:focus {
-  outline: 2px solid rgba(0,0,0,0.1);
-}
+.icon-btn:focus, .hamburger:focus { outline: 2px solid rgba(0,0,0,.1); }
 
 /* =========================
    Sidebar
    ========================= */
+/* =========================
+   SIDEBAR
+   ========================= */
 .sidebar {
   position: fixed;
-  left: 0;
   top: 0;
-  height: 100vh;
+  left: 0;
   width: 280px;
-  background: var(--card);
-  box-shadow: 8px 0 30px rgba(2,6,23,0.15);
-  transform: translateX(-120%);
-  transition: transform .28s ease;
-  z-index: 30;
-  padding: 1rem;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  justify-content: space-between;
+  padding: 1.5rem 1rem;
+  background: rgba(255,255,255,0.25);
+  backdrop-filter: blur(12px) saturate(180%);
+  border-radius: var(--radius);
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: var(--shadow);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 1000;
 }
+
 .sidebar.open {
   transform: translateX(0);
 }
-.sidebar .brand {
+
+/* BRAND */
+.brand {
   display: flex;
-  gap: 0.6rem;
   align-items: center;
+  gap: 0.75rem;
 }
-.brand-icon {
-  width: 44px;
-  height: 44px;
-  color: var(--green);
+
+.brand h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
 }
-.sidebar .nav ul {
+
+.brand small {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+/* ICON BUTTONS */
+.icon-btn {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.icon-btn:hover {
+  background: rgba(255,255,255,0.3);
+  transform: scale(1.05);
+}
+
+/* NAVIGATION */
+.nav ul {
   list-style: none;
-  padding: 0;
-  margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 1rem;
+  margin-top: 2rem;
 }
-.sidebar .nav a {
-  display: flex;
-  gap: 0.6rem;
-  align-items: center;
-  padding: 0.6rem;
-  border-radius: 8px;
-  color: var(--text);
+
+.nav a {
   text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius);
+  color: var(--text);
+  font-weight: 500;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
 }
-.sidebar .nav a:hover {
-  background: rgba(0,0,0,0.03);
+
+.nav a:hover,
+.nav a:focus {
+  background: rgba(76,175,80,0.25);
+  color: var(--green-dark);
+  transform: translateX(5px);
 }
 
 /* =========================
-   Cards & Inputs
+   ACTIVE NAV LINK
+   ========================= */
+.nav a.active {
+  background: rgba(76,175,80,0.3);
+  color: var(--green-dark);
+  font-weight: 600;
+  position: relative;
+}
+
+.nav a.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--green);
+  border-radius: 2px 0 0 2px;
+}
+
+/* SIDEBAR FOOTER BUTTONS */
+.sidebar-footer {
+  text-align: center;
+}
+
+.sidebar-footer .btn {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  font-size: 0.95rem;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s, transform 0.2s;
+}
+
+.sidebar-footer .btn.ghost {
+  background: rgba(255,255,255,0.15);
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+.sidebar-footer .btn.ghost:hover {
+  background: var(--orange);
+  color: #fff;
+  border-color: var(--orange-dark);
+  transform: scale(1.05);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    max-width: 280px;
+  }
+}
+
+
+/* =========================
+   Card & Inputs
    ========================= */
 .card {
   background: var(--card);
@@ -186,154 +241,116 @@ body {
   border-radius: var(--radius);
   box-shadow: var(--shadow);
 }
-.filters .search-inline input,
-.search-bar input,
-input[type="search"],
-input[type="text"],
-select {
-  width: 100%;
-  padding: 0.65rem 0.75rem;
-  border-radius: 10px;
-  border: 1px solid rgba(0,0,0,0.06);
-  font-size: 0.95rem;
-  background: transparent;
-  color: inherit;
+input[type="text"], input[type="search"], select {
+  width: 100%; padding: .65rem .75rem;
+  border-radius: 10px; border: 1px solid rgba(0,0,0,.06);
+  font-size: .95rem; background: transparent; color: inherit;
 }
-input[type="range"] {
-  width: 100%;
-  margin-top: 0.4rem;
-}
+input[type="range"] { width: 100%; margin-top: .4rem; accent-color: var(--green); cursor: pointer; }
 
 /* =========================
    Quote Block
    ========================= */
 .quote-block {
-  margin-top: 0.75rem;
-  background: rgba(0,0,0,0.03);
-  padding: 0.7rem;
-  border-radius: 10px;
-}
-.quote-block blockquote {
-  margin: 0;
+  background: #f9f9f9;
+  padding: 1rem;
+  border-left: 4px solid var(--orange);
+  border-radius: 6px;
   font-style: italic;
-  color: var(--muted);
-  font-size: 0.95rem;
 }
+.quote-controls { margin-top: .5rem; display: flex; gap: .6rem; font-size: .9rem; }
 
 /* =========================
-   Recipes Grid & Cards
+   Recipe Cards
    ========================= */
-.recipes .grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.9rem;
-}
+.recipes .grid { display: grid; grid-template-columns: 1fr; gap: .9rem; }
 .recipe-card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  background: var(--card);
-  border: 1px solid rgba(0,0,0,0.04);
-  border-radius: var(--radius);
-  overflow: hidden;
-  padding: 0.8rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
+  position: relative; display: flex; flex-direction: column;
+  gap: .75rem; padding: .9rem;
+  background: var(--card); border: 1px solid rgba(0,0,0,.04);
+  border-radius: var(--radius); overflow: hidden;
+  transition: transform .25s, box-shadow .25s, border .25s, background .25s;
 }
 .recipe-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 12px 28px rgba(0,0,0,.12);
   border-color: var(--green);
+  background: rgba(255,255,255,.75);
+  backdrop-filter: blur(10px);
 }
+body.dark .recipe-card:hover { background: rgba(17,24,39,.8); border-color: var(--orange); }
 .recipe-card img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 8px;
-  background: #eee;
+  width: 100%; height: 200px; object-fit: cover;
+  border-radius: 10px; background: #eee;
+  transition: transform .3s ease;
 }
+.recipe-card:hover img { transform: scale(1.05); }
 .recipe-title {
   font-family: "Poppins", sans-serif;
-  margin: 0;
-  font-size: 1rem;
-  color: var(--text);
+  font-size: 1.05rem; font-weight: 600; color: var(--text);
 }
-.recipe-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.9rem;
-  color: var(--muted);
-}
-.recipe-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.5rem;
-}
+.recipe-card:hover .recipe-title { color: var(--green); }
+.recipe-meta { display: flex; justify-content: space-between; font-size: .9rem; color: var(--muted); }
+.recipe-actions { display: flex; gap: .6rem; margin-top: auto; }
 
 /* =========================
    Buttons
    ========================= */
 .btn {
-  background: var(--green);
-  color: #fff;
-  border: 0;
-  padding: 0.5rem 0.8rem;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background 0.2s ease;
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: .4rem; padding: .75rem 1.2rem;
+  border: none; border-radius: 8px; font-weight: 600;
+  cursor: pointer; transition: all .3s ease;
 }
-.btn:hover {
-  background: #43a047; /* darker green */
-}
+.btn.block { width: 100%; }
+.btn.icon { padding: .6rem; border-radius: 50%; }
+.btn:hover { transform: translateY(-2px); }
+.btn:not(.ghost) { background: var(--green); color: #fff; }
+.btn:not(.ghost):hover { background: var(--green-dark); }
 .btn.ghost {
-  background: transparent;
-  border: 1px solid rgba(0,0,0,0.06);
-  color: var(--text);
+  background: transparent; border: 2px solid #ddd; color: var(--text);
 }
-.btn.outline {
-  background: transparent;
-  border: 1px solid var(--orange);
-  color: var(--orange);
-}
-.btn.block {
-  display: block;
-  width: 100%;
-}
+.btn.ghost:hover { background: #f3f3f3; }
+.btn.outline { border: 1px solid var(--orange); color: var(--orange); background: transparent; }
+.btn.outline:hover { background: var(--orange); color: #fff; }
 
 /* =========================
-   Stars Rating
+   Hero
    ========================= */
-.stars {
-  display: flex;
-  gap: 6px;
-  align-items: center;
+.hero {
+  position: relative;
+  background: url("../images/home.jpeg") center/cover no-repeat;
+  min-height: 90vh;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; padding: 2rem; color: #fff;
 }
-.stars span {
-  font-size: 1.05rem;
-  color: #d1d5db;
-  cursor: pointer;
+.hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom right, rgba(0,0,0,.65), rgba(0,0,0,.4));
+  z-index: 1;
 }
-.stars span.active {
-  color: #f6c846;
+.hero-content { position: relative; z-index: 2; max-width: 800px; }
+.hero-content h1 {
+  font-family: "Poppins", sans-serif; font-size: 2.8rem; font-weight: 700;
+  line-height: 1.3; margin-bottom: 1rem;
 }
+.hero-content .highlight { color: var(--orange); }
+.hero-sub { font-size: 1.2rem; margin-bottom: 2rem; opacity: .95; }
+.hero-cta .btn { background: var(--orange); }
+.hero-cta .btn:hover { background: var(--orange-dark); }
+
+/* =========================
+   Stars
+   ========================= */
+.stars { display: flex; gap: 6px; }
+.stars span { font-size: 1.05rem; color: #d1d5db; cursor: pointer; transition: color .2s, transform .2s; }
+.stars span.active, .stars span:hover { color: var(--orange); transform: scale(1.2); }
 
 /* =========================
    Meal Plan
    ========================= */
-.meal-plan .days {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
-.meal-plan .slot {
-  display: inline-block;
-  margin-left: 8px;
-  color: var(--muted);
-}
+.meal-plan .days { list-style: none; display: flex; flex-direction: column; gap: .6rem; }
+.meal-plan .slot { margin-left: 8px; color: var(--muted); }
 
 /* =========================
    Footer
@@ -342,328 +359,302 @@ input[type="range"] {
   padding: 1rem;
   text-align: center;
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: .95rem;
   margin-top: auto;
 }
 
 /* =========================
-   Responsive Layout
+   Responsive
    ========================= */
 @media (min-width: 768px) {
-  .container {
-    grid-template-columns: 240px 1fr;
-    align-items: flex-start;
-    gap: 1.25rem;
-  }
-  .filters {
-    position: sticky;
-    top: 5rem;
-    align-self: start;
-  }
-  .recipes .grid {
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1.25rem;
-  }
+  .container { grid-template-columns: 240px 1fr; gap: 1.25rem; }
+  .filters { position: sticky; top: 5rem; }
+  .recipes .grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.25rem; }
   .search-inline.mobile-only { display: none; }
-  .search-bar.desktop-only { display: block; margin-bottom: 1rem; }
 }
 @media (min-width: 1024px) {
-  .container {
-    grid-template-columns: 260px 1fr 260px;
-  }
-  .meal-plan {
-    position: sticky;
-    top: 5rem;
-    align-self: start;
-  }
-  .recipes .grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  }
+  .container { grid-template-columns: 260px 1fr 260px; }
+  .meal-plan { position: sticky; top: 5rem; }
+  .recipes .grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
 }
 @media (min-width: 1440px) {
-  .container {
-    grid-template-columns: 280px 1fr 280px;
-    max-width: 1440px;
-    margin: 0 auto;
-  }
+  .container { grid-template-columns: 280px 1fr 280px; max-width: 1440px; margin: 0 auto; }
 }
+@media (max-width: 768px) {
+  .hero-content h1 { font-size: 2rem; }
+}
+
 /* =========================
-   Hero Section
+   Animations
    ========================= */
-.hero {
+@keyframes fadeSlideUp { from {opacity:0; transform: translateY(20px);} to {opacity:1; transform: translateY(0);} }
+@keyframes popIn { from {opacity:0; transform: scale(.95);} to {opacity:1; transform: scale(1);} }
+.recipes .grid > * { opacity: 0; animation: fadeSlideUp .6s forwards; }
+.filters, .meal-plan { opacity: 0; animation: popIn .7s forwards .2s; }
+
+/* ============================
+   Recipe Cards & Grid
+   ============================ */
+.recipes {
+  flex: 1;
+  padding: 1rem;
+}
+
+.recipes .search-bar {
+  margin-bottom: 1rem;
+}
+
+.recipes .grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.2rem;
+}
+
+/* Card */
+.recipe-card {
+  background: #fff;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.recipe-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+}
+
+/* Image */
+.card-image {
   position: relative;
-  background: url("/images/home.png") center/cover no-repeat;
-  min-height: 85vh;
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+}
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+.recipe-card:hover .card-image img {
+  transform: scale(1.08);
+}
+.card-image .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  padding: 2rem;
-  color: #fff;
   opacity: 0;
-  animation: fadeSlideUp 0.8s ease forwards;
-  background-size: cover;     /* default = immersive fill */
-  background-position: center;
-  background-repeat: no-repeat;
+  transition: opacity 0.3s ease;
+}
+.recipe-card:hover .overlay {
+  opacity: 1;
+}
+.card-image .overlay .btn.small {
+  padding: 0.4rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 20px;
 }
 
-/* On smaller screens, don’t crop the image */
-@media (max-width: 768px) {
-  .hero {
-    background-size: contain;
-    background-position: top center;
-    background-color: #000; /* fallback color for empty space */
-  }
+/* Body */
+.card-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
-
-
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom right, rgba(0,0,0,0.6), rgba(0,0,0,0.4));
-  z-index: 1;
+.recipe-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
 }
-
-.hero-content {
-  position: relative;
-  z-index: 2;
-  max-width: 800px;
+.recipe-meta {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
 }
-
-.hero h1 {
-  font-family: "Poppins", sans-serif;
-  font-size: 2.5rem;
-  font-weight: 700;
-  line-height: 1.3;
-  margin-bottom: 1rem;
+.badge {
+  background: #f5f5f5;
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
 }
-.hero h1 .highlight {
+.stars {
+  display: flex;
+  gap: 0.2rem;
+  margin-bottom: 0.8rem;
+}
+.stars i {
+  color: #ccc;
+  width: 18px;
+  height: 18px;
+}
+.stars i.active {
   color: #ff9800;
 }
 
-.hero-sub {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-  opacity: 0.9;
-}
-
-.hero-search {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-  background: rgba(255, 255, 255, 0.15);
-  padding: 0.5rem;
-  border-radius: var(--radius);
-  backdrop-filter: blur(6px);
-}
-.hero-search input {
-  padding: 0.9rem 1rem;
-  border-radius: 50px;
-  border: none;
-  width: 60%;
-  max-width: 450px;
-  font-size: 1rem;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-  background: rgba(255,255,255,0.2);
-  color: #fff;
-}
-.hero-search input::placeholder {
-  color: rgba(255,255,255,0.85);
-}
-.hero-search button {
-  background: #ff9800;
-  border: none;
-  padding: 0.9rem 1.5rem;
-  border-radius: 50px;
-  font-weight: 600;
-  color: #fff;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-.hero-search button:hover {
-  background: #e68900;
-}
-
-.hero-cta {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-}
-.hero-cta .btn {
-  background: #fff;
-  color: #333;
-  padding: 0.8rem 1.2rem;
-  border-radius: 30px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-.hero-cta .btn:hover {
-  background: #ff9800;
-  color: #fff;
-}
-.hero-cta .btn.ghost {
-  background: transparent;
-  border: 2px solid #fff;
-  color: #fff;
-}
-.hero-cta .btn.ghost:hover {
-  background: rgba(255,255,255,0.1);
-}
-
-/* =========================
-   CUSTOM DROPDOWNS
-   ========================= */
-.select-wrapper {
-  position: relative;
-  display: inline-block;
-  width: 100%;
-}
-.select-wrapper select {
-  appearance: none;
-  background: var(--card);
-  color: var(--text);
-  width: 100%;
-  padding: 0.65rem 2.5rem 0.65rem 0.75rem;
-  border-radius: 10px;
-  border: 1px solid rgba(0,0,0,0.06);
-  font-size: 0.95rem;
-  cursor: pointer;
-}
-.select-wrapper::after {
-  content: "";
-  position: absolute;
-  right: 0.9rem;
-  top: 50%;
-  width: 16px;
-  height: 16px;
-  transform: translateY(-50%);
-  pointer-events: none;
-  background: no-repeat center/contain
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%20fill='none'%20viewBox='0%200%2024%2024'%20stroke='%237a7a7a'%20stroke-width='2'%3E%3Cpath%20stroke-linecap='round'%20stroke-linejoin='round'%20d='M19%209l-7%207-7-7'/%3E%3C/svg%3E");
-}
-body.dark .select-wrapper select {
-  border: 1px solid rgba(255,255,255,0.1);
-}
-body.dark .select-wrapper::after {
-  background: no-repeat center/contain
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%20fill='none'%20viewBox='0%200%2024%2024'%20stroke='%23E6EEF6'%20stroke-width='2'%3E%3Cpath%20stroke-linecap='round'%20stroke-linejoin='round'%20d='M19%209l-7%207-7-7'/%3E%3C/svg%3E");
-}
-
-/* =========================
-   RECIPE CARD
-   ========================= */
-.recipe-card {
-  position: relative;
+/* Actions */
+.recipe-actions {
+  margin-top: auto;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  background: var(--card);
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  border-radius: var(--radius);
-  overflow: hidden;
-  padding: 0.9rem;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border 0.25s ease, background 0.25s ease;
+  gap: 0.5rem;
 }
-.recipe-card:hover {
-  transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 12px 28px rgba(0,0,0,0.12);
-  border-color: var(--green);
-  background: rgba(255,255,255,0.75);
-  backdrop-filter: blur(10px);
-}
-body.dark .recipe-card:hover {
-  background: rgba(17,24,39,0.8);
-  border-color: var(--orange);
-}
-
-.recipe-card img {
+.btn.block {
   width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 10px;
-  background: #eee;
-  transition: transform 0.3s ease;
+  text-align: center;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
 }
-.recipe-card:hover img {
-  transform: scale(1.05);
+.btn.outline {
+  background: transparent;
+  border: 2px solid var(--primary, #ff9800);
+  color: var(--primary, #ff9800);
 }
-
-.recipe-title {
-  font-family: "Poppins", sans-serif;
-  margin: 0;
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: var(--text);
-  transition: color 0.2s ease;
-}
-.recipe-card:hover .recipe-title {
-  color: var(--green);
+.btn.outline:hover {
+  background: var(--primary, #ff9800);
+  color: #fff;
 }
 
-.recipe-meta {
+.recipe-modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.7);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 1000;
+}
+.recipe-modal.hidden { display: none; }
+.modal-content {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 1rem;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+}
+.modal-img {
+  width: 100%;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+}
+.icon-btn {
+  position: absolute;
+  top: 1rem; right: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+/* HEADER */
+.header {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-inner {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.9rem;
-  color: var(--muted);
+  padding: 0.75rem 1.25rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.recipe-actions {
+/* Left controls: logo + menu */
+.left-controls {
   display: flex;
-  gap: 0.6rem;
-  margin-top: auto;
+  align-items: center;
+  gap: 1rem;
 }
-.recipe-actions .btn {
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: #222;
+}
+
+.logo-icon {
+  margin-right: 0.5rem;
+  color: #ff6600;
+}
+
+.logo-text .tagline {
+  display: block;
+  font-size: 0.7rem;
+  color: #666;
+}
+
+/* Center search */
+.nav {
   flex: 1;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  max-width: 500px;
+  margin: 0 1.5rem;
+}
+
+.search-bar {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
   font-size: 0.9rem;
-  font-weight: 500;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
-}
-.recipe-actions .btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-}
-.recipe-actions .btn.outline:hover {
-  background: var(--orange);
-  color: #fff;
 }
 
-.stars span {
+/* Right controls */
+.right-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.btn.small {
+  font-size: 0.85rem;
+  padding: 0.4rem 0.75rem;
+}
+
+.btn.outline.small {
+  border: 1px solid #ddd;
+  background: transparent;
+  color: #444;
+}
+
+.icon-btn,
+.profile-btn {
+  background: none;
+  border: none;
+  padding: 0.4rem;
   cursor: pointer;
-  transition: color 0.2s ease, transform 0.2s ease;
-}
-.stars span:hover {
-  color: var(--orange);
-  transform: scale(1.2);
+  color: #444;
 }
 
-/* =========================
-   ANIMATIONS
-   ========================= */
-@keyframes fadeSlideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes popIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
-}
-.recipes .grid > * {
-  opacity: 0;
-  animation: fadeSlideUp 0.6s ease forwards;
-}
-.recipes .grid > *:nth-child(1) { animation-delay: 0.1s; }
-.recipes .grid > *:nth-child(2) { animation-delay: 0.2s; }
-.recipes .grid > *:nth-child(3) { animation-delay: 0.3s; }
-.recipes .grid > *:nth-child(4) { animation-delay: 0.4s; }
-.recipes .grid > *:nth-child(5) { animation-delay: 0.5s; }
-.recipes .grid > *:nth-child(6) { animation-delay: 0.6s; }
-
-.filters, .meal-plan {
-  opacity: 0;
-  animation: popIn 0.7s ease forwards;
-  animation-delay: 0.2s;
+.icon-btn:hover,
+.profile-btn:hover {
+  color: #ff6600;
 }
 
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .nav {
+    display: none; /* hide center search on mobile */
+  }
+  .header-inner {
+    padding: 0.5rem 1rem;
+  }
+}
