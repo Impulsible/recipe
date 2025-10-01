@@ -105,19 +105,11 @@
 
   <!-- ================= HERO ================= -->
 <section class="hero">
-  <div class="hero-overlay"></div>
-
-  <!-- Art-directed hero images -->
-<picture class="hero-picture">
-  <!-- Desktop: wide crop -->
-  <source media="(min-width: 1025px)" srcset="images/find.avif">
-  <!-- Tablet: medium crop -->
-  <source media="(min-width: 601px)" srcset="images/find.avif">
-  <!-- Mobile: tighter vertical crop -->
-  <img src="images/find.avif" 
-       alt="Fresh healthy meal on a kitchen table" 
-       class="hero-img">
-</picture>
+  <picture class="hero-picture">
+    <source media="(min-width: 1025px)" srcset="images/home.jpeg">
+    <source media="(min-width: 601px)" srcset="images/home.jpeg">
+    <img src="images/home.jpeg" alt="Fresh healthy meal" class="hero-img">
+  </picture>
 
   <div class="hero-content">
     <h1>
@@ -125,39 +117,105 @@
       <span class="highlight">Discover</span> Recipes. Track <span class="highlight">Nutrition</span>.
     </h1>
     <p class="hero-sub">
-      Every kitchen is a canvas. Every meal, a masterpiece.  
-      Start with what you have and create something unforgettable.
+      Every kitchen is a canvas. Every meal, a masterpiece. Start with what you have and create something unforgettable.
     </p>
-
     <div class="hero-cta">
-      <a href="recipes.html" class="cta-btn">
-        🍲 Browse Recipes
-      </a>
-      <a href="planner.html" class="cta-btn outline">
-        📅 Open Planner
-      </a>
+      <a href="recipes.html" class="cta-btn green">🍲 Browse Recipes</a>
+      <a href="planner.html" class="cta-btn orange">📅 Open Planner</a>
     </div>
   </div>
 </section>
 
-  <!-- ================= MAIN ================= -->
- <main class="page">
-  <div class="card welcome-card">
-    <h3>Welcome back, Henry 👋</h3>
-    <p>Discover new recipes, track your nutrition, and make healthy living simple.</p>
-    <a href="recipes.html" class="btn-primary">Find Recipes</a>
-  </div>
+<main class="app-container">
+  <!-- Dashboard Grid -->
+  <div class="dashboard-grid">
+    
+    <!-- Welcome Card -->
+    <div class="card welcome-card" data-emoji="🥗">
+      <div class="card-emoji">🥗</div>
+      <h3 id="greeting">Welcome 👋 Henry</h3>
+      <p id="foodTalk" class="subtitle">
+        <span id="foodTalkText"></span><span class="cursor">|</span>
+      </p>
 
-  <div class="card highlights-card">
-    <h3>Today’s Highlights</h3>
-    <ul>
-      <li><span class="badge">🔥</span>1,800 calories logged</li>
-      <li><span class="badge">🥦</span>5 servings of veggies</li>
-      <li><span class="badge">💧</span>6 cups of water</li>
-    </ul>
+      <!-- ✅ Quick Stats -->
+<div class="quick-stats">
+  <div class="stat">
+    <span class="stat-num" id="plannedMeals">0</span>
+    <span class="stat-label">Meals Planned</span>
   </div>
-</main>
+  <div class="stat">
+    <span class="stat-num" id="favorites">0</span>
+    <span class="stat-label">Favorites</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num" id="progress">0%</span>
+    <span class="stat-label">Progress</span>
+  </div>
+</div>
+      <!-- ✅ Daily Tip -->
+<!-- ✅ Daily Tip -->
+<div class="tip-box">
+  <p id="dailyTip">💡 Eat a colorful plate for better nutrition!</p>
+</div>
 
+
+      <!-- ✅ Call to Actions -->
+      <a href="recipes.html" class="btn btn-primary">
+        <span id="btnEmoji">🍲</span> Find Recipes
+      </a>
+      <a href="planner.html" class="btn btn-outline">📅 Go to Planner</a>
+    </div>
+
+    <!-- Meal Plan Card -->
+    <aside class="card meal-plan" aria-labelledby="plannerHeading" data-emoji="🍽️">
+      <div class="card-emoji">🍽️</div>
+      <h3 id="plannerHeading">Meal Plan</h3>
+
+      <!-- Days Grid -->
+      <div class="days-grid">
+        <div class="day-item" data-day="monday">
+          <button class="day-btn">Mon <span class="meal-count">0</span></button>
+          <ul class="meal-list" id="mondayMeals"></ul>
+        </div>
+        <div class="day-item" data-day="tuesday">
+          <button class="day-btn">Tue <span class="meal-count">0</span></button>
+          <ul class="meal-list" id="tuesdayMeals"></ul>
+        </div>
+        <div class="day-item" data-day="wednesday">
+          <button class="day-btn">Wed <span class="meal-count">0</span></button>
+          <ul class="meal-list" id="wednesdayMeals"></ul>
+        </div>
+        <div class="day-item" data-day="thursday">
+          <button class="day-btn">Thu <span class="meal-count">0</span></button>
+          <ul class="meal-list" id="thursdayMeals"></ul>
+        </div>
+        <div class="day-item" data-day="friday">
+          <button class="day-btn">Fri <span class="meal-count">0</span></button>
+          <ul class="meal-list" id="fridayMeals"></ul>
+        </div>
+      </div>
+
+     <!-- Planner Actions -->
+<div class="planner-actions">
+  <!-- Open Planner -->
+  <a href="planner.html" class="btn btn-primary block">📅 Open Planner</a>
+
+  <!-- Shopping List -->
+  <a href="shopping.html" class="btn btn-outline block">🛒 Shopping List</a>
+
+  <!-- Reset Planner -->
+  <a href="#" id="resetPlannerLink" class="btn btn-danger block">♻️ Reset Planner</a>
+</div>
+<!-- Planner Modal -->
+<div id="plannerModal" class="planner-modal hidden">
+  <div class="planner-content">
+    <button id="closePlanner" class="close-btn">&times;</button>
+    <h3>Your Meal Plan</h3>
+    <ul id="plannerList"></ul>
+  </div>
+</div>
+  </main>
 
   <!-- ================= BOTTOM NAV ================= -->
   <nav class="bottom-nav">
@@ -168,112 +226,7 @@
     <a href="about.html"><i data-lucide="info"></i><span>About</span></a>
   </nav>
 
-    <section class="filters-wrapper">
-  <!-- Toggle Button -->
-  <button id="toggleFilters" class="btn primary drawer-toggle" aria-expanded="false">
-    <i data-lucide="sliders"></i> Filters
-  </button>
-
-  <!-- Filter Drawer -->
-  <aside class="card filters-drawer hidden" id="filtersCard" aria-labelledby="filtersHeading">
-    <div class="drawer-header">
-      <h3 id="filtersHeading" class="filters-title">
-        <i data-lucide="sliders"></i> Filters
-      </h3>
-      <button id="closeFilters" class="btn-close" aria-label="Close Filters">&times;</button>
-    </div>
-
-    <!-- Search -->
-    <div class="field">
-      <label for="searchInput">Search Recipes</label>
-      <input id="searchInput" type="search" placeholder="e.g. Jollof, Pasta..." aria-label="Search recipes">
-    </div>
-
-    <!-- Category -->
-    <div class="field">
-      <label for="filterCategory">Category</label>
-      <div class="select-wrapper">
-        <select id="filterCategory">
-          <option value="">All Categories</option>
-          <option value="breakfast">Breakfast</option>
-          <option value="lunch">Lunch</option>
-          <option value="dinner">Dinner</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- Area / Cuisine -->
-    <div class="field">
-      <label for="filterArea">Cuisine / Area</label>
-      <div class="select-wrapper">
-        <select id="filterArea">
-          <option value="">All Areas</option>
-          <option value="nigerian">Nigerian</option>
-          <option value="italian">Italian</option>
-          <option value="chinese">Chinese</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- Diet -->
-    <div class="field">
-      <label for="dietSelect">Diet</label>
-      <div class="select-wrapper">
-        <select id="dietSelect">
-          <option value="">Any</option>
-          <option value="vegan">Vegan</option>
-          <option value="vegetarian">Vegetarian</option>
-          <option value="keto">Keto</option>
-          <option value="gluten free">Gluten-Free</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- Calories -->
-    <div class="field">
-      <label for="caloriesRange">Max Calories: <span id="calLabel">800</span></label>
-      <input id="caloriesRange" type="range" min="100" max="1200" step="50" value="800">
-    </div>
-
-    <!-- Actions -->
-    <div class="filter-actions">
-      <button id="applyFilters" class="btn primary">Apply</button>
-      <button id="clearFilters" class="btn outline">Clear</button>
-    </div>
-  </aside>
-
-  <!-- Overlay -->
-  <div id="drawerOverlay" class="drawer-overlay hidden"></div>
-</section>
-
-
-
-       <div class="quote-block">
-  <blockquote id="quoteText">Loading quote…</blockquote>
-  <div class="quote-controls">
-    <label for="quoteLang" class="small">Language</label>
-    <div class="select-wrapper">
-      <select id="quoteLang" aria-label="Quote language">
-        <option value="en">English</option>
-        <option value="yo">Yoruba</option>
-        <option value="ig">Igbo</option>
-        <option value="ha">Hausa</option>
-        <option value="ef">Efik/Ibibio</option>
-        <option value="tv">Tiv</option>
-      </select>
-    </div>
-    <button id="newQuoteBtn" class="btn">🎲 New Quote</button>
-  </div>
-</div>
-
-        <!-- Actions -->
-        <div class="filters-actions">
-          <button class="btn block" aria-label="Apply filters"><i data-lucide="check-circle"></i> Apply</button>
-          <button class="btn ghost block" aria-label="Reset filters"><i data-lucide="rotate-ccw"></i> Reset</button>
-        </div>
-      </aside>
-
-      <main class="main-content">
+    <main class="main-content">
 
   <!-- Recipes Section -->
   <section class="recipes" aria-labelledby="resultsHeading">
@@ -292,31 +245,6 @@
     <div id="recipeList" class="recipe-grid" aria-live="polite"></div>
     <div id="statusMsg" class="visually-hidden" aria-live="polite"></div>
   </section>
-
-  <!-- Meal Plan -->
-  <aside class="meal-plan card" aria-labelledby="plannerHeading">
-    <h3 id="plannerHeading">Meal Plan</h3>
-    <ul class="days">
-      <li><button class="day-btn" data-day="monday">Monday</button></li>
-      <li><button class="day-btn" data-day="tuesday">Tuesday</button></li>
-    <li><button class="day-btn" data-day="wednesday">Wednesday</button></li>
-    <li><button class="day-btn" data-day="thursday">Thursday</button></li>
-    <li><button class="day-btn" data-day="friday">Friday</button></li>
-  </ul>
-  <div class="planner-actions">
-    <button id="openPlannerBtn" class="btn block">Open Planner</button>
-    <button id="shoppingListBtn" class="btn outline block">Generate Shopping List</button>
-  </div>
-</aside>
-
-<!-- Planner Modal -->
-<div id="plannerModal" class="planner-modal hidden">
-  <div class="planner-content">
-    <button id="closePlanner" class="close-btn">&times;</button>
-    <h3>Your Meal Plan</h3>
-    <ul id="plannerList"></ul>
-  </div>
-</div>
 
 </main>
 
@@ -348,6 +276,5 @@
     document.addEventListener("DOMContentLoaded", () => lucide.createIcons());
   </script>
 
-  
 </body>
 </html>

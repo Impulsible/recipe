@@ -246,165 +246,152 @@ a {
 }
 
 /* =========================
-   Hero Section (Clean Version)
+   Hero Section (Dimmed Background + Clear Text)
 ========================= */
 .hero {
   position: relative;
-  height: 60vh;
-  min-height: 400px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   color: #fff;
+  font-family: 'Poppins', sans-serif;
   overflow: hidden;
-  background: none;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  min-height: 400px;
 }
 
-/* Hero image fills container */
-.hero picture,
+/* Hero image */
+.hero-picture,
 .hero-img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-}
-
-.hero-img {
-  object-fit: cover;       /* fills hero */
-  object-position: center; /* keeps subject centered */
+  object-fit: cover;
+  object-position: center;
   z-index: 0;
+  transition: transform 0.5s ease;
 }
 
-/* REMOVE overlay */
+.hero-picture:hover img {
+  transform: scale(1.05);
+}
+
+/* Dimmed dark gradient overlay */
 .hero-overlay {
-  display: none !important;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.65) 0%,   /* top */
+    rgba(0, 0, 0, 0.55) 40%,  /* middle */
+    rgba(0, 0, 0, 0.75) 100%  /* bottom */
+  );
+  pointer-events: none;
 }
 
-/* Content */
+/* Hero content */
 .hero-content {
   position: relative;
   z-index: 2;
-  padding: 1rem;
-  max-width: 700px;
+  max-width: 900px;
+  padding: 2rem;
 }
 
-/* Highlighted words */
-.highlight {
-  color: var(--orange);
-}
-
-/* CTA area */
-.hero-cta {
-  margin-top: 1.5rem;
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-/* =========================
-   CTA Buttons
-========================= */
-.cta-btn {
-  background: linear-gradient(135deg, var(--green), #2ecc71);
-  color: #fff;
-  font-size: 0.9rem;
-  font-weight: 600;
-  padding: 0.5rem 1.4rem;
-  border-radius: 999px; /* pill shape */
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-  user-select: none;
-  min-width: 120px;
-}
-
-.cta-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-  background: linear-gradient(135deg, #2ecc71, var(--green));
-}
-
-.cta-btn:active {
-  transform: scale(0.96);
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-}
-
-/* Outline CTA */
-.cta-btn.outline {
-  background: transparent;
-  border: 2px solid var(--orange);
-  color: var(--orange);
-}
-
-.cta-btn.outline:hover {
-  background: linear-gradient(135deg, var(--orange), #ff9f43);
-  color: #fff;
-}
-
-/* =========================
-   Animations
-========================= */
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes popIn {
-  0% {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-  60% {
-    opacity: 1;
-    transform: scale(1.05);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-/* Animate headline */
+/* Headline */
 .hero-content h1 {
-  opacity: 0;
-  animation: fadeInUp 0.8s ease forwards;
-  animation-delay: 0.2s;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  line-height: 1.2;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.7);
 }
 
-/* Animate sub-text */
+.hero-content .highlight {
+  color: #ff9800;
+  font-weight: 800;
+}
+
+/* Subtext */
 .hero-sub {
-  opacity: 0;
-  animation: fadeInUp 0.8s ease forwards;
-  animation-delay: 0.5s;
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  margin-bottom: 2rem;
+  color: #f5f5f5;
+  text-shadow: 0 3px 8px rgba(0,0,0,0.6);
 }
 
-/* Animate CTA buttons container */
+/* =========================
+   CTA Buttons 🍲 📅
+========================= */
 .hero-cta {
-  opacity: 0;
-  animation: fadeInUp 0.8s ease forwards;
-  animation-delay: 0.8s;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
 }
 
-/* Pop-in effect for each button */
-.hero-cta .cta-btn {
-  animation: popIn 0.6s ease forwards;
+/* Base button */
+.cta-btn {
+  display: inline-block;
+  padding: 0.85rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 999px;
+  text-decoration: none;
+  text-align: center;
+  min-width: 180px;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
 }
 
-.hero-cta .cta-btn:nth-child(1) {
-  animation-delay: 1s;
+/* 🍲 Browse Recipes (green) */
+.cta-btn.green {
+  background: #4caf50;
+  color: #fff;
+}
+.cta-btn.green:hover {
+  background: #43a047;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.35);
 }
 
-.hero-cta .cta-btn:nth-child(2) {
-  animation-delay: 1.2s;
+/* 📅 Open Planner (dark orange) */
+.cta-btn.orange {
+  background: #ff9800;
+  color: #fff;
+}
+.cta-btn.orange:hover {
+  background: #e68900;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.35);
 }
 
+/* =========================
+   Hero Section (Rectangular for all devices)
+========================= */
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+  width: 100%;
+  min-height: 500px; /* Desktop rectangle height */
+  height: auto;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .hero {
+    min-height: 400px; /* shorter rectangle on smaller screens */
+  }
+}
 
 /* =========================
    Bottom Navigation
@@ -1187,4 +1174,451 @@ form input {
   font-size: 1.5rem;
   color: #ff6b00;
   cursor: pointer;
+}
+
+/* Layout */
+.app-container {
+  padding: 2rem;
+}
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+@media (max-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Card */
+.card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  transition: transform 0.2s;
+}
+.card:hover {
+  transform: translateY(-3px);
+}
+.card-emoji {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Welcome Card */
+.welcome-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.welcome-card a {
+  margin-top: 1rem;
+  text-align: center;
+  display: inline-block;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  background: #4caf50;
+  color: #fff;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.welcome-card a:hover {
+  background: #43a047;
+}
+
+/* Meal Plan Card */
+.meal-plan h3 {
+  margin-bottom: 1rem;
+  color: #f7b500;
+  font-weight: 700;
+}
+
+/* Days Grid */
+.days-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+.day-item {
+  background: #fff8e7;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: background 0.2s;
+}
+.day-item:hover {
+  background: #ffeab8;
+}
+.day-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: none;
+  background: transparent;
+  font-weight: 600;
+  cursor: pointer;
+}
+.day-btn .meal-count {
+  background: #4caf50;
+  color: #fff;
+  font-size: 0.8rem;
+  padding: 0.2rem 0.7rem;
+  border-radius: 50px;
+  font-weight: bold;
+}
+.meal-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 1rem 1rem 1.5rem;
+  display: none; /* start hidden */
+}
+.day-item.active .meal-list {
+  display: block;
+}
+
+/* Buttons */
+.planner-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.btn {
+  border: none;
+  border-radius: 12px;
+  padding: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+}
+.btn:hover {
+  transform: translateY(-2px);
+}
+.btn-primary {
+  background: #4caf50;
+  color: #fff;
+}
+.btn.outline {
+  border: 2px solid #2196f3;
+  background: transparent;
+  color: #2196f3;
+}
+.btn.danger {
+  background: #ef4444;
+  color: #fff;
+}
+.block {
+  width: 100%;
+}
+/* App Layout */
+.app-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 2rem;
+}
+
+/* Card Styles */
+.card {
+  background: #fff;
+  border-radius: 1.2rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+
+.card-emoji {
+  font-size: 1.8rem;
+  margin-bottom: 0.6rem;
+}
+
+.subtitle {
+  color: #666;
+  font-size: 0.95rem;
+  margin-bottom: 1.2rem;
+}
+
+/* Quick Stats */
+.quick-stats {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 0 1.5rem;
+  gap: 0.8rem;
+}
+
+.stat {
+  flex: 1;
+  text-align: center;
+  padding: 0.8rem;
+  background: #f9fafb;
+  border-radius: 0.8rem;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.stat-num {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #16a34a;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: #555;
+}
+
+/* Tip Box */
+.tip-box {
+  background: #fefce8;
+  border: 1px solid #fcd34d;
+  padding: 1rem;
+  border-radius: 0.8rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  text-align: center;
+  padding: 0.8rem 1.2rem;
+  border-radius: 0.8rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #16a34a;
+  color: #fff;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: #15803d;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid #d1d5db;
+  color: #374151;
+}
+
+.btn-outline:hover {
+  background: #f3f4f6;
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: #fff;
+  border: none;
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+}
+
+.block {
+  display: block;
+  width: 100%;
+  margin-top: 0.7rem;
+}
+
+/* Meal Plan Grid */
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.day-item {
+  background: #f9fafb;
+  border-radius: 0.8rem;
+  padding: 0.5rem;
+}
+
+.day-btn {
+  background: #fff;
+  border: none;
+  width: 100%;
+  padding: 0.6rem;
+  font-weight: 600;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.day-btn:hover {
+  background: #e5e7eb;
+}
+
+.meal-list {
+  margin: 0.5rem 0 0;
+  padding-left: 1rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Planner Actions */
+.planner-actions {
+  margin-top: 1.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* small toast notification */
+
+@keyframes flipText {
+  0% { transform: rotateX(90deg); opacity: 0; }
+  20% { transform: rotateX(0deg); opacity: 1; }
+  80% { transform: rotateX(0deg); opacity: 1; }
+  100% { transform: rotateX(-90deg); opacity: 0; }
+}
+
+.tip-box {
+  perspective: 800px; /* gives 3D look */
+}
+
+.tip-box p {
+  display: inline-block;
+  animation: flipText 6s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* Filters Wrapper */
+.filters-wrapper { position: relative; margin-bottom: 1rem; z-index: 20; }
+.filters-wrapper .drawer-toggle { margin-bottom: 1rem; }
+
+/* Drawer */
+.filters-wrapper .filters-drawer {
+  position: fixed; top:0; right:0; width:300px; max-width:90%; height:100%;
+  background:#fff; box-shadow:-4px 0 12px rgba(0,0,0,0.2); display:flex; flex-direction:column;
+  transform:translateX(100%); transition: transform 0.3s ease;
+}
+.filters-wrapper .filters-drawer:not(.hidden){ transform: translateX(0); }
+.filters-wrapper .drawer-header { display:flex; justify-content:space-between; align-items:center; padding:1rem; border-bottom:1px solid #eee; position:sticky; top:0; background:#fff; z-index:10; }
+.filters-wrapper .drawer-body { padding:1rem; flex:1; overflow-y:auto; }
+.filters-wrapper .field { margin-bottom:1rem; display:flex; flex-direction:column; }
+.filters-wrapper .field label { font-weight:600; font-size:0.9rem; margin-bottom:0.25rem; }
+.filters-wrapper .field input, .filters-wrapper .field select { padding:0.5rem; border:1px solid #ccc; border-radius:5px; font-size:0.9rem; }
+.filters-wrapper .filter-actions { display:flex; justify-content:space-between; padding:1rem; border-top:1px solid #eee; position:sticky; bottom:0; background:#fff; }
+
+/* Overlay */
+.filters-wrapper .drawer-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:15; }
+
+/* Quote Block */
+.quote-block { margin:2rem 0; padding:1rem; border:1px solid #eee; border-radius:8px; background:#fdfdfd; max-width:600px; }
+.quote-block blockquote { margin:0 0 1rem; font-style:italic; color:#555; }
+.quote-block .quote-controls { display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; }
+.quote-block .quote-controls label { font-size:0.8rem; margin-right:0.25rem; }
+.quote-block .quote-controls select { padding:0.3rem 0.5rem; border-radius:4px; border:1px solid #ccc; }
+.quote-block .quote-controls button { padding:0.4rem 0.7rem; border-radius:4px; border:none; background:#4CAF50; color:#fff; cursor:pointer; transition:0.2s; }
+.quote-block .quote-controls button:hover { background:#45a049; }
+
+/* Filter actions at bottom of drawer */
+.filters-actions { margin-top:1rem; display:flex; gap:0.5rem; flex-direction:column; }
+.filters-actions .btn { width:100%; }
+
+/* ===== FOOTER ===== */
+.footer {
+  background: #1a1a1a;
+  color: #f5f5f5;
+  text-align: center;
+  padding: 1.5rem 1rem;
+  font-family: 'Inter', sans-serif;
+  position: relative;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Camera icon */
+.camera-icon {
+  position: relative;
+  width: 40px;
+  height: 30px;
+  border: 3px solid #ff6b6b;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.camera-icon .lens {
+  width: 12px;
+  height: 12px;
+  background: #ff6b6b;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.camera-icon .flash {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 8px;
+  height: 8px;
+  background: #ff8787;
+  border-radius: 50%;
+}
+
+/* Footer text */
+.footer p {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 0;
+  max-width: 500px;
+}
+
+.footer small {
+  display: block;
+  font-size: 0.7rem;
+  color: #aaa;
+  margin-top: 0.5rem;
+}
+
+.footer a {
+  color: #ff6b6b;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer a:hover {
+  color: #ff8787;
+}
+
+/* Responsive adjustments */
+@media (min-width: 600px) {
+  .footer-content {
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .footer p {
+    margin: 0 0 0 0.5rem;
+  }
 }

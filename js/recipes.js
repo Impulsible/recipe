@@ -425,3 +425,78 @@
   const meals = await fetchMealsBySearch('jollof');
   renderRecipes(meals);
 })();
+
+// =========================
+// Update Stats Function
+// =========================
+function updateStats() {
+  const FAV_KEY = "rf_favorites";
+  const PLANNER_KEY = "rf_planner";
+
+  const favEl = document.getElementById("favorites");
+  const plannedMealsEl = document.getElementById("plannedMeals");
+  const progressEl = document.getElementById("progress");
+
+  const favorites = JSON.parse(localStorage.getItem(FAV_KEY) || "[]");
+  const planner = JSON.parse(localStorage.getItem(PLANNER_KEY) || "{}");
+
+  favEl.textContent = favorites.length;
+
+  const plannedCount = Object.values(planner).reduce((sum, dayMeals) => sum + dayMeals.length, 0);
+  plannedMealsEl.textContent = plannedCount;
+
+  const days = ["monday","tuesday","wednesday","thursday","friday"];
+  const filledDays = days.filter(day => (planner[day] || []).length > 0).length;
+  const progress = Math.round((filledDays / days.length) * 100);
+  progressEl.textContent = progress + "%";
+}
+
+// Call on load
+document.addEventListener("DOMContentLoaded", updateStats);
+
+// =========================
+// Modified Functions
+// =========================
+const toggleFavorite = (meal) => {
+  const favs = getFavorites();
+  const index = favs.findIndex(f => f.idMeal === meal.idMeal);
+  if (index >= 0) {
+    favs.splice(index, 1);
+    statusMsg && (statusMsg.textContent = `${meal.strMeal} removed from favorites`);
+  } else {
+    favs.unshift(meal);
+    statusMsg && (statusMsg.textContent = `${meal.strMeal} added to favorites`);
+  }
+  setFavorites(favs);
+  renderRecipes(lastRecipes);
+
+  // 🔄 Refresh stats instantly
+  updateStats();
+};
+
+const addToPlanner = (meal, day = 'monday') => {
+  try {
+    const planner = JSON.parse(localStorage.getItem(PLANNER_KEY) || '{}');
+    planner[day] = planner[day] || [];
+    planner[day].push({ id: meal.idMeal, name: meal.strMeal });
+    localStorage.setItem(PLANNER_KEY, JSON.stringify(planner));
+    alert(`Added "${meal.strMeal}" to ${day}`);
+
+    // 🔄 Refresh stats instantly
+    updateStats();
+  } catch (err) {
+    console.error('Planner add failed', err);
+  }
+};
+
+// =========================
+// Reset Planner Button
+// =========================
+document.getElementById("resetPlannerBtn")?.addEventListener("click", () => {
+  if (confirm("Are you sure you want to reset your planner?")) {
+    localStorage.removeItem("rf_planner"); // clear planner storage
+    alert("Planner has been reset!");
+    updateStats(); // 🔄 instantly update dashboard
+  }
+});
+

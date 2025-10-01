@@ -174,174 +174,322 @@ darkModeBtn?.addEventListener("click", () => {
   if (window.lucide) lucide.createIcons();
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-  const categoryFilter = document.getElementById("categoryFilter");
-  const dietFilter = document.getElementById("dietFilter");
-  const applyBtn = document.getElementById("applyFilters");
-  const clearBtn = document.getElementById("clearFilters");
-  const recipeCards = document.querySelectorAll(".recipe-card");
+// =========================
+// Surprise Me - Random Recipe Modal + Add to Planner
+// =========================
+(function () {
+  const randomBtn = document.getElementById("randomBtnToolbar");
+  const modal = document.getElementById("recipeModal");
+  const modalBody = document.getElementById("modalBody");
+  const modalClose = document.getElementById("modalClose");
 
-  // Function to filter cards based on dropdowns
-  function filterRecipes() {
-    const selectedCategory = categoryFilter.value;
-    const selectedDiet = dietFilter.value;
+  const plannerList = document.getElementById("plannerList"); // target list
+  const plannerModal = document.getElementById("plannerModal");
+  const closePlanner = document.getElementById("closePlanner");
 
-    recipeCards.forEach(card => {
-      const cardCategory = card.dataset.category;
-      const cardDiet = card.dataset.diet;
+  if (!randomBtn || !modal || !modalBody) return; // Safe check
 
-      // Show card if it matches both filters or if filter is empty
-      if ((selectedCategory === "" || cardCategory === selectedCategory) &&
-          (selectedDiet === "" || cardDiet === selectedDiet)) {
-        card.style.display = "block";
-      } else {
-        card.style.display = "none";
+  // Build ingredients list
+  function buildIngredients(meal) {
+    let html = "<ul class='ingredients-list'>";
+    for (let i = 1; i <= 20; i++) {
+      const ingredient = meal[`strIngredient${i}`];
+      const measure = meal[`strMeasure${i}`];
+      if (ingredient && ingredient.trim()) {
+        html += `<li>${measure ? measure : ""} ${ingredient}</li>`;
       }
+    }
+    html += "</ul>";
+    return html;
+  }
+
+  // Function to insert recipe details into modal
+  function renderMeal(meal) {
+    modalBody.innerHTML = `
+      <h2 id="modalTitle">${meal.strMeal}</h2>
+      <img src="${meal.strMealThumb}" alt="${meal.strMeal}" style="max-width:100%;border-radius:8px;">
+
+      <p><strong>Category:</strong> ${meal.strCategory || "N/A"}</p>
+      <p><strong>Area:</strong> ${meal.strArea || "N/A"}</p>
+      ${meal.strTags ? `<p><strong>Tags:</strong> ${meal.strTags}</p>` : ""}
+
+      <h3>Ingredients</h3>
+      ${buildIngredients(meal)}
+
+      <h3>Instructions</h3>
+      <p style="white-space:pre-line;line-height:1.5;">${meal.strInstructions}</p>
+
+      ${meal.strYoutube ? `<p><a href="${meal.strYoutube}" target="_blank">📺 Watch Video</a></p>` : ""}
+
+      <button id="addToPlannerBtn" class="btn">➕ Add to Planner</button>
+    `;
+
+    // Attach Add to Planner functionality
+    const addToPlannerBtn = document.getElementById("addToPlannerBtn");
+    addToPlannerBtn.addEventListener("click", () => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <span>${meal.strMeal}</span>
+        <button class="remove-btn">❌</button>
+      `;
+      plannerList.appendChild(li);
+
+      // Allow removing
+      li.querySelector(".remove-btn").addEventListener("click", () => li.remove());
+
+      // Open planner modal after adding
+      plannerModal.classList.remove("hidden");
     });
   }
 
-  // Apply button click
-  applyBtn?.addEventListener("click", filterRecipes);
+  // Random button fetch
+  randomBtn.addEventListener("click", async () => {
+    try {
+      const res = await fetch("https://www.themealdb.com/api/json/v1/1/random.php");
+      const data = await res.json();
+      const meal = data.meals[0];
 
-  // Clear button click
-  clearBtn?.addEventListener("click", () => {
-    categoryFilter.value = "";
-    dietFilter.value = "";
-    recipeCards.forEach(card => card.style.display = "block");
+      renderMeal(meal);
+      modal.classList.remove("hidden");
+    } catch (err) {
+      console.error("Error fetching recipe:", err);
+      modalBody.innerHTML = `<p>⚠️ Sorry, something went wrong fetching the recipe.</p>`;
+      modal.classList.remove("hidden");
+    }
   });
 
-  // Optional: Live filtering as user changes dropdowns
-  categoryFilter?.addEventListener("change", filterRecipes);
-  dietFilter?.addEventListener("change", filterRecipes);
-});
+  // Close recipe modal
+  modalClose?.addEventListener("click", () => modal.classList.add("hidden"));
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) modal.classList.add("hidden");
+  });
 
-const toggleBtn = document.getElementById('toggleFilters');
-const closeBtn = document.getElementById('closeFilters');
-const drawer = document.getElementById('filtersCard');
-const overlay = document.getElementById('drawerOverlay');
-const calRange = document.getElementById('caloriesRange');
-const calLabel = document.getElementById('calLabel');
+  // Close planner modal
+  closePlanner?.addEventListener("click", () => plannerModal.classList.add("hidden"));
+  plannerModal.addEventListener("click", (e) => {
+    if (e.target === plannerModal) plannerModal.classList.add("hidden");
+  });
+})();
 
-// Toggle Drawer
-toggleBtn.addEventListener('click', () => {
-  drawer.classList.toggle('hidden');
-  overlay.classList.toggle('hidden');
-  toggleBtn.setAttribute('aria-expanded', !drawer.classList.contains('hidden'));
-});
+document.addEventListener("DOMContentLoaded", () => {
+  /* =====================
+     WELCOME + GREETING
+  ===================== */
+  const welcomeCard = document.querySelector(".welcome-card");
+  const greeting = document.getElementById("greeting");
+  const foodTalkText = document.getElementById("foodTalkText");
+  const btnEmoji = document.getElementById("btnEmoji");
 
-closeBtn.addEventListener('click', () => {
-  drawer.classList.add('hidden');
-  overlay.classList.add('hidden');
-  toggleBtn.setAttribute('aria-expanded', false);
-});
+  const hour = new Date().getHours();
+  greeting.textContent =
+    hour < 12 ? "Good Morning, Henry 🌅" :
+    hour < 18 ? "Good Afternoon, Henry ☀️" :
+                "Good Evening, Henry 🌙";
 
-overlay.addEventListener('click', () => {
-  drawer.classList.add('hidden');
-  overlay.classList.add('hidden');
-  toggleBtn.setAttribute('aria-expanded', false);
-});
+  const emojis = ["🥗","🍲","🥑","🍎","🍕","🍛","🍤","🍞","🥕","🍇"];
+  const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+  welcomeCard.setAttribute("data-emoji", randomEmoji);
+  btnEmoji.textContent = randomEmoji;
 
-// Update calories label
-calRange.addEventListener('input', () => {
-  calLabel.textContent = calRange.value;
-});
-
-// Make drawer draggable via header only
-let isDragging = false;
-let offsetX = 0;
-let offsetY = 0;
-const header = document.getElementById('drawerHeader');
-
-header.addEventListener('mousedown', dragStart);
-header.addEventListener('touchstart', dragStart, { passive: false });
-
-function dragStart(e) {
-  // Prevent dragging when interacting with inputs inside header (if any)
-  if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'BUTTON') return;
-
-  isDragging = true;
-  const rect = drawer.getBoundingClientRect();
-
-  if(e.type === 'mousedown') {
-    offsetX = e.clientX - rect.left;
-    offsetY = e.clientY - rect.top;
-    document.addEventListener('mousemove', dragMove);
-    document.addEventListener('mouseup', dragEnd);
-  } else {
-    offsetX = e.touches[0].clientX - rect.left;
-    offsetY = e.touches[0].clientY - rect.top;
-    document.addEventListener('touchmove', dragMove, { passive: false });
-    document.addEventListener('touchend', dragEnd);
+  const talks = [
+    "Healthy meals, happy life 🥦",
+    "Good food fuels great days 💪",
+    "Eat better, live better 🌱",
+    "Every bite counts 🍴",
+    "Food is the ingredient that binds us together 🍜",
+    "Small bites, big changes 🥕",
+    "Hydrate, nourish, glow 💧",
+    "Your body deserves the best 🥗",
+    "Cooking is love made visible ❤️"
+  ];
+  let talkIndex = 0, charIndex = 0, typingInterval;
+  function typeTalk() {
+    if (charIndex < talks[talkIndex].length) {
+      foodTalkText.textContent += talks[talkIndex].charAt(charIndex++);
+    } else {
+      clearInterval(typingInterval);
+      setTimeout(() => {
+        talkIndex = (talkIndex + 1) % talks.length;
+        foodTalkText.textContent = "";
+        charIndex = 0;
+        typingInterval = setInterval(typeTalk, 60);
+      }, 3000);
+    }
   }
-}
+  typingInterval = setInterval(typeTalk, 60);
 
-function dragMove(e) {
-  if(!isDragging) return;
-  e.preventDefault(); // Only block default while dragging
-  let x = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
-  let y = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
-  drawer.style.left = `${x - offsetX}px`;
-  drawer.style.top = `${y - offsetY}px`;
-}
+  /* =====================
+     MEAL PLANNER
+  ===================== */
+  const MEALDB_BASE = "https://www.themealdb.com/api/json/v1/1";
+  const PLANNER_KEY = "rf_planner";
+  const days = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
 
-// Meal Plan JS
-const days = ['monday','tuesday','wednesday','thursday','friday'];
-const savedMeals = JSON.parse(localStorage.getItem('mealPlan') || '{}');
+  let planner = JSON.parse(localStorage.getItem(PLANNER_KEY) || "{}");
+  let selectedDay = "";
 
-// Update buttons
-function updateButtons(){
-  document.querySelectorAll('.day-btn').forEach(btn=>{
-    const day = btn.dataset.day;
-    btn.textContent = day.charAt(0).toUpperCase() + day.slice(1);
-    if(savedMeals[day]) btn.textContent += `: ${savedMeals[day]}`;
+  const mealModal = document.getElementById("mealModal");
+  const mealDayLabel = document.getElementById("mealDayLabel");
+  const mealSelect = document.getElementById("mealSelect");
+  const saveMealBtn = document.getElementById("saveMealBtn");
+  const cancelMealBtn = document.getElementById("cancelMealBtn");
+
+  const plannerModal = document.getElementById("plannerModal");
+  const plannerList = document.getElementById("plannerList");
+  const closePlannerBtn = document.getElementById("closePlannerBtn");
+
+  const shoppingModal = document.getElementById("shoppingModal");
+  const shoppingList = document.getElementById("shoppingList");
+  const closeShoppingBtn = document.getElementById("closeShoppingBtn");
+  const downloadShoppingBtn = document.getElementById("downloadShoppingBtn");
+
+  // Load recipes from MealDB
+  async function loadRecipes(q="chicken") {
+    const res = await fetch(`${MEALDB_BASE}/search.php?s=${encodeURIComponent(q)}`);
+    const data = await res.json();
+    const meals = data.meals || [];
+    mealSelect.innerHTML =
+      `<option value="">Select a recipe</option>` +
+      meals.map(m => `<option value="${m.idMeal}" data-name="${m.strMeal}">${m.strMeal}</option>`).join("");
+  }
+
+  // Update UI for a day's meals
+  function updateMealList(day) {
+    const ul = document.getElementById(`${day}Meals`);
+    const meals = planner[day] || [];
+    ul.innerHTML = meals.map(m => `<li>${m.name}</li>`).join("");
+    const count = document.querySelector(`.day-item[data-day="${day}"] .meal-count`);
+    count.textContent = meals.length;
+  }
+
+  // Init all days
+  days.forEach(updateMealList);
+
+  // Day click → open modal
+  document.querySelectorAll(".day-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      selectedDay = btn.dataset.day;
+      mealDayLabel.textContent = selectedDay.charAt(0).toUpperCase() + selectedDay.slice(1);
+      mealModal.classList.remove("hidden");
+      loadRecipes();
+    });
   });
-}
 
-// Day buttons click
-document.querySelectorAll('.day-btn').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    const day = btn.dataset.day;
-    const meal = prompt(`Enter your meal for ${day}:`, savedMeals[day] || '');
-    if(meal !== null){
-      savedMeals[day] = meal.trim();
-      localStorage.setItem('mealPlan', JSON.stringify(savedMeals));
-      updateButtons();
+  // Save meal
+  saveMealBtn.addEventListener("click", () => {
+    const mealId = mealSelect.value;
+    const mealName = mealSelect.selectedOptions[0]?.dataset.name;
+    if (!mealId) return;
+
+    planner[selectedDay] = planner[selectedDay] || [];
+    planner[selectedDay].push({ id: mealId, name: mealName });
+    localStorage.setItem(PLANNER_KEY, JSON.stringify(planner));
+    updateMealList(selectedDay);
+    mealModal.classList.add("hidden");
+  });
+
+    cancelMealBtn.addEventListener("click", () => mealModal.classList.add("hidden"));
+  
+  });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const dayButtons = document.querySelectorAll(".day-btn");
+
+  // ===== Open Day Modal =====
+  const modal = document.getElementById("mealModal");
+  const cancelBtn = document.getElementById("cancelMealBtn");
+
+  dayButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const day = btn.parentElement.dataset.day;
+      document.getElementById("mealDayLabel").textContent =
+        day.charAt(0).toUpperCase() + day.slice(1);
+      modal.classList.add("show");
+    });
+  });
+
+  cancelBtn.addEventListener("click", () => modal.classList.remove("show"));
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) modal.classList.remove("show");
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") modal.classList.remove("show");
+  });
+
+  // ===== Planner Button (go to planner.html) =====
+  document.getElementById("openPlannerBtn").addEventListener("click", () => {
+    window.location.href = "planner.html";
+  });
+
+  // ===== Shopping List Button (go to shopping.html) =====
+  document.getElementById("shoppingListBtn").addEventListener("click", () => {
+    window.location.href = "shopping.html";
+  });
+
+  // ===== Reset Planner Button =====
+  document.getElementById("resetPlannerBtn").addEventListener("click", () => {
+    if (confirm("Are you sure you want to reset your meal plan?")) {
+      localStorage.removeItem("mealPlan"); // clear storage
+      document.querySelectorAll(".meal-count").forEach(el => el.textContent = "0");
+      document.querySelectorAll(".meal-list").forEach(el => el.innerHTML = "");
+      alert("✅ Meal plan has been reset!");
     }
   });
 });
 
-// Open Planner Modal
-const openPlannerBtn = document.getElementById('openPlannerBtn');
-const plannerModal = document.getElementById('plannerModal');
-const plannerList = document.getElementById('plannerList');
-const closePlanner = document.getElementById('closePlanner');
-
-openPlannerBtn.addEventListener('click', ()=>{
-  plannerList.innerHTML = '';
-  days.forEach(day=>{
-    const li = document.createElement('li');
-    li.textContent = `${day.charAt(0).toUpperCase() + day.slice(1)}: ${savedMeals[day] || '-'}`;
-    plannerList.appendChild(li);
+// Expand/collapse meals per day
+document.querySelectorAll(".day-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    btn.parentElement.classList.toggle("active");
   });
-  plannerModal.classList.remove('hidden');
 });
 
-closePlanner.addEventListener('click', ()=>plannerModal.classList.add('hidden'));
-plannerModal.addEventListener('click', e=>{
-  if(e.target === plannerModal) plannerModal.classList.add('hidden');
+// Button actions
+document.getElementById("openPlannerBtn").addEventListener("click", () => {
+  window.location.href = "planner.html"; // go to planner
 });
-
-// Shopping List
-const shoppingBtn = document.getElementById('shoppingListBtn');
-shoppingBtn.addEventListener('click', ()=>{
-  const meals = Object.values(savedMeals).filter(m=>m);
-  if(meals.length === 0){
-    alert("No meals added yet.");
-    return;
+document.getElementById("shoppingListBtn").addEventListener("click", () => {
+  window.location.href = "shopping.html"; // go to shopping
+});
+document.getElementById("resetPlannerBtn").addEventListener("click", () => {
+  if (confirm("Reset all meals?")) {
+    document.querySelectorAll(".meal-list").forEach(list => list.innerHTML = "");
+    document.querySelectorAll(".meal-count").forEach(count => count.textContent = "0");
   }
-  alert("Shopping List:\n" + meals.join('\n'));
 });
 
-// Initialize
-updateButtons();
+document.addEventListener("DOMContentLoaded", () => {
+  // Load data from localStorage (or your recipe/meal plan system)
+  let planner = JSON.parse(localStorage.getItem("mealPlan")) || {};
+  let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+
+  // ===== Meals Planned =====
+  let plannedMealsCount = Object.values(planner).flat().length;
+  document.getElementById("plannedMeals").textContent = plannedMealsCount;
+
+  // ===== Favorites =====
+  document.getElementById("favorites").textContent = favorites.length;
+
+  // ===== Progress =====
+  // Example: progress = % of days with at least 1 meal planned
+  const days = ["monday","tuesday","wednesday","thursday","friday"];
+  let filledDays = days.filter(day => (planner[day] || []).length > 0).length;
+  let progressPercent = Math.round((filledDays / days.length) * 100);
+  document.getElementById("progress").textContent = progressPercent + "%";
+});
+
+// Reset Planner
+document.getElementById("resetPlannerLink").addEventListener("click", function(e) {
+    e.preventDefault(); // prevent default link behavior
+
+    // Reset all meal counts to 0
+    const counts = document.querySelectorAll(".meal-count");
+    counts.forEach(count => count.textContent = "0");
+
+    // Clear all meal lists
+    const mealLists = document.querySelectorAll(".meal-list");
+    mealLists.forEach(list => list.innerHTML = "");
+
+    alert("Meal planner has been reset!"); // optional feedback
+});
 
