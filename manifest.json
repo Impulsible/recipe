@@ -1,0 +1,25 @@
+{
+  "name": "Recipe Finder + Nutrition Tracker",
+  "short_name": "Recipe Finder",
+  "description": "Discover recipes, track nutrition, and plan healthy meals easily.",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4CAF50",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "images/cook.jpg",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "images/cook.jpg",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

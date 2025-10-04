@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +8,9 @@
   <meta name="description" content="Recipe Finder + Nutrition Tracker — discover recipes by ingredient or diet, view nutrition facts, save favorites, plan meals, and generate shopping lists.">
   <meta name="keywords" content="recipe finder, nutrition tracker, meal planner, shopping list, healthy recipes, Nigerian recipes, food app">
   <meta name="author" content="Henry Osuagwu">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
 
   <!-- TITLE -->
   <title>Recipe Finder + Nutrition Tracker</title>
@@ -22,24 +26,25 @@
   <!-- STYLES -->
   <link rel="stylesheet" href="css/styles.css">
 
-  <!-- FAVICON -->
-  <link rel="icon" href="images/favicon.png">
+  <!-- Favicon and PWA -->
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="images/icon-192.png">
+<link rel="apple-touch-icon" href="images/icon-512.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4CAF50">
+
 
   <!-- SOCIAL META -->
   <meta property="og:title" content="Recipe Finder + Nutrition Tracker">
   <meta property="og:description" content="Discover recipes, track nutrition, save favorites, and plan healthy meals.">
-  <meta property="og:image" content="images/preview.png">
+  <meta property="og:image" content="images/cook.jpg">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://yourwebsite.com/">
+  <meta property="og:url" content="https://impulsible.github.io/recipe/">
   <meta name="twitter:card" content="summary_large_image">
 
-  <!-- PWA -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#ffcc00">
 </head>
 <body>
   
-   
   <!-- ================= HEADER ================= -->
   <header class="site-header" role="banner">
     <div class="container header-inner">
@@ -104,27 +109,35 @@
   <div id="backdrop" class="backdrop"></div>
 
   <!-- ================= HERO ================= -->
-<section class="hero">
+<section class="hero" id="hero">
+  <!-- Background Image -->
   <picture class="hero-picture">
-    <source media="(min-width: 1025px)" srcset="images/home.jpeg">
-    <source media="(min-width: 601px)" srcset="images/home.jpeg">
-    <img src="images/home.jpeg" alt="Fresh healthy meal" class="hero-img">
+    <source media="(min-width: 1025px)" srcset="images/find.avif" type="image/avif">
+    <source media="(min-width: 601px)" srcset="images/find.avif" type="image/avif">
+    <img src="images/find.avif" alt="Fresh healthy meal" class="hero-img" loading="lazy">
   </picture>
 
+  <!-- Overlay -->
+  <div class="hero-overlay"></div>
+
+  <!-- Hero Content -->
   <div class="hero-content">
     <h1>
       Plan Smarter, Eat <span class="highlight">Healthier</span>.<br>
       <span class="highlight">Discover</span> Recipes. Track <span class="highlight">Nutrition</span>.
     </h1>
+
     <p class="hero-sub">
       Every kitchen is a canvas. Every meal, a masterpiece. Start with what you have and create something unforgettable.
     </p>
+
     <div class="hero-cta">
       <a href="recipes.html" class="cta-btn green">🍲 Browse Recipes</a>
       <a href="planner.html" class="cta-btn orange">📅 Open Planner</a>
     </div>
   </div>
 </section>
+
 
 <main class="app-container">
   <!-- Dashboard Grid -->
@@ -274,6 +287,10 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => lucide.createIcons());
   </script>
+<!-- Scroll to Top Button -->
+<button id="scrollTopBtn" aria-label="Scroll to Top">
+  🍴
+</button>
 
 </body>
 </html>

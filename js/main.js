@@ -1,7 +1,3 @@
-// =========================
-// main.js
-// Handles sidebar, dark mode, year/lastModified, profile, hero interactions
-// =========================
 
 document.addEventListener("DOMContentLoaded", () => {
   // ===== Utilities =====
@@ -108,57 +104,85 @@ darkModeBtn?.addEventListener("click", () => {
       { passive: true }
     );
   }
+// public/js/main.js
+console.log('✅ main.js loaded');
 
-  // ===== Profile =====
-  const profileBtn = qs("#profileBtn");
-  const logoutBtn = qs("#logoutBtn");
-  const profileForm = qs("#profileForm");
-  const sidebarName = qs("#sidebarName");
-  const sidebarEmail = qs("#sidebarEmail");
-  const welcomeText = qs("#welcomeText");
-  const welcomeMessage = qs("#welcomeMessage");
+document.addEventListener('DOMContentLoaded', () => {
+  // --- Utilities ---
+  const $ = sel => document.querySelector(sel);
+  const $$ = sel => Array.from(document.querySelectorAll(sel));
 
-  function loadProfile() {
-    const name = localStorage.getItem("profileName");
-    const email = localStorage.getItem("profileEmail");
 
-    if (sidebarName) sidebarName.textContent = name || "Guest";
-    if (sidebarEmail) sidebarEmail.textContent = email || "Not signed in";
-    if (welcomeText) {
-      welcomeText.textContent = name ? `Welcome back, ${name} 👋` : "Welcome back, Guest 👋";
-    }
-    if (welcomeMessage && name) {
-      welcomeMessage.textContent = `Welcome back, ${name} 👋`;
-    }
+
+  // --- Sidebar / Backdrop ---
+  const menuBtn = $('#menuBtn');
+  const sidebar = $('#sidebar');
+  const closeSidebar = $('#closeSidebar');
+  const backdrop = $('#backdrop');
+
+  function openSidebar() {
+    if (!sidebar) return;
+    sidebar.classList.add('active');
+    backdrop.classList.add('show');
+    document.body.style.overflow = 'hidden';
   }
-  loadProfile();
+  function closeSidebarFn() {
+    if (!sidebar) return;
+    sidebar.classList.remove('active');
+    backdrop.classList.remove('show');
+    document.body.style.overflow = '';
+  }
 
-  profileBtn?.addEventListener("click", () => (window.location.href = "profile.html"));
+  if (menuBtn) menuBtn.addEventListener('click', openSidebar);
+  if (closeSidebar) closeSidebar.addEventListener('click', closeSidebarFn);
+  if (backdrop) backdrop.addEventListener('click', closeSidebarFn);
 
-  logoutBtn?.addEventListener("click", () => {
-    localStorage.removeItem("profileName");
-    localStorage.removeItem("profileEmail");
-    loadProfile();
-    alert("Signed out successfully.");
-    window.location.href = "index.html";
-  });
+  // --- Dark mode toggle (persist in localStorage) ---
+  const darkToggle = $('#darkModeToggle');
+  const savedTheme = localStorage.getItem('rf_theme');
+  if (savedTheme === 'dark') document.body.classList.add('dark');
 
-  if (profileForm) {
-    const nameInput = qs("#profileName");
-    const emailInput = qs("#profileEmail");
-    if (nameInput) nameInput.value = localStorage.getItem("profileName") || "";
-    if (emailInput) emailInput.value = localStorage.getItem("profileEmail") || "";
+  if (darkToggle) {
+    darkToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      const isDark = document.body.classList.contains('dark');
+      localStorage.setItem('rf_theme', isDark ? 'dark' : 'light');
+      // update aria
+      darkToggle.setAttribute('aria-pressed', String(isDark));
+    });
+  }
 
-    profileForm.addEventListener("submit", (e) => {
+  // --- Planner reset example handler (if present) ---
+  const resetPlannerLink = document.getElementById('resetPlannerLink');
+  if (resetPlannerLink) {
+    resetPlannerLink.addEventListener('click', (e) => {
       e.preventDefault();
-      if (nameInput && emailInput) {
-        localStorage.setItem("profileName", nameInput.value);
-        localStorage.setItem("profileEmail", emailInput.value);
-        alert("Profile saved!");
-        window.location.href = "index.html";
+      if (confirm('Reset the planner? This will remove saved meals for the week.')) {
+        // example: clear localStorage keys used by planner
+        localStorage.removeItem('rf_mealplan');
+        // clear UI counts
+        $$('.meal-count').forEach(n => n.textContent = '0');
+        alert('Planner reset.');
       }
     });
   }
+
+  // --- Make sure lucide icons exist then create icons ---
+  try {
+    if (window.lucide && typeof window.lucide.createIcons === 'function') {
+      window.lucide.createIcons();
+    } else {
+      console.log('lucide not available yet — createIcons skipped.');
+    }
+  } catch (err) {
+    console.warn('lucide.createIcons error:', err);
+  }
+
+  // debug helper to show resource checks in console
+  console.log('UI wired: sidebar:', !!sidebar, 'backdrop:', !!backdrop, 'darkToggle:', !!darkToggle);
+});
+
+
 
   // ===== Active Nav Highlight =====
   const currentPage = window.location.pathname.split("/").pop();
@@ -292,16 +316,28 @@ document.addEventListener("DOMContentLoaded", () => {
   btnEmoji.textContent = randomEmoji;
 
   const talks = [
-    "Healthy meals, happy life 🥦",
-    "Good food fuels great days 💪",
-    "Eat better, live better 🌱",
-    "Every bite counts 🍴",
-    "Food is the ingredient that binds us together 🍜",
-    "Small bites, big changes 🥕",
-    "Hydrate, nourish, glow 💧",
-    "Your body deserves the best 🥗",
-    "Cooking is love made visible ❤️"
-  ];
+  "Healthy meals, happy life 🥦",
+  "Good food fuels great days 💪",
+  "Eat better, live better 🌱",
+  "Every bite counts 🍴",
+  "Food is the ingredient that binds us together 🍜",
+  "Small bites, big changes 🥕",
+  "Hydrate, nourish, glow 💧",
+  "Your body deserves the best 🥗",
+  "Cooking is love made visible ❤️",
+  "Savor the flavor of wellness 🍋",
+  "You are what you eat — so eat something amazing 🍇",
+  "Good vibes start with good food ✨",
+  "Wholesome plates, wholesome hearts 💚",
+  "A balanced diet is a recipe for joy ⚖️",
+  "Fuel your body, feed your soul 🍓",
+  "Tasty meets healthy — the perfect match 🥑",
+  "Nourishment is self-care 🌻",
+  "Every meal is a chance to thrive 🌾",
+  "Cook with passion, eat with purpose 🍲",
+  "From market to table, make every moment delicious 🛒"
+];
+
   let talkIndex = 0, charIndex = 0, typingInterval;
   function typeTalk() {
     if (charIndex < talks[talkIndex].length) {
@@ -393,12 +429,15 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 document.addEventListener("DOMContentLoaded", () => {
-  const dayButtons = document.querySelectorAll(".day-btn");
-
-  // ===== Open Day Modal =====
+  // ===== Elements =====
   const modal = document.getElementById("mealModal");
   const cancelBtn = document.getElementById("cancelMealBtn");
+  const dayButtons = document.querySelectorAll(".day-btn");
+  const resetBtn = document.getElementById("resetPlannerBtn") || document.getElementById("resetPlannerLink");
+  const openPlannerBtn = document.getElementById("openPlannerBtn");
+  const shoppingListBtn = document.getElementById("shoppingListBtn");
 
+  // ===== Modal Handling =====
   dayButtons.forEach(btn => {
     btn.addEventListener("click", () => {
       const day = btn.parentElement.dataset.day;
@@ -408,88 +447,79 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  cancelBtn.addEventListener("click", () => modal.classList.remove("show"));
-  modal.addEventListener("click", (e) => {
+  cancelBtn?.addEventListener("click", () => modal.classList.remove("show"));
+  modal?.addEventListener("click", e => {
     if (e.target === modal) modal.classList.remove("show");
   });
-  document.addEventListener("keydown", (e) => {
+  document.addEventListener("keydown", e => {
     if (e.key === "Escape") modal.classList.remove("show");
   });
 
-  // ===== Planner Button (go to planner.html) =====
-  document.getElementById("openPlannerBtn").addEventListener("click", () => {
-    window.location.href = "planner.html";
-  });
+  // ===== Navigation Buttons =====
+  openPlannerBtn?.addEventListener("click", () => (window.location.href = "planner.html"));
+  shoppingListBtn?.addEventListener("click", () => (window.location.href = "shopping.html"));
 
-  // ===== Shopping List Button (go to shopping.html) =====
-  document.getElementById("shoppingListBtn").addEventListener("click", () => {
-    window.location.href = "shopping.html";
-  });
+  // ===== Reset Planner =====
+  resetBtn?.addEventListener("click", e => {
+    e.preventDefault();
+    if (confirm("♻️ Are you sure you want to reset your meal plan?")) {
+      // Clear stored data
+      localStorage.removeItem("mealPlan");
 
-  // ===== Reset Planner Button =====
-  document.getElementById("resetPlannerBtn").addEventListener("click", () => {
-    if (confirm("Are you sure you want to reset your meal plan?")) {
-      localStorage.removeItem("mealPlan"); // clear storage
-      document.querySelectorAll(".meal-count").forEach(el => el.textContent = "0");
-      document.querySelectorAll(".meal-list").forEach(el => el.innerHTML = "");
-      alert("✅ Meal plan has been reset!");
+      // Reset all visual data
+      document.querySelectorAll(".meal-list").forEach(list => (list.innerHTML = ""));
+      document.querySelectorAll(".meal-count").forEach(count => (count.textContent = "0"));
+
+      // Reset dashboard stats
+      document.getElementById("plannedMeals").textContent = "0";
+      document.getElementById("progress").textContent = "0%";
+
+      alert("✅ All meals have been cleared successfully!");
     }
   });
+
+  // ===== Load Stats on Startup =====
+  loadDashboardStats();
 });
 
-// Expand/collapse meals per day
-document.querySelectorAll(".day-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    btn.parentElement.classList.toggle("active");
-  });
-});
+/* =======================
+   DASHBOARD STATS LOADER
+=========================*/
+function loadDashboardStats() {
+  const planner = JSON.parse(localStorage.getItem("mealPlan")) || {};
+  const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
-// Button actions
-document.getElementById("openPlannerBtn").addEventListener("click", () => {
-  window.location.href = "planner.html"; // go to planner
-});
-document.getElementById("shoppingListBtn").addEventListener("click", () => {
-  window.location.href = "shopping.html"; // go to shopping
-});
-document.getElementById("resetPlannerBtn").addEventListener("click", () => {
-  if (confirm("Reset all meals?")) {
-    document.querySelectorAll(".meal-list").forEach(list => list.innerHTML = "");
-    document.querySelectorAll(".meal-count").forEach(count => count.textContent = "0");
+  const plannedMeals = Object.values(planner).flat().length;
+  const days = ["monday", "tuesday", "wednesday", "thursday", "friday"];
+  const filledDays = days.filter(day => (planner[day] || []).length > 0).length;
+  const progressPercent = Math.round((filledDays / days.length) * 100);
+
+  document.getElementById("plannedMeals").textContent = plannedMeals;
+  document.getElementById("favorites").textContent = favorites.length;
+  document.getElementById("progress").textContent = progressPercent + "%";
+}
+// Scroll to Top Button
+const scrollTopBtn = document.getElementById("scrollTopBtn");
+
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 400) {
+    scrollTopBtn.classList.add("show");
+  } else {
+    scrollTopBtn.classList.remove("show");
   }
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-  // Load data from localStorage (or your recipe/meal plan system)
-  let planner = JSON.parse(localStorage.getItem("mealPlan")) || {};
-  let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-
-  // ===== Meals Planned =====
-  let plannedMealsCount = Object.values(planner).flat().length;
-  document.getElementById("plannedMeals").textContent = plannedMealsCount;
-
-  // ===== Favorites =====
-  document.getElementById("favorites").textContent = favorites.length;
-
-  // ===== Progress =====
-  // Example: progress = % of days with at least 1 meal planned
-  const days = ["monday","tuesday","wednesday","thursday","friday"];
-  let filledDays = days.filter(day => (planner[day] || []).length > 0).length;
-  let progressPercent = Math.round((filledDays / days.length) * 100);
-  document.getElementById("progress").textContent = progressPercent + "%";
+scrollTopBtn.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 });
 
-// Reset Planner
-document.getElementById("resetPlannerLink").addEventListener("click", function(e) {
-    e.preventDefault(); // prevent default link behavior
-
-    // Reset all meal counts to 0
-    const counts = document.querySelectorAll(".meal-count");
-    counts.forEach(count => count.textContent = "0");
-
-    // Clear all meal lists
-    const mealLists = document.querySelectorAll(".meal-list");
-    mealLists.forEach(list => list.innerHTML = "");
-
-    alert("Meal planner has been reset!"); // optional feedback
-});
-
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('✅ Service Worker registered successfully!'))
+      .catch(err => console.error('❌ Service Worker registration failed:', err));
+  });
+}

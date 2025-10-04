@@ -113,61 +113,120 @@
     });
   };
 
-  // =========================
-  // Render
-  // =========================
-  async function renderRecipes(recipes = []) {
-    lastRecipes = recipes;
-    recipeList.innerHTML = '';
+  
+// =========================
+// Ratings Storage & Logic
+// =========================
+const RATINGS_KEY = "rf_ratings";
 
-    if (!recipes.length) {
-      recipeList.innerHTML = '<p class="empty">No recipes found.</p>';
-      resultCount && (resultCount.textContent = '0');
-      return;
-    }
+function getRatings() {
+  return JSON.parse(localStorage.getItem(RATINGS_KEY) || "{}");
+}
 
-    const toShow = showingFavoritesOnly ? getFavorites() : recipes;
-    resultCount && (resultCount.textContent = toShow.length);
+function setRatings(data) {
+  localStorage.setItem(RATINGS_KEY, JSON.stringify(data));
+}
 
-    for (const meal of toShow) {
-      // Fetch calories if Edamam keys provided
-      let calories = null;
-      if (meal.strIngredient1 && EDAMAM_ID && EDAMAM_KEY) {
-        const nutrit = await fetchNutritionForIngredient(`${meal.strIngredient1} 100g`);
-        calories = nutrit?.calories ? Math.round(nutrit.calories) : null;
-      }
+function renderStars() {
+  document.querySelectorAll(".rating").forEach((ratingDiv) => {
+    const id = ratingDiv.dataset.id;
+    const stars = ratingDiv.querySelectorAll(".star");
+    const ratings = getRatings();
+    const entry = ratings[id] || [];
+    const avg = entry.length
+      ? (entry.reduce((a, b) => a + b, 0) / entry.length).toFixed(1)
+      : "0.0";
 
-      const isFav = isFavorite(meal.idMeal);
-      const card = document.createElement('article');
-      card.className = 'recipe-card';
-      card.innerHTML = `
-        <div class="card-image">
-          <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
-        </div>
-        <div class="card-body">
-          <h4>${meal.strMeal}</h4>
-          <p class="meta">${meal.strArea} • ${meal.strCategory}</p>
-          <div class="nutrition">🔥 ${calories ?? '—'} cal</div>
-          <div class="card-actions">
-            <button class="btn outline save-btn">${isFav ? 'Unsave' : 'Save'}</button>
-            <button class="btn planner-btn">Add to Planner</button>
-            <button class="btn small detail-btn">View</button>
-          </div>
-        </div>
-      `;
+    // Highlight stars
+    stars.forEach((star, i) => {
+      star.classList.toggle("active", i < Math.round(avg));
+    });
 
-      card.querySelector('.save-btn')?.addEventListener('click', () => toggleFavorite(meal));
-      card.querySelector('.planner-btn')?.addEventListener('click', () => {
-        const day = prompt('Add to which day? (monday, tuesday, etc.)', 'monday');
-        if (day) addToPlanner(meal, day.toLowerCase());
+    ratingDiv.querySelector(".avg").textContent = `(${avg})`;
+
+    // Click to rate
+    stars.forEach((star) => {
+      star.addEventListener("click", () => {
+        const val = Number(star.dataset.value);
+        ratings[id] = ratings[id] || [];
+        ratings[id].push(val);
+        setRatings(ratings);
+        renderStars(); // re-render stars after rating
       });
-      card.querySelector('.detail-btn')?.addEventListener('click', () => openModal(meal.idMeal));
+    });
+  });
+}
 
-      recipeList.appendChild(card);
+// =========================
+// Render Recipes
+// =========================
+async function renderRecipes(recipes = []) {
+  lastRecipes = recipes;
+  recipeList.innerHTML = "";
+
+  if (!recipes.length) {
+    recipeList.innerHTML = '<p class="empty">No recipes found.</p>';
+    resultCount && (resultCount.textContent = "0");
+    return;
+  }
+
+  const toShow = showingFavoritesOnly ? getFavorites() : recipes;
+  resultCount && (resultCount.textContent = toShow.length);
+
+  for (const meal of toShow) {
+    // Fetch calories if Edamam keys provided
+    let calories = null;
+    if (meal.strIngredient1 && EDAMAM_ID && EDAMAM_KEY) {
+      const nutrit = await fetchNutritionForIngredient(`${meal.strIngredient1} 100g`);
+      calories = nutrit?.calories ? Math.round(nutrit.calories) : null;
     }
 
-    window.lucide?.createIcons();
+    const isFav = isFavorite(meal.idMeal);
+
+    // Build card HTML
+    const card = document.createElement("article");
+    card.className = "recipe-card";
+    card.innerHTML = `
+      <div class="card-image">
+        <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
+      </div>
+      <div class="card-body">
+        <h4>${meal.strMeal}</h4>
+        <p class="meta">${meal.strArea} • ${meal.strCategory}</p>
+
+        <div class="nutrition">🔥 ${calories ?? "—"} cal</div>
+
+        <div class="rating" data-id="${meal.idMeal}">
+          <span class="star" data-value="1">★</span>
+          <span class="star" data-value="2">★</span>
+          <span class="star" data-value="3">★</span>
+          <span class="star" data-value="4">★</span>
+          <span class="star" data-value="5">★</span>
+          <span class="avg"></span>
+        </div>
+
+        <div class="card-actions">
+          <button class="btn outline save-btn">${isFav ? "Unsave" : "Save"}</button>
+          <button class="btn planner-btn">Add to Planner</button>
+          <button class="btn small detail-btn">View</button>
+        </div>
+      </div>
+    `;
+
+    // --- Event listeners ---
+    card.querySelector(".save-btn")?.addEventListener("click", () => toggleFavorite(meal));
+    card.querySelector(".planner-btn")?.addEventListener("click", () => {
+      const day = prompt("Add to which day? (monday, tuesday, etc.)", "monday");
+      if (day) addToPlanner(meal, day.toLowerCase());
+    });
+    card.querySelector(".detail-btn")?.addEventListener("click", () => openModal(meal.idMeal));
+
+    recipeList.appendChild(card);
   }
+
+  renderStars(); // ⭐ Initialize ratings
+  window.lucide?.createIcons?.();
+}
 
   // =========================
   // Modal
