@@ -875,4 +875,6 @@ generateDashboardCards();
   }
   menuBtn.addEventListener("click", () => toggleSidebar(true));
   closeSidebarBtn.addEventListener("click", () => toggleSidebar(false));
-  backdrop.addEventListener("click", () => toggleSidebar(false));
+backdrop.addEventListener("click", () => toggleSidebar(false));
+  
+

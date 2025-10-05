@@ -1,17 +1,12 @@
-/* js/recipes.js
-   Full Recipes page logic: Theme-agnostic, works with your global CSS and recipes.css
-   - Uses TheMealDB for recipes
-   - Optional Edamam integration for nutrition (provide EDAMAM_ID/EDAMAM_KEY)
-*/
 
 (() => {
   // =========================
   // Config & DOM
   // =========================
-  const MEALDB_BASE = 'https://www.themealdb.com/api/json/v1/1';
-  const EDAMAM_API = 'https://api.edamam.com/api/nutrition-data';
-  const EDAMAM_ID = ''; // optional: set your id
-  const EDAMAM_KEY = ''; // optional: set your key
+const MEALDB_BASE = 'https://www.themealdb.com/api/json/v1/1';
+const EDAMAM_API = 'https://api.edamam.com/api/nutrition-data';
+const EDAMAM_ID = '1edd8316'; // your Edamam ID
+const EDAMAM_KEY = 'fff5581f3438a5bcac6ab5e038dda7ae'; // your Edamam KEY
 
   // DOM
   const recipeList = document.getElementById('recipeList');
@@ -170,6 +165,8 @@
     };
   };
 
+  
+
   // =========================
   // Ratings UI
   // =========================
@@ -280,6 +277,7 @@
       progressEl.textContent = progress + "%";
     }
   }
+
 
   // =========================
   // Favorites & Planner actions
@@ -724,8 +722,8 @@
 
 const MEALDB_BASE = 'https://www.themealdb.com/api/json/v1/1';
 const EDAMAM_API = 'https://api.edamam.com/api/nutrition-data';
-const EDAMAM_ID = ''; // Optional: set your Edamam app ID
-const EDAMAM_KEY = ''; // Optional: set your Edamam app key
+const EDAMAM_ID = '1edd8316'; // your Edamam ID
+const EDAMAM_KEY = 'fff5581f3438a5bcac6ab5e038dda7ae'; // your Edamam KEY
 
 const dashboardGrid = document.getElementById('dashboardGrid');
 const modal = document.getElementById('dashboardModal');
@@ -779,9 +777,10 @@ function createMiniMacroRing(container, macro, value) {
   container.appendChild(macroDiv);
 }
 
-// Generate dashboard cards
+// Generate dashboard cards with nutrition info
 async function generateDashboardCards() {
   const usedMeals = new Set();
+
   for (let i = 0; i < 12; i++) {
     let meal;
     do {
@@ -801,7 +800,23 @@ async function generateDashboardCards() {
       const measure = meal[`strMeasure${j}`];
       if (ingredient) ingredients.push(`${measure} ${ingredient}`);
     }
-    card.dataset.description = ingredients.join(', ');
+    const ingredientsText = ingredients.join(', ');
+    card.dataset.description = ingredientsText;
+
+    // Fetch nutrition data immediately
+    try {
+      const url = `${EDAMAM_API}?app_id=${EDAMAM_ID}&app_key=${EDAMAM_KEY}&ingr=${encodeURIComponent(ingredientsText)}`;
+      const nutritionRes = await fetch(url);
+      const nutritionData = await nutritionRes.json();
+      card.dataset.nutrition = `
+        Calories: ${nutritionData.calories || 'N/A'} kcal,
+        Protein: ${nutritionData.totalNutrients?.PROCNT?.quantity?.toFixed(1) || 'N/A'} g,
+        Carbs: ${nutritionData.totalNutrients?.CHOCDF?.quantity?.toFixed(1) || 'N/A'} g,
+        Fat: ${nutritionData.totalNutrients?.FAT?.quantity?.toFixed(1) || 'N/A'} g
+      `;
+    } catch {
+      card.dataset.nutrition = 'Nutrition info unavailable.';
+    }
 
     // Card inner HTML
     card.innerHTML = `
@@ -812,7 +827,7 @@ async function generateDashboardCards() {
       </div>
     `;
 
-    // Add mini macro rings (randomized for demo)
+    // Add mini macro rings
     const overlay = card.querySelector('.card-overlay');
     const macroContainer = document.createElement("div");
     macroContainer.classList.add("macro-mini");
@@ -823,31 +838,12 @@ async function generateDashboardCards() {
 
     dashboardGrid.appendChild(card);
 
-    // Click event for modal
-    card.addEventListener("click", async () => {
+    // Modal click
+    card.addEventListener("click", () => {
       modal.classList.remove("hidden");
       modalTitle.textContent = card.dataset.title;
       modalSteps.textContent = card.dataset.steps;
-
-      // Optional: fetch nutrition data from Edamam if ID & KEY are provided
-      if (EDAMAM_ID && EDAMAM_KEY) {
-        const url = `${EDAMAM_API}?app_id=${EDAMAM_ID}&app_key=${EDAMAM_KEY}&ingr=${encodeURIComponent(card.dataset.description)}`;
-        try {
-          const nutritionRes = await fetch(url);
-          const nutritionData = await nutritionRes.json();
-          modalDescription.innerHTML = `
-            <strong>Nutrition Info:</strong><br>
-            Calories: ${nutritionData.calories || 'N/A'} kcal<br>
-            Protein: ${nutritionData.totalNutrients?.PROCNT?.quantity?.toFixed(1) || 'N/A'} g<br>
-            Carbs: ${nutritionData.totalNutrients?.CHOCDF?.quantity?.toFixed(1) || 'N/A'} g<br>
-            Fat: ${nutritionData.totalNutrients?.FAT?.quantity?.toFixed(1) || 'N/A'} g
-          `;
-        } catch {
-          modalDescription.textContent = 'Nutrition info unavailable.';
-        }
-      } else {
-        modalDescription.textContent = 'Nutrition info unavailable. Set EDAMAM_ID & EDAMAM_KEY to fetch.';
-      }
+      modalDescription.textContent = card.dataset.nutrition;
     });
   }
 }
