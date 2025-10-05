@@ -841,7 +841,7 @@ async function generateDashboardCards() {
     });
   }
 
-  dashboardLoader.style.display = 'none'; // Hide loader after cards are ready
+  dashboardLoader.style.display = 'none'; // Hide loader
 }
 generateDashboardCards();
   const menuBtn = document.getElementById("menuBtn");
@@ -896,6 +896,3 @@ function updateMacro(el, newValue) {
   ringEl.classList.add('pulse');
 }
 
-// Example usage:
-// const caloriesRing = document.querySelector('.macro-summary .ms-item.calories');
-// updateMacro(caloriesRing, 560);

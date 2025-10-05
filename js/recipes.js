@@ -1,3 +1,8 @@
+/* js/recipes.js
+   Full Recipes page logic: Theme-agnostic, works with your global CSS and recipes.css
+   - Uses TheMealDB for recipes
+   - Optional Edamam integration for nutrition (provide EDAMAM_ID/EDAMAM_KEY)
+*/
 
 (() => {
   // =========================
@@ -165,8 +170,6 @@ const EDAMAM_KEY = 'fff5581f3438a5bcac6ab5e038dda7ae'; // your Edamam KEY
     };
   };
 
-  
-
   // =========================
   // Ratings UI
   // =========================
@@ -277,7 +280,6 @@ const EDAMAM_KEY = 'fff5581f3438a5bcac6ab5e038dda7ae'; // your Edamam KEY
       progressEl.textContent = progress + "%";
     }
   }
-
 
   // =========================
   // Favorites & Planner actions
