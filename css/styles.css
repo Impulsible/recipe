@@ -291,7 +291,7 @@ a {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(6px) brightness(0.9);
+  backdrop-filter: blur(6px) brightness(0.75);
   z-index: 1;
   opacity: 0;
   animation: overlayFade 1.2s ease forwards;
@@ -449,7 +449,7 @@ a {
 @media (prefers-color-scheme: dark) {
   .hero-overlay {
     background: rgba(0, 0, 0, 0.55);
-    backdrop-filter: blur(8px) brightness(0.8);
+    backdrop-filter: blur(1px) brightness(0.9);
   }
 
   .highlight {
@@ -1371,7 +1371,7 @@ a {
   margin-bottom: 1.4rem;
 }
 
-/* ===== DAYS GRID (Simplified Compact Style) ===== */
+/* ===== DAYS GRID ===== */
 .days-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
@@ -1426,7 +1426,7 @@ a {
   display: none;
 }
 
-/* ===== PLANNER ACTIONS (Simplified) ===== */
+/* ===== PLANNER ACTIONS ===== */
 .planner-actions {
   display: flex;
   flex-direction: column;
@@ -1478,13 +1478,13 @@ a {
   transform: translateY(-2px);
 }
 
-/* Make buttons fill width */
+
 .block {
   width: 100%;
   text-align: center;
 }
 
-/* ===== RESET BUTTON EFFECT (Clear Planner Data) ===== */
+
 #resetPlannerLink {
   position: relative;
   overflow: hidden;
@@ -1506,7 +1506,7 @@ a {
   opacity: 1;
 }
 
-/* Optional subtle fade animation for clear effect */
+
 @keyframes fadeClear {
   from { opacity: 1; filter: blur(0); }
   to { opacity: 0; filter: blur(3px); }
