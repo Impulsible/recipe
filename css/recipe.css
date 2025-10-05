@@ -967,160 +967,52 @@ main {
 }
 
 /* ===== MOBILE RESPONSIVE FIXES ===== */
+
+/* On small screens, filters stack vertically and inputs take full width */
 @media (max-width: 640px) {
 
   /* Filters container */
   .filters {
     padding: 1rem;
     margin-bottom: 1.5rem;
-    background: var(--card);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
   }
 
-  /* Search group stacks vertically */
+  /* Search group should stack instead of side-by-side */
   .search-group {
     flex-direction: column;
-    gap: 0.5rem;
   }
 
   .search-group input,
   .search-group .btn {
     width: 100%;
-    font-size: 0.95rem;
   }
 
-  /* Filter grid single column */
+  /* Filter grid should become a single column */
   .filter-grid {
     grid-template-columns: 1fr;
-    gap: 0.75rem;
   }
 
-  /* Filter buttons stack */
+  /* Filter buttons wrap neatly */
   .filter-actions {
     flex-direction: column;
     align-items: stretch;
-    gap: 0.5rem;
   }
 
-  /* Macro summary single column */
+  /* Macro summary becomes one per row */
   .macro-summary {
     grid-template-columns: 1fr;
     gap: 0.8rem;
   }
 
-  .ms-item {
-    padding: 0.8rem;
-    background: var(--card);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-  }
-
-  /* Recipe cards stack */
+  /* Recipe cards stack cleanly */
   .recipe-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
 
-  .dashboard-card {
-    border-radius: var(--radius);
-    overflow: hidden;
-    box-shadow: var(--shadow);
-  }
-
-  /* Modal spacing tweak */
+  /* Modal spacing tweak for mobile */
   .modal-content {
     width: 95%;
     padding: 1.2rem;
-  }
-
-  /* ===== Surprise Button Lightbox ===== */
-  .btn.surprise {
-    width: 100%;
-    background: var(--orange);
-    color: #fff;
-    font-weight: 600;
-    padding: 0.65rem 0.8rem;
-    border-radius: var(--radius);
-    text-align: center;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  .btn.surprise:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
-  }
-
-  /* Lightbox overlay */
-  .surprise-lightbox {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.75);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    padding: 1rem;
-    overflow-y: auto;
-  }
-  .surprise-lightbox.show {
-    display: flex;
-  }
-
-  /* Lightbox content */
-  .surprise-lightbox-content {
-    background: var(--card);
-    border-radius: var(--radius);
-    padding: 1.5rem;
-    width: 95%;
-    max-width: 450px;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: var(--shadow);
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-    position: relative;
-    text-align: center;
-    transition: transform 0.3s ease;
-  }
-  .surprise-lightbox.show .surprise-lightbox-content {
-    transform: translateY(0);
-  }
-
-  /* Close button */
-  .surprise-close {
-    position: absolute;
-    top: 0.6rem;
-    right: 0.8rem;
-    font-size: 1.6rem;
-    cursor: pointer;
-    background: none;
-    border: none;
-    color: var(--muted);
-  }
-
-  /* Surprise content inside lightbox */
-  .surprise-lightbox-content h3 {
-    font-size: 1.1rem;
-    margin-bottom: 0.6rem;
-    color: var(--text);
-  }
-  .surprise-lightbox-content p,
-  .surprise-lightbox-content ul {
-    font-size: 0.9rem;
-    color: var(--text);
-    margin: 0.4rem 0;
-    text-align: left;
-  }
-  .surprise-lightbox-content ul li {
-    margin-bottom: 0.25rem;
-  }
-
-  /* Buttons inside lightbox */
-  .surprise-lightbox-content .btn {
-    font-size: 0.85rem;
-    padding: 0.45rem 0.7rem;
-    margin-top: 0.6rem;
   }
 }
