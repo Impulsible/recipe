@@ -878,3 +878,24 @@ generateDashboardCards();
 backdrop.addEventListener("click", () => toggleSidebar(false));
   
 
+function updateMacro(el, newValue) {
+  const valueEl = el.querySelector('.progress-value');
+  const ringEl = el.querySelector('circle.progress');
+
+  // Update the number
+  valueEl.textContent = newValue;
+
+  // Trigger pop animation
+  valueEl.classList.remove('pop');
+  void valueEl.offsetWidth; // force reflow
+  valueEl.classList.add('pop');
+
+  // Trigger ring pulse animation
+  ringEl.classList.remove('pulse');
+  void ringEl.offsetWidth; // force reflow
+  ringEl.classList.add('pulse');
+}
+
+// Example usage:
+// const caloriesRing = document.querySelector('.macro-summary .ms-item.calories');
+// updateMacro(caloriesRing, 560);
