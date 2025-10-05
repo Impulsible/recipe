@@ -967,8 +967,6 @@ main {
 }
 
 /* ===== MOBILE RESPONSIVE FIXES ===== */
-
-/* On small screens, filters stack vertically and inputs take full width */
 @media (max-width: 640px) {
 
   /* Filters container */
@@ -977,7 +975,7 @@ main {
     margin-bottom: 1.5rem;
   }
 
-  /* Search group should stack instead of side-by-side */
+  /* Search group stacks vertically */
   .search-group {
     flex-direction: column;
   }
@@ -987,32 +985,107 @@ main {
     width: 100%;
   }
 
-  /* Filter grid should become a single column */
+  /* Filter grid single column */
   .filter-grid {
     grid-template-columns: 1fr;
   }
 
-  /* Filter buttons wrap neatly */
+  /* Filter buttons stack */
   .filter-actions {
     flex-direction: column;
     align-items: stretch;
   }
 
-  /* Macro summary becomes one per row */
+  /* Macro summary single column */
   .macro-summary {
     grid-template-columns: 1fr;
     gap: 0.8rem;
   }
 
-  /* Recipe cards stack cleanly */
+  /* Recipe cards stack */
   .recipe-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
 
-  /* Modal spacing tweak for mobile */
+  /* Modal spacing tweak */
   .modal-content {
     width: 95%;
     padding: 1.2rem;
+  }
+
+  /* ===== Surprise Button Lightbox ===== */
+  .btn.surprise {
+    width: 100%;
+    background: var(--orange);
+    color: #fff;
+    font-weight: 600;
+    padding: 0.6rem 0.8rem;
+    border-radius: var(--radius);
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .btn.surprise:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  }
+
+  /* Lightbox overlay */
+  .surprise-lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 1rem;
+    overflow-y: auto;
+  }
+  .surprise-lightbox.show {
+    display: flex;
+  }
+
+  /* Lightbox content */
+  .surprise-lightbox-content {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    width: 95%;
+    max-width: 450px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    position: relative;
+    text-align: center;
+  }
+
+  /* Close button */
+  .surprise-close {
+    position: absolute;
+    top: 0.8rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: var(--muted);
+  }
+
+  /* Surprise content inside lightbox */
+  .surprise-lightbox-content p {
+    font-size: 0.9rem;
+    color: var(--text);
+    margin: 0.5rem 0;
+  }
+
+  /* Buttons inside lightbox */
+  .surprise-lightbox-content .btn {
+    font-size: 0.85rem;
+    padding: 0.45rem 0.7rem;
   }
 }
