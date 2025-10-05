@@ -523,3 +523,356 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.error('❌ Service Worker registration failed:', err));
   });
 }
+
+function updateProgressRing(selector, percent) {
+  const circle = document.querySelector(selector);
+  const radius = circle.r.baseVal.value;
+  const circumference = 2 * Math.PI * radius;
+  circle.style.strokeDasharray = `${circumference} ${circumference}`;
+  circle.style.strokeDashoffset = circumference;
+
+  const offset = circumference - (percent / 100) * circumference;
+  circle.style.strokeDashoffset = offset;
+}
+
+// Example demo values (replace with actual macros)
+updateProgressRing('.progress.calories', 60);
+updateProgressRing('.progress.protein', 75);
+updateProgressRing('.progress.carbs', 45);
+updateProgressRing('.progress.fat', 30);
+
+// ==================== MACRO TRACKER ====================
+
+// User’s daily goals (can later be user-customized)
+const goals = {
+  calories: 2000,
+  protein: 150,
+  carbs: 250,
+  fat: 70,
+};
+
+// Current tracked totals
+let tracker = {
+  calories: 0,
+  protein: 0,
+  carbs: 0,
+  fat: 0,
+};
+
+// Selectors
+const summaryEls = {
+  calories: document.getElementById('summaryCalories'),
+  protein: document.getElementById('summaryProtein'),
+  carbs: document.getElementById('summaryCarbs'),
+  fat: document.getElementById('summaryFat'),
+  caloriesValue: document.getElementById('summaryCaloriesValue'),
+  proteinValue: document.getElementById('summaryProteinValue'),
+  carbsValue: document.getElementById('summaryCarbsValue'),
+  fatValue: document.getElementById('summaryFatValue'),
+};
+
+// === Progress Ring Updater ===
+function updateProgressRing(selector, percent) {
+  const circle = document.querySelector(selector);
+  const radius = circle.r.baseVal.value;
+  const circumference = 2 * Math.PI * radius;
+
+  circle.style.strokeDasharray = `${circumference} ${circumference}`;
+  const offset = circumference - (percent / 100) * circumference;
+  circle.style.strokeDashoffset = offset;
+}
+
+// === Update Display ===
+function updateTrackerDisplay() {
+  for (const key in tracker) {
+    const percent = Math.min((tracker[key] / goals[key]) * 100, 100);
+    summaryEls[key].textContent = tracker[key];
+    summaryEls[`${key}Value`].textContent = Math.floor(percent);
+    updateProgressRing(`.progress.${key}`, percent);
+  }
+}
+
+// === Add Favorites (demo functionality) ===
+document.getElementById('addFavoritesToTracker').addEventListener('click', () => {
+  // Example: simulate adding values (these would come from selected recipes)
+  tracker.calories += 400;
+  tracker.protein += 25;
+  tracker.carbs += 50;
+  tracker.fat += 10;
+
+  updateTrackerDisplay();
+
+  // Visual feedback
+  const btn = document.getElementById('addFavoritesToTracker');
+  btn.textContent = '✅ Added!';
+  btn.disabled = true;
+  setTimeout(() => {
+    btn.textContent = 'Add Favorites to Tracker';
+    btn.disabled = false;
+  }, 1500);
+});
+
+// === Clear Tracker ===
+document.getElementById('clearTracker').addEventListener('click', () => {
+  tracker = { calories: 0, protein: 0, carbs: 0, fat: 0 };
+  updateTrackerDisplay();
+});
+
+// Initialize on load
+updateTrackerDisplay();
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const apiBase = "https://www.themealdb.com/api/json/v1/1/";
+  const recipeList = document.getElementById("recipeList");
+  const statusMsg = document.getElementById("statusMsg");
+  const searchInput = document.getElementById("searchInput");
+  const randomBtn = document.getElementById("randomBtn");
+  const applyFilters = document.getElementById("applyFilters");
+  const clearFilters = document.getElementById("clearFilters");
+  const favoritesToggle = document.getElementById("favoritesToggle");
+  const addFavoritesToTracker = document.getElementById("addFavoritesToTracker");
+  const clearTracker = document.getElementById("clearTracker");
+  const modal = document.getElementById("recipeModal");
+  const modalBody = document.getElementById("modalBody");
+  const modalClose = document.getElementById("modalClose");
+
+  let allRecipes = [];
+  let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+  let showFavorites = false;
+
+  /* ========= Load Recipes ========= */
+  async function fetchRecipes(query = "") {
+    statusMsg.textContent = "Loading recipes...";
+    recipeList.innerHTML = "";
+    const url = query
+      ? `${apiBase}search.php?s=${query}`
+      : `${apiBase}search.php?s=chicken`;
+
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      allRecipes = data.meals || [];
+      renderRecipes(allRecipes);
+    } catch (err) {
+      statusMsg.textContent = "Failed to load recipes.";
+    }
+  }
+
+  /* ========= Render ========= */
+  function renderRecipes(recipes) {
+    recipeList.innerHTML = "";
+    if (!recipes.length) {
+      statusMsg.textContent = "No recipes found.";
+      return;
+    }
+    statusMsg.textContent = "";
+
+    recipes.forEach((meal) => {
+      const card = document.createElement("div");
+      card.className = "recipe-card";
+      card.innerHTML = `
+        <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
+        <div class="recipe-card-content">
+          <h3>${meal.strMeal}</h3>
+          <small>${meal.strArea} • ${meal.strCategory}</small>
+          <button class="favorite-btn ${favorites.includes(meal.idMeal) ? "active" : ""}" data-id="${meal.idMeal}">❤️</button>
+        </div>
+      `;
+      card.querySelector("img").addEventListener("click", () => openModal(meal.idMeal));
+      card.querySelector(".favorite-btn").addEventListener("click", (e) => toggleFavorite(meal.idMeal, e.target));
+      recipeList.appendChild(card);
+    });
+
+    document.getElementById("resultCount").textContent = recipes.length;
+  }
+
+  /* ========= Modal ========= */
+  async function openModal(id) {
+    const res = await fetch(`${apiBase}lookup.php?i=${id}`);
+    const data = await res.json();
+    const meal = data.meals[0];
+    modalBody.innerHTML = `
+      <h2 id="modalTitle">${meal.strMeal}</h2>
+      <img src="${meal.strMealThumb}" alt="${meal.strMeal}" style="width:100%; border-radius: var(--radius); margin:1rem 0;">
+      <p><strong>Category:</strong> ${meal.strCategory}</p>
+      <p><strong>Area:</strong> ${meal.strArea}</p>
+      <p><strong>Instructions:</strong></p>
+      <p>${meal.strInstructions}</p>
+      <a href="${meal.strSource}" target="_blank" class="btn orange small">View Source</a>
+    `;
+    modal.classList.remove("hidden");
+  }
+
+  modalClose.addEventListener("click", () => modal.classList.add("hidden"));
+
+  /* ========= Favorites ========= */
+  function toggleFavorite(id, btn) {
+    if (favorites.includes(id)) {
+      favorites = favorites.filter(f => f !== id);
+      btn.classList.remove("active");
+    } else {
+      favorites.push(id);
+      btn.classList.add("active");
+    }
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+  }
+
+  favoritesToggle.addEventListener("click", () => {
+    showFavorites = !showFavorites;
+    if (showFavorites) {
+      const favRecipes = allRecipes.filter(r => favorites.includes(r.idMeal));
+      renderRecipes(favRecipes);
+    } else {
+      renderRecipes(allRecipes);
+    }
+  });
+
+  addFavoritesToTracker.addEventListener("click", () => {
+    alert("Favorites added to your nutrition tracker!");
+  });
+
+  clearTracker.addEventListener("click", () => {
+    alert("Tracker cleared.");
+  });
+
+  /* ========= Filters ========= */
+  applyFilters.addEventListener("click", () => {
+    const maxCalories = document.getElementById("caloriesRange").value;
+    const filterText = `Applied filters: Max ${maxCalories} kcal`;
+    statusMsg.textContent = filterText;
+  });
+
+  clearFilters.addEventListener("click", () => {
+    searchInput.value = "";
+    document.getElementById("filterCategory").value = "";
+    document.getElementById("filterArea").value = "";
+    document.getElementById("dietSelect").value = "";
+    document.getElementById("caloriesRange").value = 800;
+    statusMsg.textContent = "Filters cleared.";
+  });
+
+  /* ========= Random ========= */
+  randomBtn.addEventListener("click", async () => {
+    const res = await fetch(`${apiBase}random.php`);
+    const data = await res.json();
+    renderRecipes(data.meals);
+  });
+
+  /* ========= Search ========= */
+  searchInput.addEventListener("input", (e) => {
+    const q = e.target.value.toLowerCase();
+    const filtered = allRecipes.filter(r => r.strMeal.toLowerCase().includes(q));
+    renderRecipes(filtered);
+  });
+
+  /* ========= Init ========= */
+  fetchRecipes();
+});
+
+const dashboardLoader = document.getElementById('dashboardLoader');
+
+async function generateDashboardCards() {
+  dashboardGrid.innerHTML = ""; // Clear previous cards
+  dashboardLoader.style.display = 'flex'; // Show loader
+
+  const usedMeals = new Set();
+  for (let i = 0; i < 12; i++) {
+    let meal;
+    do {
+      meal = await fetchRandomMeal();
+    } while (!meal || usedMeals.has(meal.idMeal));
+    usedMeals.add(meal.idMeal);
+
+    const card = document.createElement('div');
+    card.classList.add('dashboard-card');
+    card.dataset.title = meal.strMeal;
+    card.dataset.steps = meal.strInstructions;
+
+    const ingredients = [];
+    for (let j = 1; j <= 20; j++) {
+      const ingredient = meal[`strIngredient${j}`];
+      const measure = meal[`strMeasure${j}`];
+      if (ingredient) ingredients.push(`${measure} ${ingredient}`);
+    }
+    card.dataset.description = ingredients.join(', ');
+
+    card.innerHTML = `
+      <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
+      <div class="card-overlay">
+        <h3>${meal.strMeal}</h3>
+        <p>Click to view recipe & macros</p>
+      </div>
+    `;
+
+    const overlay = card.querySelector('.card-overlay');
+    const macroContainer = document.createElement("div");
+    macroContainer.classList.add("macro-mini");
+    overlay.appendChild(macroContainer);
+    createMiniMacroRing(macroContainer, "protein", Math.floor(Math.random() * 50) + 20);
+    createMiniMacroRing(macroContainer, "carbs", Math.floor(Math.random() * 50) + 20);
+    createMiniMacroRing(macroContainer, "fat", Math.floor(Math.random() * 50) + 10);
+
+    dashboardGrid.appendChild(card);
+
+    card.addEventListener("click", async () => {
+      modal.classList.remove("hidden");
+      modalTitle.textContent = card.dataset.title;
+      modalSteps.textContent = card.dataset.steps;
+
+      if (EDAMAM_ID && EDAMAM_KEY) {
+        const url = `${EDAMAM_API}?app_id=${EDAMAM_ID}&app_key=${EDAMAM_KEY}&ingr=${encodeURIComponent(card.dataset.description)}`;
+        try {
+          const nutritionRes = await fetch(url);
+          const nutritionData = await nutritionRes.json();
+          modalDescription.innerHTML = `
+            <strong>Nutrition Info:</strong><br>
+            Calories: ${nutritionData.calories || 'N/A'} kcal<br>
+            Protein: ${nutritionData.totalNutrients?.PROCNT?.quantity?.toFixed(1) || 'N/A'} g<br>
+            Carbs: ${nutritionData.totalNutrients?.CHOCDF?.quantity?.toFixed(1) || 'N/A'} g<br>
+            Fat: ${nutritionData.totalNutrients?.FAT?.quantity?.toFixed(1) || 'N/A'} g
+          `;
+        } catch {
+          modalDescription.textContent = 'Nutrition info unavailable.';
+        }
+      } else {
+        modalDescription.textContent = 'Nutrition info unavailable. Set EDAMAM_ID & EDAMAM_KEY to fetch.';
+      }
+    });
+  }
+
+  dashboardLoader.style.display = 'none'; // Hide loader after cards are ready
+}
+generateDashboardCards();
+  const menuBtn = document.getElementById("menuBtn");
+  const sidebar = document.getElementById("sidebar");
+  const closeSidebarBtn = document.getElementById("closeSidebar");
+  const backdrop = document.getElementById("backdrop");
+
+  menuBtn.addEventListener("click", () => {
+    sidebar.classList.add("open");
+    backdrop.style.display = "block";
+  });
+
+  closeSidebarBtn.addEventListener("click", () => {
+    sidebar.classList.remove("open");
+    backdrop.style.display = "none";
+  });
+
+  backdrop.addEventListener("click", () => {
+    sidebar.classList.remove("open");
+    backdrop.style.display = "none";
+  });
+  dashboardLoader.style.display = 'none';
+  function toggleSidebar(open) {
+    if (open) {
+      sidebar.classList.add("open");
+      backdrop.style.display = "block";
+    } else {
+      sidebar.classList.remove("open");
+      backdrop.style.display = "none";
+    }
+  }
+  menuBtn.addEventListener("click", () => toggleSidebar(true));
+  closeSidebarBtn.addEventListener("click", () => toggleSidebar(false));
+  backdrop.addEventListener("click", () => toggleSidebar(false));
