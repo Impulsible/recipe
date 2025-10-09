@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- META -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Meal Planner — plan your weekly meals, add recipes, and organize your nutrition goals.">
+  <meta name="keywords" content="meal planner, weekly planner, nutrition tracker, recipe organizer, food app">
+  <meta name="author" content="Henry Osuagwu">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- TITLE -->
+  <title>Meal Planner | Recipe Finder + Nutrition Tracker</title>
+
+  <!-- PERFORMANCE -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- FONTS + ICONS -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest" defer></script>
+
+  <!-- STYLES -->
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/planner.css">
+
+  <!-- Favicon and PWA -->
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="images/favicon.png">
+  <link rel="apple-touch-icon" href="images/favicon.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4CAF50">
+
+  <!-- SOCIAL META -->
+  <meta property="og:title" content="Meal Planner | Recipe Finder + Nutrition Tracker">
+  <meta property="og:description" content="Plan your weekly meals, add recipes, and organize your nutrition goals.">
+  <meta property="og:image" content="images/planner.jpg">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://impulsible.github.io/recipe/planner.html">
+  <meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
+  
+  <!-- ================= HEADER ================= -->
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+
+      <!-- Left: Logo + Sidebar -->
+      <div class="header-left">
+        <button id="menuBtn" class="icon-btn hamburger" aria-label="Open menu">
+          <i data-lucide="menu"></i>
+        </button>
+        <a href="index.html" class="logo" aria-label="Recipe Finder Home">
+          <i data-lucide="fork-knife" class="logo-icon"></i>
+          <span class="logo-text">
+            <strong>Recipe Finder</strong>
+            <small class="tagline">+ Nutrition Tracker</small>
+          </span>
+        </a>
+      </div>
+
+      <!-- Right: Quick Actions -->
+      <div class="header-right">
+        <button id="darkModeToggle" class="icon-btn" aria-pressed="false" aria-label="Toggle dark mode">
+          <i data-lucide="moon"></i>
+        </button>
+        <a href="profile.html" id="profileBtn" class="icon-btn profile-btn" aria-label="Profile">
+          <i data-lucide="user"></i>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-top">
+      <div class="brand profile-section">
+        <i data-lucide="user"></i>
+        <div>
+          <h2 id="sidebarName">Guest</h2>
+          <small id="sidebarEmail">Not signed in</small>
+        </div>
+      </div>
+      <button id="closeSidebar" class="icon-btn" aria-label="Close menu">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+    
+    <nav>
+      <ul>
+        <li><a href="index.html"><i data-lucide="home"></i><span>Home</span></a></li>
+        <li><a href="recipes.html"><i data-lucide="book-open"></i><span>Recipes</span></a></li>
+        <li><a href="planner.html" class="active"><i data-lucide="calendar"></i><span>Planner</span></a></li>
+        <li><a href="shoppinglist.html"><i data-lucide="shopping-cart"></i><span>Shopping List</span></a></li>
+        <li><a href="about.html"><i data-lucide="info"></i><span>About</span></a></li>
+      </ul>
+    </nav>
+    <div class="sidebar-footer">
+      <button id="logoutBtn" class="ghost">Sign out</button>
+    </div>
+  </aside>
+
+  <!-- BACKDROP -->
+  <div id="backdrop" class="backdrop"></div>
+
+  <!-- ================= MAIN CONTENT ================= -->
+  <main class="app-container">
+    <div class="planner-container">
+      
+      <!-- Planner Header -->
+      <div class="planner-header">
+        <h1>Meal Planner</h1>
+        <p>Plan your weekly meals and track your nutrition goals</p>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <button class="btn btn-outline quick-plan-btn" title="Generate quick meal plan">
+          <i data-lucide="zap"></i> Quick Plan
+        </button>
+        <button class="btn btn-outline smart-suggest-btn" title="Get smart suggestions">
+          <i data-lucide="sparkles"></i> Smart Suggest
+        </button>
+      </div>
+
+      <!-- Week Selector -->
+      <div class="week-selector">
+        <div class="week-nav">
+          <button id="prevWeek" class="btn btn-outline">
+            <i data-lucide="chevron-left"></i> Previous Week
+          </button>
+          <div class="week-display" id="currentWeek">Week of March 1, 2023</div>
+          <button id="nextWeek" class="btn btn-outline">
+            Next Week <i data-lucide="chevron-right"></i>
+          </button>
+        </div>
+        <button id="todayBtn" class="btn btn-primary">Today</button>
+      </div>
+
+      <!-- Week Grid -->
+      <div class="week-grid">
+        <!-- Monday -->
+        <div class="day-card" data-day="monday">
+          <div class="day-header">
+            <h3>Monday</h3>
+            <span class="date" id="mondayDate">Mar 1</span>
+          </div>
+          <div class="meals-container">
+            <div class="meal-section">
+              <h4>Breakfast</h4>
+              <div class="meal-list" id="mondayBreakfast">
+                <!-- Meals will be added here dynamically -->
+              </div>
+              <button class="add-meal-btn" data-day="monday" data-meal="breakfast">
+                <i data-lucide="plus"></i> Add Meal
+              </button>
+            </div>
+            <div class="meal-section">
+              <h4>Lunch</h4>
+              <div class="meal-list" id="mondayLunch">
+                <!-- Meals will be added here dynamically -->
+              </div>
+              <button class="add-meal-btn" data-day="monday" data-meal="lunch">
+                <i data-lucide="plus"></i> Add Meal
+              </button>
+            </div>
+            <div class="meal-section">
+              <h4>Dinner</h4>
+              <div class="meal-list" id="mondayDinner">
+                <!-- Meals will be added here dynamically -->
+              </div>
+              <button class="add-meal-btn" data-day="monday" data-meal="dinner">
+                <i data-lucide="plus"></i> Add Meal
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tuesday -->
+        <div class="day-card" data-day="tuesday">
+          <div class="day-header">
+            <h3>Tuesday</h3>
+            <span class="date" id="tuesdayDate">Mar 2</span>
+          </div>
+          <div class="meals-container">
+            <div class="meal-section">
+              <h4>Breakfast</h4>
+              <div class="meal-list" id="tuesdayBreakfast"></div>
+              <button class="add-meal-btn" data-day="tuesday" data-meal="breakfast">
+                <i data-lucide="plus"></i> Add Meal
+              </button>
+            </div>
+            <div class="meal-section">
+              <h4>Lunch</h4>
+              <div class="meal-list" id="tuesdayLunch"></div>
+              <button class="add-meal-btn" data-day="tuesday" data-meal="lunch">
+                <i data-lucide="plus"></i> Add Meal
+              </button>
+            </div>
+            <div class="meal-section">
+              <h4>Dinner</h4>
+              <div class="meal-list" id="tuesdayDinner"></div>
+              <button class="add-meal-btn" data-day="tuesday" data-meal="dinner">
+                <i data-lucide="plus"></i> Add Meal
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Wednesday -->
+        <div class="day-card" data-day="wednesday">
+          <div class="day-header">
+            <h3>Wednesday</h3>
+            <span class="date" id="wednesdayDate">Mar 3</span>
+          </div>
+          <div class="meals-container">
+            <div class="meal-section">
+              <h4>Breakfast</h4>
+              <div class="meal-list" id="wednesdayBreakfast"></div>
+              <button class="add-meal-btn" data-day="wednesday" data-meal="breakfast">
+                <i data-lucide="plus"></i> Add Meal
+              </button>
+            </div>
+            <div class="meal-section">
+              <h4>Lunch</h4>
+              <div class="meal-list" id="wednesdayLunch"></div>
+              <button class="add-meal-btn" data-day="wednesday" data-meal="lunch">
+                <i data-lucide="plus"></i> Add Meal
+              </button>
+            </div>
+            <div class="meal-section">
+              <h4>Dinner</h4>
+              <div class="meal-list" id="wednesdayDinner"></div>
+              <button class="add-meal-btn" data-day="wednesday" data-meal="dinner">
+                <i data-lucide="plus"></i> Add Meal
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Thursday -->
+        <div class="day-card" data-day="thursday">
+          <div class="day-header">
+            <h3>Thursday</h3>
+            <span class="date" id="thursdayDate">Mar 4</span>
+          </div>
+          <div class="meals-container">
+            <div class="meal-section">
+              <h4>Breakfast</h4>
+              <div class="meal-list" id="thursdayBreakfast"></div>
+              <button class="add-meal-btn" data-day="thursday" data-meal="breakfast">
+                <i data-lucide="plus"></i> Add Meal
+              </button>
+            </div>
+            <div class="meal-section">
+              <h4>Lunch</h4>
+              <div class="meal-list" id="thursdayLunch"></div>
+              <button class="add-meal-btn" data-day="thursday" data-meal="lunch">
+                <i data-lucide="plus"></i> Add Meal
+              </button>
+            </div>
+            <div class="meal-section">
+              <h4>Dinner</h4>
+              <div class="meal-list" id="thursdayDinner"></div>
+              <button class="add-meal-btn" data-day="thursday" data-meal="dinner">
+                <i data-lucide="plus"></i> Add Meal
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Friday -->
+        <div class="day-card" data-day="friday">
+          <div class="day-header">
+            <h3>Friday</h3>
+            <span class="date" id="fridayDate">Mar 5</span>
+          </div>
+          <div class="meals-container">
+            <div class="meal-section">
+              <h4>Breakfast</h4>
+              <div class="meal-list" id="fridayBreakfast"></div>
+              <button class="add-meal-btn" data-day="friday" data-meal="breakfast">
+                <i data-lucide="plus"></i> Add Meal
+              </button>
+            </div>
+            <div class="meal-section">
+              <h4>Lunch</h4>
+              <div class="meal-list" id="fridayLunch"></div>
+              <button class="add-meal-btn" data-day="friday" data-meal="lunch">
+                <i data-lucide="plus"></i> Add Meal
+              </button>
+            </div>
+            <div class="meal-section">
+              <h4>Dinner</h4>
+              <div class="meal-list" id="fridayDinner"></div>
+              <button class="add-meal-btn" data-day="friday" data-meal="dinner">
+                <i data-lucide="plus"></i> Add Meal
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Saturday -->
+        <div class="day-card" data-day="saturday">
+          <div class="day-header">
+            <h3>Saturday</h3>
+            <span class="date" id="saturdayDate">Mar 6</span>
+          </div>
+          <div class="meals-container">
+            <div class="meal-section">
+              <h4>Breakfast</h4>
+              <div class="meal-list" id="saturdayBreakfast"></div>
+              <button class="add-meal-btn" data-day="saturday" data-meal="breakfast">
+                <i data-lucide="plus"></i> Add Meal
+              </button>
+            </div>
+            <div class="meal-section">
+              <h4>Lunch</h4>
+              <div class="meal-list" id="saturdayLunch"></div>
+              <button class="add-meal-btn" data-day="saturday" data-meal="lunch">
+                <i data-lucide="plus"></i> Add Meal
+              </button>
+            </div>
+            <div class="meal-section">
+              <h4>Dinner</h4>
+              <div class="meal-list" id="saturdayDinner"></div>
+              <button class="add-meal-btn" data-day="saturday" data-meal="dinner">
+                <i data-lucide="plus"></i> Add Meal
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sunday -->
+        <div class="day-card" data-day="sunday">
+          <div class="day-header">
+            <h3>Sunday</h3>
+            <span class="date" id="sundayDate">Mar 7</span>
+          </div>
+          <div class="meals-container">
+            <div class="meal-section">
+              <h4>Breakfast</h4>
+              <div class="meal-list" id="sundayBreakfast"></div>
+              <button class="add-meal-btn" data-day="sunday" data-meal="breakfast">
+                <i data-lucide="plus"></i> Add Meal
+              </button>
+            </div>
+            <div class="meal-section">
+              <h4>Lunch</h4>
+              <div class="meal-list" id="sundayLunch"></div>
+              <button class="add-meal-btn" data-day="sunday" data-meal="lunch">
+                <i data-lucide="plus"></i> Add Meal
+              </button>
+            </div>
+            <div class="meal-section">
+              <h4>Dinner</h4>
+              <div class="meal-list" id="sundayDinner"></div>
+              <button class="add-meal-btn" data-day="sunday" data-meal="dinner">
+                <i data-lucide="plus"></i> Add Meal
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Smart Suggestions Section -->
+      <div class="smart-suggestions-section card">
+        <div class="suggestion-header">
+          <h3>🤖 Smart Meal Suggestions</h3>
+          <p>Get AI-powered meal ideas based on your current plan</p>
+        </div>
+        
+        <div class="suggestion-content">
+          <div class="suggestion-display">
+            <div id="mealSuggestion" class="suggestion-text">
+              Click the button below to get a smart meal suggestion!
+            </div>
+            <div id="nutritionInfo" class="nutrition-info hidden"></div>
+            <a id="cookLink" href="#" target="_blank" class="cook-link btn btn-primary hidden">
+              <i data-lucide="utensils"></i> View Recipe & Instructions
+            </a>
+          </div>
+          
+          <div class="suggestion-actions">
+            <button id="smartSuggestBtn" class="btn btn-primary">
+              <i data-lucide="sparkles"></i> Get Smart Suggestion
+            </button>
+            <button id="refreshSuggestion" class="btn btn-outline hidden">
+              <i data-lucide="refresh-cw"></i> Try Another
+            </button>
+          </div>
+        </div>
+        
+        <div class="suggestion-features">
+          <div class="feature">
+            <i data-lucide="zap"></i>
+            <span>Uses your current ingredients</span>
+          </div>
+          <div class="feature">
+            <i data-lucide="bar-chart"></i>
+            <span>Includes nutrition information</span>
+          </div>
+          <div class="feature">
+            <i data-lucide="chef-hat"></i>
+            <span>Links to full recipes</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Planner Actions -->
+      <div class="planner-actions">
+        <button id="generateShoppingList" class="btn btn-primary">
+          <i data-lucide="shopping-cart"></i> Generate Shopping List
+        </button>
+        <button id="clearPlanner" class="btn btn-danger">
+          <i data-lucide="trash-2"></i> Clear Planner
+        </button>
+      </div>
+
+      <!-- Nutrition Summary -->
+      <div class="nutrition-summary card">
+        <h3>Weekly Nutrition Summary</h3>
+        <div class="nutrition-stats">
+          <div class="nutrition-stat">
+            <span class="stat-value" id="totalCalories">0</span>
+            <span class="stat-label">Calories</span>
+          </div>
+          <div class="nutrition-stat">
+            <span class="stat-value" id="totalProtein">0g</span>
+            <span class="stat-label">Protein</span>
+          </div>
+          <div class="nutrition-stat">
+            <span class="stat-value" id="totalCarbs">0g</span>
+            <span class="stat-label">Carbs</span>
+          </div>
+          <div class="nutrition-stat">
+            <span class="stat-value" id="totalFat">0g</span>
+            <span class="stat-label">Fat</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Weekly Summary -->
+      <div class="weekly-summary card">
+        <h3>📊 Weekly Progress</h3>
+        <div class="weekly-stats">
+          <div class="weekly-stat">
+            <div class="stat-value" id="weeklyCalories">0</div>
+            <div class="stat-label">Total Calories</div>
+          </div>
+          <div class="weekly-stat">
+            <div class="stat-value" id="weeklyProtein">0g</div>
+            <div class="stat-label">Protein</div>
+          </div>
+          <div class="weekly-stat">
+            <div class="stat-value" id="weeklyMeals">0</div>
+            <div class="stat-label">Meals Planned</div>
+          </div>
+          <div class="weekly-stat">
+            <div class="stat-value" id="weeklyDays">0/7</div>
+            <div class="stat-label">Days Planned</div>
+          </div>
+        </div>
+        <div class="weekly-actions">
+          <button class="btn btn-outline view-details-btn">
+            <i data-lucide="bar-chart"></i> View Details
+          </button>
+          <button class="btn btn-outline export-btn">
+            <i data-lucide="download"></i> Export
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ================= BOTTOM NAV ================= -->
+  <nav class="bottom-nav">
+    <a href="index.html"><i data-lucide="home"></i><span>Home</span></a>
+    <a href="recipes.html"><i data-lucide="book-open"></i><span>Recipes</span></a>
+    <a href="planner.html" class="active"><i data-lucide="calendar"></i><span>Planner</span></a>
+    <a href="shoppinglist.html"><i data-lucide="shopping-cart"></i><span>List</span></a>
+    <a href="about.html"><i data-lucide="info"></i><span>About</span></a>
+  </nav>
+
+  <!-- Add Meal Modal -->
+  <div id="addMealModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-content">
+      <button id="modalClose" class="modal-close">&times;</button>
+      <h3 id="modalTitle">Add Meal</h3>
+      <div class="modal-body">
+        <div class="search-container">
+          <input type="text" id="recipeSearch" placeholder="Search recipes..." class="search-input">
+          <button id="searchBtn" class="btn btn-primary">Search</button>
+        </div>
+        <div id="recipeResults" class="recipe-results">
+          <!-- Recipe results will be displayed here -->
+        </div>
+        <div class="custom-meal-form">
+          <h4>Or Add Custom Meal</h4>
+          <input type="text" id="customMealName" placeholder="Meal name" class="form-input">
+          <button id="addCustomMeal" class="btn btn-outline">Add Custom Meal</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Enhanced Meal Details Modal -->
+  <div id="mealDetailsModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="mealDetailsTitle">
+    <div class="modal-content large">
+      <button class="modal-close">&times;</button>
+      <h3 id="mealDetailsTitle">Meal Details</h3>
+      <div class="modal-body">
+        <!-- Content will be populated by JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Detailed Summary Modal -->
+  <div id="detailedSummaryModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="summaryTitle">
+    <div class="modal-content large">
+      <button class="modal-close">&times;</button>
+      <h3 id="summaryTitle">Weekly Nutrition Report</h3>
+      <div class="modal-body">
+        <!-- Content will be populated by JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Message Toast -->
+  <div id="successToast" class="toast hidden">
+    <div class="toast-content">
+      <i data-lucide="check-circle" class="toast-icon"></i>
+      <span id="toastMessage">Operation completed successfully!</span>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer-content">
+      <i data-lucide="fork-knife" class="footer-icon"></i>
+      <p>
+        © <span id="year"></span> Recipe Finder + Nutrition Tracker — All rights reserved. <br>
+        Built with ❤️ by Henry Osuagwu
+      </p>
+    </div>
+    <small id="lastModified"></small>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script src="js/main.js" defer></script>
+  <script src="js/planner.js" defer></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => lucide.createIcons());
+  </script>
+</body>
+</html>
