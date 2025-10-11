@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Your existing head content remains the same -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Smart Shopping List — Generate grocery lists from your meal plans, organize by category, and track your shopping progress.">
+  <meta name="keywords" content="shopping list, grocery list, meal planning, recipe ingredients, food app">
+  <meta name="author" content="Henry Osuagwu">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <title>Shopping List | Recipe Finder + Nutrition Tracker</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest" defer></script>
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/shoppinglist.css">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="images/favicon.png">
+  <link rel="apple-touch-icon" href="images/favicon.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4CAF50">
+</head>
+<body>
+  
+  <!-- ================= HEADER ================= -->
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <div class="header-left">
+        <button id="menuBtn" class="icon-btn hamburger" aria-label="Open menu">
+          <i data-lucide="menu"></i>
+        </button>
+        <a href="index.html" class="logo" aria-label="Recipe Finder Home">
+          <i data-lucide="fork-knife" class="logo-icon"></i>
+          <span class="logo-text">
+            <strong>Recipe Finder</strong>
+            <small class="tagline">+ Nutrition Tracker</small>
+          </span>
+        </a>
+      </div>
+
+      <div class="header-right">
+        <button id="darkModeToggle" class="icon-btn" aria-pressed="false" aria-label="Toggle dark mode">
+          <i data-lucide="moon"></i>
+        </button>
+        <a href="profile.html" id="profileBtn" class="icon-btn profile-btn" aria-label="Profile">
+          <i data-lucide="user"></i>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-top">
+      <div class="brand profile-section">
+        <i data-lucide="user"></i>
+        <div>
+          <h2 id="sidebarName">Guest</h2>
+          <small id="sidebarEmail">Not signed in</small>
+        </div>
+      </div>
+      <button id="closeSidebar" class="icon-btn" aria-label="Close menu">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+    
+    <nav>
+      <ul>
+        <li><a href="index.html"><i data-lucide="home"></i><span>Home</span></a></li>
+        <li><a href="recipes.html"><i data-lucide="book-open"></i><span>Recipes</span></a></li>
+        <li><a href="planner.html"><i data-lucide="calendar"></i><span>Planner</span></a></li>
+        <li><a href="shoppinglist.html" class="active"><i data-lucide="shopping-cart"></i><span>Shopping List</span></a></li>
+        <li><a href="about.html"><i data-lucide="info"></i><span>About</span></a></li>
+      </ul>
+    </nav>
+    <div class="sidebar-footer">
+      <button id="logoutBtn" class="ghost">Sign out</button>
+    </div>
+  </aside>
+
+  <!-- BACKDROP -->
+  <div id="backdrop" class="backdrop"></div>
+
+  <!-- ================= MAIN CONTENT ================= -->
+  <main class="app-container">
+    <div class="shopping-container">
+      
+      <!-- Shopping Header -->
+      <div class="shopping-hero">
+        <div class="hero-content">
+          <h1>🛒 Smart Shopping List</h1>
+          <p class="hero-subtitle">Your personalized grocery companion</p>
+          <div class="hero-stats">
+            <div class="stat-bubble">
+              <span class="stat-number" id="totalItems">0</span>
+              <span class="stat-label">Total Items</span>
+            </div>
+            <div class="stat-bubble">
+              <span class="stat-number" id="completedItems">0</span>
+              <span class="stat-label">Completed</span>
+            </div>
+            <div class="stat-bubble">
+              <span class="stat-number" id="estimatedCost">$0</span>
+              <span class="stat-label">Est. Cost</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-illustration">
+          <div class="cart-animation">🛒</div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions-panel">
+        <div class="action-card generate-card">
+          <i data-lucide="refresh-cw" class="action-icon"></i>
+          <h3>Generate from Planner</h3>
+          <p>Create a shopping list from your weekly meal plan</p>
+          <button id="generateFromPlanner" class="btn btn-primary action-btn">
+            Generate List
+          </button>
+        </div>
+        
+        <div class="action-card custom-card">
+          <i data-lucide="plus" class="action-icon"></i>
+          <h3>Add Custom Items</h3>
+          <p>Manually add items to your shopping list</p>
+          <button id="addCustomItem" class="btn btn-outline action-btn">
+            Add Items
+          </button>
+        </div>
+        
+        <div class="action-card import-card">
+          <i data-lucide="upload" class="action-icon"></i>
+          <h3>Import Recipes</h3>
+          <p>Add ingredients from your favorite recipes</p>
+          <button id="importRecipes" class="btn btn-outline action-btn">
+            Import
+          </button>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="progress-section">
+        <div class="progress-header">
+          <h3>Shopping Progress</h3>
+          <span class="progress-percent" id="progressPercent">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-stats">
+          <span id="remainingCount">0 items remaining</span>
+          <span class="progress-eta" id="progressETA">~0 min</span>
+        </div>
+      </div>
+
+      <!-- Shopping List Sections -->
+      <div class="shopping-sections">
+        
+        <!-- Produce Section -->
+        <section class="shopping-section" data-category="produce">
+          <div class="section-header">
+            <div class="section-icon">🥬</div>
+            <div class="section-info">
+              <h3>Fresh Produce</h3>
+              <span class="section-count" id="produceCount">0 items</span>
+            </div>
+            <button class="section-toggle" data-section="produce">
+              <i data-lucide="chevron-down"></i>
+            </button>
+          </div>
+          <div class="items-list" id="produceList">
+            <!-- Items will be populated by JavaScript -->
+          </div>
+        </section>
+
+        <!-- Protein Section -->
+        <section class="shopping-section" data-category="protein">
+          <div class="section-header">
+            <div class="section-icon">🥩</div>
+            <div class="section-info">
+              <h3>Protein</h3>
+              <span class="section-count" id="proteinCount">0 items</span>
+            </div>
+            <button class="section-toggle" data-section="protein">
+              <i data-lucide="chevron-down"></i>
+            </button>
+          </div>
+          <div class="items-list" id="proteinList">
+            <!-- Items will be populated by JavaScript -->
+          </div>
+        </section>
+
+        <!-- Dairy Section -->
+        <section class="shopping-section" data-category="dairy">
+          <div class="section-header">
+            <div class="section-icon">🥛</div>
+            <div class="section-info">
+              <h3>Dairy & Eggs</h3>
+              <span class="section-count" id="dairyCount">0 items</span>
+            </div>
+            <button class="section-toggle" data-section="dairy">
+              <i data-lucide="chevron-down"></i>
+            </button>
+          </div>
+          <div class="items-list" id="dairyList">
+            <!-- Items will be populated by JavaScript -->
+          </div>
+        </section>
+
+        <!-- Pantry Section -->
+        <section class="shopping-section" data-category="pantry">
+          <div class="section-header">
+            <div class="section-icon">🫙</div>
+            <div class="section-info">
+              <h3>Pantry</h3>
+              <span class="section-count" id="pantryCount">0 items</span>
+            </div>
+            <button class="section-toggle" data-section="pantry">
+              <i data-lucide="chevron-down"></i>
+            </button>
+          </div>
+          <div class="items-list" id="pantryList">
+            <!-- Items will be populated by JavaScript -->
+          </div>
+        </section>
+
+        <!-- Bakery Section (MISSING IN YOUR HTML) -->
+        <section class="shopping-section" data-category="bakery">
+          <div class="section-header">
+            <div class="section-icon">🍞</div>
+            <div class="section-info">
+              <h3>Bakery</h3>
+              <span class="section-count" id="bakeryCount">0 items</span>
+            </div>
+            <button class="section-toggle" data-section="bakery">
+              <i data-lucide="chevron-down"></i>
+            </button>
+          </div>
+          <div class="items-list" id="bakeryList">
+            <!-- Items will be populated by JavaScript -->
+          </div>
+        </section>
+
+        <!-- Frozen Section (MISSING IN YOUR HTML) -->
+        <section class="shopping-section" data-category="frozen">
+          <div class="section-header">
+            <div class="section-icon">🧊</div>
+            <div class="section-info">
+              <h3>Frozen</h3>
+              <span class="section-count" id="frozenCount">0 items</span>
+            </div>
+            <button class="section-toggle" data-section="frozen">
+              <i data-lucide="chevron-down"></i>
+            </button>
+          </div>
+          <div class="items-list" id="frozenList">
+            <!-- Items will be populated by JavaScript -->
+          </div>
+        </section>
+
+        <!-- Other Sections -->
+        <section class="shopping-section" data-category="other">
+          <div class="section-header">
+            <div class="section-icon">📦</div>
+            <div class="section-info">
+              <h3>Other Items</h3>
+              <span class="section-count" id="otherCount">0 items</span>
+            </div>
+            <button class="section-toggle" data-section="other">
+              <i data-lucide="chevron-down"></i>
+            </button>
+          </div>
+          <div class="items-list" id="otherList">
+            <!-- Items will be populated by JavaScript -->
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Empty State -->
+      <div id="emptyState" class="empty-state">
+        <div class="empty-illustration">
+          <i data-lucide="shopping-cart" class="empty-icon"></i>
+        </div>
+        <h3>Your shopping list is empty</h3>
+        <p>Generate a list from your meal planner or add custom items to get started.</p>
+        <div class="empty-actions">
+          <button id="generateEmpty" class="btn btn-primary">
+            <i data-lucide="refresh-cw"></i> Generate from Planner
+          </button>
+          <button id="addEmptyItem" class="btn btn-outline">
+            <i data-lucide="plus"></i> Add Custom Item
+          </button>
+        </div>
+      </div>
+
+      <!-- Smart Suggestions -->
+      <div class="suggestions-card card">
+        <div class="suggestion-header">
+          <i data-lucide="lightbulb" class="suggestion-icon"></i>
+          <h3>Smart Shopping Tips</h3>
+        </div>
+        <div class="suggestion-content">
+          <p id="shoppingTip">Shop seasonal produce for better flavor and lower prices. Consider buying in bulk for pantry staples you use frequently.</p>
+          <button id="nextTip" class="btn btn-ghost btn-sm">
+            <i data-lucide="refresh-cw"></i> Next Tip
+          </button>
+        </div>
+      </div>
+
+      <!-- List Actions -->
+      <div class="action-bar">
+        <button id="printList" class="btn btn-outline action-btn">
+          <i data-lucide="printer"></i> Print
+        </button>
+        <button id="shareList" class="btn btn-outline action-btn">
+          <i data-lucide="share-2"></i> Share
+        </button>
+        <button id="exportList" class="btn btn-outline action-btn">
+          <i data-lucide="download"></i> Export
+        </button>
+        <button id="clearList" class="btn btn-danger action-btn">
+          <i data-lucide="trash-2"></i> Clear All
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ================= BOTTOM NAV ================= -->
+  <nav class="bottom-nav">
+    <a href="index.html"><i data-lucide="home"></i><span>Home</span></a>
+    <a href="recipes.html"><i data-lucide="book-open"></i><span>Recipes</span></a>
+    <a href="planner.html"><i data-lucide="calendar"></i><span>Planner</span></a>
+    <a href="shoppinglist.html" class="active"><i data-lucide="shopping-cart"></i><span>List</span></a>
+    <a href="about.html"><i data-lucide="info"></i><span>About</span></a>
+  </nav>
+
+  <!-- Add Item Modal -->
+  <div id="addItemModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="addItemTitle">
+    <div class="modal-content">
+      <button class="modal-close">&times;</button>
+      <h3 id="addItemTitle">Add Item to Shopping List</h3>
+      <div class="modal-body">
+        <form id="addItemForm" class="item-form">
+          <div class="form-group">
+            <label for="itemName">Item Name</label>
+            <input type="text" id="itemName" class="form-input" placeholder="e.g., Bananas, Chicken Breast..." required>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="itemQuantity">Quantity</label>
+              <input type="text" id="itemQuantity" class="form-input" placeholder="e.g., 2" value="1">
+            </div>
+            <div class="form-group">
+              <label for="itemUnit">Unit</label>
+              <input type="text" id="itemUnit" class="form-input" placeholder="e.g., pieces, kg">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="itemCategory">Category</label>
+            <select id="itemCategory" class="form-input" required>
+              <option value="">Select Category</option>
+              <option value="produce">🥬 Produce</option>
+              <option value="protein">🥩 Protein</option>
+              <option value="dairy">🥛 Dairy & Eggs</option>
+              <option value="pantry">🫙 Pantry</option>
+              <option value="bakery">🍞 Bakery</option>
+              <option value="frozen">🧊 Frozen</option>
+              <option value="other">📦 Other</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="itemNotes">Notes (Optional)</label>
+            <textarea id="itemNotes" class="form-input" placeholder="Any specific details, brand preferences, or notes..."></textarea>
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" class="btn btn-outline" id="cancelAddItem">Cancel</button>
+            <button type="submit" class="btn btn-primary">Add to List</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Share List Modal -->
+  <div id="shareListModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="shareListTitle">
+    <div class="modal-content">
+      <button class="modal-close">&times;</button>
+      <h3 id="shareListTitle">Share Your Shopping List</h3>
+      <div class="modal-body">
+        <div class="share-options">
+          <button class="share-option" data-method="copy">
+            <i data-lucide="copy"></i>
+            <span>Copy to Clipboard</span>
+          </button>
+          <button class="share-option" data-method="whatsapp">
+            <i data-lucide="message-circle"></i>
+            <span>Share via WhatsApp</span>
+          </button>
+          <button class="share-option" data-method="email">
+            <i data-lucide="mail"></i>
+            <span>Send via Email</span>
+          </button>
+        </div>
+        <div class="share-preview">
+          <h4>Preview:</h4>
+          <div id="sharePreview" class="share-preview-content"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Toast -->
+  <div id="successToast" class="toast hidden">
+    <div class="toast-content">
+      <i data-lucide="check-circle" class="toast-icon"></i>
+      <span id="toastMessage">Operation completed successfully!</span>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer-content">
+      <i data-lucide="fork-knife" class="footer-icon"></i>
+      <p>
+        © <span id="year"></span> Recipe Finder + Nutrition Tracker — All rights reserved. <br>
+        Built with ❤️ by Henry Osuagwu
+      </p>
+    </div>
+    <small id="lastModified"></small>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script src="js/main.js" defer></script>
+  <script src="js/shoppinglist.js" defer></script>
+</body>
+</html>
