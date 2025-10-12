@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Your existing head content remains the same -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Smart Shopping List — Generate grocery lists from your meal plans, organize by category, and track your shopping progress.">
@@ -17,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest" defer></script>
 
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/shoppinglist.css">
 
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png">
@@ -72,15 +71,18 @@
     
     <nav>
       <ul>
-        <li><a href="index.html"><i data-lucide="home"></i><span>Home</span></a></li>
-        <li><a href="recipes.html"><i data-lucide="book-open"></i><span>Recipes</span></a></li>
-        <li><a href="planner.html"><i data-lucide="calendar"></i><span>Planner</span></a></li>
-        <li><a href="shoppinglist.html" class="active"><i data-lucide="shopping-cart"></i><span>Shopping List</span></a></li>
-        <li><a href="about.html"><i data-lucide="info"></i><span>About</span></a></li>
+        <li><a href="index.html" class="nav-link" data-page="index"><i data-lucide="home"></i><span>Home</span></a></li>
+        <li><a href="recipes.html" class="nav-link" data-page="recipes"><i data-lucide="book-open"></i><span>Recipes</span></a></li>
+        <li><a href="planner.html" class="nav-link" data-page="planner"><i data-lucide="calendar"></i><span>Planner</span></a></li>
+        <li><a href="shoppinglist.html" class="nav-link active" data-page="shoppinglist"><i data-lucide="shopping-cart"></i><span>Shopping List</span></a></li>
+        <li><a href="about.html" class="nav-link" data-page="about"><i data-lucide="info"></i><span>About</span></a></li>
       </ul>
     </nav>
     <div class="sidebar-footer">
-      <button id="logoutBtn" class="ghost">Sign out</button>
+      <button id="logoutBtn" class="sign-out-btn">
+        <i data-lucide="log-out"></i>
+        Sign out
+      </button>
     </div>
   </aside>
 
@@ -92,9 +94,9 @@
     <div class="shopping-container">
       
       <!-- Shopping Header -->
-      <div class="shopping-hero">
+      <div class="shopping-hero card">
         <div class="hero-content">
-          <h1>🛒 Smart Shopping List</h1>
+          <h1 class="hero-title">🛒 Smart Shopping List</h1>
           <p class="hero-subtitle">Your personalized grocery companion</p>
           <div class="hero-stats">
             <div class="stat-bubble">
@@ -118,42 +120,48 @@
 
       <!-- Quick Actions -->
       <div class="quick-actions-panel">
-        <div class="action-card generate-card">
-          <i data-lucide="refresh-cw" class="action-icon"></i>
+        <div class="action-card generate-card card">
+          <div class="action-icon-container">
+            <i data-lucide="refresh-cw" class="action-icon"></i>
+          </div>
           <h3>Generate from Planner</h3>
           <p>Create a shopping list from your weekly meal plan</p>
           <button id="generateFromPlanner" class="btn btn-primary action-btn">
-            Generate List
+            <i data-lucide="refresh-cw"></i> Generate List
           </button>
         </div>
         
-        <div class="action-card custom-card">
-          <i data-lucide="plus" class="action-icon"></i>
+        <div class="action-card custom-card card">
+          <div class="action-icon-container">
+            <i data-lucide="plus" class="action-icon"></i>
+          </div>
           <h3>Add Custom Items</h3>
           <p>Manually add items to your shopping list</p>
           <button id="addCustomItem" class="btn btn-outline action-btn">
-            Add Items
+            <i data-lucide="plus"></i> Add Items
           </button>
         </div>
         
-        <div class="action-card import-card">
-          <i data-lucide="upload" class="action-icon"></i>
+        <div class="action-card import-card card">
+          <div class="action-icon-container">
+            <i data-lucide="upload" class="action-icon"></i>
+          </div>
           <h3>Import Recipes</h3>
           <p>Add ingredients from your favorite recipes</p>
           <button id="importRecipes" class="btn btn-outline action-btn">
-            Import
+            <i data-lucide="upload"></i> Import
           </button>
         </div>
       </div>
 
       <!-- Progress Bar -->
-      <div class="progress-section">
+      <div class="progress-section card">
         <div class="progress-header">
           <h3>Shopping Progress</h3>
           <span class="progress-percent" id="progressPercent">0%</span>
         </div>
         <div class="progress-bar">
-          <div class="progress-fill" id="progressFill"></div>
+          <div class="progress-fill" id="progressFill" style="width: 0%"></div>
         </div>
         <div class="progress-stats">
           <span id="remainingCount">0 items remaining</span>
@@ -165,7 +173,7 @@
       <div class="shopping-sections">
         
         <!-- Produce Section -->
-        <section class="shopping-section" data-category="produce">
+        <section class="shopping-section card" data-category="produce">
           <div class="section-header">
             <div class="section-icon">🥬</div>
             <div class="section-info">
@@ -177,12 +185,15 @@
             </button>
           </div>
           <div class="items-list" id="produceList">
-            <!-- Items will be populated by JavaScript -->
+            <div class="empty-section">
+              <i data-lucide="carrot"></i>
+              <p>No produce items yet</p>
+            </div>
           </div>
         </section>
 
         <!-- Protein Section -->
-        <section class="shopping-section" data-category="protein">
+        <section class="shopping-section card" data-category="protein">
           <div class="section-header">
             <div class="section-icon">🥩</div>
             <div class="section-info">
@@ -194,12 +205,15 @@
             </button>
           </div>
           <div class="items-list" id="proteinList">
-            <!-- Items will be populated by JavaScript -->
+            <div class="empty-section">
+              <i data-lucide="drumstick"></i>
+              <p>No protein items yet</p>
+            </div>
           </div>
         </section>
 
         <!-- Dairy Section -->
-        <section class="shopping-section" data-category="dairy">
+        <section class="shopping-section card" data-category="dairy">
           <div class="section-header">
             <div class="section-icon">🥛</div>
             <div class="section-info">
@@ -211,12 +225,15 @@
             </button>
           </div>
           <div class="items-list" id="dairyList">
-            <!-- Items will be populated by JavaScript -->
+            <div class="empty-section">
+              <i data-lucide="egg"></i>
+              <p>No dairy items yet</p>
+            </div>
           </div>
         </section>
 
         <!-- Pantry Section -->
-        <section class="shopping-section" data-category="pantry">
+        <section class="shopping-section card" data-category="pantry">
           <div class="section-header">
             <div class="section-icon">🫙</div>
             <div class="section-info">
@@ -228,12 +245,15 @@
             </button>
           </div>
           <div class="items-list" id="pantryList">
-            <!-- Items will be populated by JavaScript -->
+            <div class="empty-section">
+              <i data-lucide="jar"></i>
+              <p>No pantry items yet</p>
+            </div>
           </div>
         </section>
 
-        <!-- Bakery Section (MISSING IN YOUR HTML) -->
-        <section class="shopping-section" data-category="bakery">
+        <!-- Bakery Section -->
+        <section class="shopping-section card" data-category="bakery">
           <div class="section-header">
             <div class="section-icon">🍞</div>
             <div class="section-info">
@@ -245,12 +265,15 @@
             </button>
           </div>
           <div class="items-list" id="bakeryList">
-            <!-- Items will be populated by JavaScript -->
+            <div class="empty-section">
+              <i data-lucide="croissant"></i>
+              <p>No bakery items yet</p>
+            </div>
           </div>
         </section>
 
-        <!-- Frozen Section (MISSING IN YOUR HTML) -->
-        <section class="shopping-section" data-category="frozen">
+        <!-- Frozen Section -->
+        <section class="shopping-section card" data-category="frozen">
           <div class="section-header">
             <div class="section-icon">🧊</div>
             <div class="section-info">
@@ -262,12 +285,15 @@
             </button>
           </div>
           <div class="items-list" id="frozenList">
-            <!-- Items will be populated by JavaScript -->
+            <div class="empty-section">
+              <i data-lucide="snowflake"></i>
+              <p>No frozen items yet</p>
+            </div>
           </div>
         </section>
 
         <!-- Other Sections -->
-        <section class="shopping-section" data-category="other">
+        <section class="shopping-section card" data-category="other">
           <div class="section-header">
             <div class="section-icon">📦</div>
             <div class="section-info">
@@ -279,14 +305,17 @@
             </button>
           </div>
           <div class="items-list" id="otherList">
-            <!-- Items will be populated by JavaScript -->
+            <div class="empty-section">
+              <i data-lucide="package"></i>
+              <p>No other items yet</p>
+            </div>
           </div>
         </section>
 
       </div>
 
       <!-- Empty State -->
-      <div id="emptyState" class="empty-state">
+      <div id="emptyState" class="empty-state card">
         <div class="empty-illustration">
           <i data-lucide="shopping-cart" class="empty-icon"></i>
         </div>
@@ -337,18 +366,35 @@
 
   <!-- ================= BOTTOM NAV ================= -->
   <nav class="bottom-nav">
-    <a href="index.html"><i data-lucide="home"></i><span>Home</span></a>
-    <a href="recipes.html"><i data-lucide="book-open"></i><span>Recipes</span></a>
-    <a href="planner.html"><i data-lucide="calendar"></i><span>Planner</span></a>
-    <a href="shoppinglist.html" class="active"><i data-lucide="shopping-cart"></i><span>List</span></a>
-    <a href="about.html"><i data-lucide="info"></i><span>About</span></a>
+    <a href="index.html" class="nav-item nav-link" data-page="index">
+      <i data-lucide="home"></i>
+      <span>Home</span>
+    </a>
+    <a href="recipes.html" class="nav-item nav-link" data-page="recipes">
+      <i data-lucide="book-open"></i>
+      <span>Recipes</span>
+    </a>
+    <a href="planner.html" class="nav-item nav-link" data-page="planner">
+      <i data-lucide="calendar"></i>
+      <span>Planner</span>
+    </a>
+    <a href="shoppinglist.html" class="nav-item nav-link active" data-page="shoppinglist">
+      <i data-lucide="shopping-cart"></i>
+      <span>List</span>
+    </a>
+    <a href="about.html" class="nav-item nav-link" data-page="about">
+      <i data-lucide="info"></i>
+      <span>About</span>
+    </a>
   </nav>
 
   <!-- Add Item Modal -->
   <div id="addItemModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="addItemTitle">
     <div class="modal-content">
       <button class="modal-close">&times;</button>
-      <h3 id="addItemTitle">Add Item to Shopping List</h3>
+      <div class="modal-header">
+        <h3 id="addItemTitle">Add Item to Shopping List</h3>
+      </div>
       <div class="modal-body">
         <form id="addItemForm" class="item-form">
           <div class="form-group">
@@ -383,7 +429,7 @@
           
           <div class="form-group">
             <label for="itemNotes">Notes (Optional)</label>
-            <textarea id="itemNotes" class="form-input" placeholder="Any specific details, brand preferences, or notes..."></textarea>
+            <textarea id="itemNotes" class="form-input" placeholder="Any specific details, brand preferences, or notes..." rows="3"></textarea>
           </div>
           
           <div class="form-actions">
@@ -399,7 +445,9 @@
   <div id="shareListModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="shareListTitle">
     <div class="modal-content">
       <button class="modal-close">&times;</button>
-      <h3 id="shareListTitle">Share Your Shopping List</h3>
+      <div class="modal-header">
+        <h3 id="shareListTitle">Share Your Shopping List</h3>
+      </div>
       <div class="modal-body">
         <div class="share-options">
           <button class="share-option" data-method="copy">
@@ -417,7 +465,23 @@
         </div>
         <div class="share-preview">
           <h4>Preview:</h4>
-          <div id="sharePreview" class="share-preview-content"></div>
+          <div id="sharePreview" class="share-preview-content">
+            <div class="share-list">
+              <div class="share-section">
+                <h5>🥬 Fresh Produce</h5>
+                <ul>
+                  <li>Bananas - 6 pieces</li>
+                  <li>Spinach - 1 bag</li>
+                </ul>
+              </div>
+              <div class="share-section">
+                <h5>🥩 Protein</h5>
+                <ul>
+                  <li>Chicken Breast - 500g</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -431,20 +495,52 @@
     </div>
   </div>
 
-  <!-- FOOTER -->
+ <!-- FOOTER -->
   <footer class="footer" role="contentinfo">
-    <div class="footer-content">
-      <i data-lucide="fork-knife" class="footer-icon"></i>
-      <p>
-        © <span id="year"></span> Recipe Finder + Nutrition Tracker — All rights reserved. <br>
-        Built with ❤️ by Henry Osuagwu
-      </p>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <i data-lucide="utensils"></i>
+          <span>Recipe Finder</span>
+        </div>
+        <p>
+          © <span id="year"></span> Recipe Finder + Nutrition Tracker — All rights reserved.<br>
+          Built with ❤️ by Henry Osuagwu
+        </p>
+      </div>
+      <small id="lastModified"></small>
     </div>
-    <small id="lastModified"></small>
   </footer>
+
+  <!-- Scroll to Top Button -->
+  <button id="scrollTopBtn" class="scroll-top-btn" aria-label="Scroll to Top">
+    <i data-lucide="chevron-up"></i>
+  </button>
+
 
   <!-- SCRIPTS -->
   <script src="js/main.js" defer></script>
   <script src="js/shoppinglist.js" defer></script>
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Testing button click...');
+    
+    const button = document.getElementById('addCustomItem');
+    if (button) {
+        console.log('Button found, adding click listener');
+        button.addEventListener('click', function() {
+            console.log('Button clicked!');
+            const modal = document.getElementById('addItemModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                console.log('Modal shown');
+            }
+        });
+    } else {
+        console.error('Button not found!');
+    }
+});
+</script>
+  
 </body>
 </html>

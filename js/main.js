@@ -10,6 +10,10 @@ let allRecipes = [];
 let isLoading = false;
 let isShowingFavorites = false;
 
+// ===== Dashboard Persistence Configuration =====
+const DASHBOARD_STORAGE_KEY = 'dashboardProgress';
+let dashboardCleared = false;
+
 // ===== DOM Elements =====
 const menuBtn = document.getElementById('menuBtn');
 const sidebar = document.getElementById('sidebar');
@@ -55,7 +59,7 @@ function initializeApp() {
     // Set up event listeners
     setupEventListeners();
     
-    // Load user data
+    // Load user data with dashboard persistence
     loadUserData();
     
     // Initialize UI components
@@ -74,6 +78,53 @@ function initializeApp() {
     updateDailyTip();
     
     console.log('Recipe Finder App initialized successfully!');
+}
+
+// ===== Dashboard Persistence Functions =====
+function saveDashboardProgress() {
+    if (dashboardCleared) {
+        // Don't save progress if dashboard was explicitly cleared
+        return;
+    }
+    
+    const progressData = {
+        favorites: favorites,
+        mealPlan: mealPlan,
+        lastUpdated: new Date().toISOString()
+    };
+    
+    localStorage.setItem(DASHBOARD_STORAGE_KEY, JSON.stringify(progressData));
+    console.log('Dashboard progress saved');
+}
+
+function loadDashboardProgress() {
+    const savedProgress = localStorage.getItem(DASHBOARD_STORAGE_KEY);
+    
+    if (savedProgress) {
+        try {
+            const progressData = JSON.parse(savedProgress);
+            
+            // Only load progress if it's not too old (optional: you can remove this check)
+            const lastUpdated = new Date(progressData.lastUpdated);
+            const daysSinceUpdate = (new Date() - lastUpdated) / (1000 * 60 * 60 * 24);
+            
+            if (daysSinceUpdate < 30) { // Keep progress for 30 days
+                favorites = progressData.favorites || favorites;
+                mealPlan = progressData.mealPlan || mealPlan;
+                console.log('Dashboard progress loaded from storage');
+            } else {
+                console.log('Dashboard progress expired, using defaults');
+            }
+        } catch (error) {
+            console.error('Error loading dashboard progress:', error);
+        }
+    }
+}
+
+function clearDashboardProgress() {
+    dashboardCleared = true;
+    localStorage.removeItem(DASHBOARD_STORAGE_KEY);
+    console.log('Dashboard progress cleared');
 }
 
 // ===== Event Listeners =====
@@ -256,10 +307,19 @@ function loadUserData() {
     const savedMealPlan = localStorage.getItem('mealPlan');
     
     currentUser = savedUser ? JSON.parse(savedUser) : { name: 'Henry', email: 'guest@example.com' };
-    favorites = savedFavorites ? JSON.parse(savedFavorites) : [];
-    mealPlan = savedMealPlan ? JSON.parse(savedMealPlan) : {
-        monday: [], tuesday: [], wednesday: [], thursday: [], friday: []
-    };
+    
+    // Load dashboard progress (favorites and meal plan)
+    loadDashboardProgress();
+    
+    // Only use localStorage data if dashboard progress wasn't loaded
+    if (favorites.length === 0) {
+        favorites = savedFavorites ? JSON.parse(savedFavorites) : [];
+    }
+    if (Object.keys(mealPlan).length === 0) {
+        mealPlan = savedMealPlan ? JSON.parse(savedMealPlan) : {
+            monday: [], tuesday: [], wednesday: [], thursday: [], friday: []
+        };
+    }
     
     updateUserUI();
 }
@@ -274,9 +334,11 @@ function updateUserUI() {
 
 function handleLogout() {
     if (confirm('Are you sure you want to sign out?')) {
+        // Clear all user data including dashboard progress
         localStorage.removeItem('currentUser');
         localStorage.removeItem('favorites');
         localStorage.removeItem('mealPlan');
+        clearDashboardProgress();
         window.location.href = 'index.html';
     }
 }
@@ -633,6 +695,7 @@ function toggleFavorite(recipeId) {
     }
     
     saveFavorites();
+    saveDashboardProgress(); // Save dashboard progress when favorites change
     updateDashboard();
     
     // Update modal favorite button if modal is open
@@ -885,6 +948,7 @@ function autoAddToMealPlan(recipeName, recipeId) {
         });
         
         saveMealPlan();
+        saveDashboardProgress(); // Save dashboard progress when meal plan changes
         updateDashboard();
         updateMealPlanDisplay();
         
@@ -948,6 +1012,7 @@ function removeMealFromPlan(day, index) {
         const mealName = mealPlan[day][index].name;
         mealPlan[day].splice(index, 1);
         saveMealPlan();
+        saveDashboardProgress(); // Save dashboard progress when meal is removed
         updateDashboard();
         showToast(`Removed ${mealName} from ${day}`);
     }
@@ -960,6 +1025,7 @@ function resetPlanner(e) {
             monday: [], tuesday: [], wednesday: [], thursday: [], friday: []
         };
         saveMealPlan();
+        clearDashboardProgress(); // Clear dashboard progress when planner is reset
         updateDashboard();
         updateMealPlanDisplay();
         showToast('Meal plan reset successfully!');
@@ -1276,10 +1342,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Logout Functionality
     logoutBtn.addEventListener('click', function() {
         if (confirm('Are you sure you want to sign out?')) {
-            // Clear user session data
+            // Clear user session data including dashboard progress
             localStorage.removeItem('userToken');
             localStorage.removeItem('userName');
             localStorage.removeItem('userEmail');
+            clearDashboardProgress();
             
             // Redirect to login page or home page
             window.location.href = 'index.html';
@@ -1320,3 +1387,367 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// ===== Page Detection Helper =====
+function isIndexPage() {
+    return window.location.pathname.endsWith('index.html') || 
+           window.location.pathname.endsWith('/') || 
+           window.location.pathname === '';
+}
+
+// ===== Enhanced Recipe Functions - 30 Recipes (Modified for Index Page Only) =====
+async function loadRecipes() {
+    // Only fetch 30 recipes on the index page
+    if (!isIndexPage()) {
+        console.log('Not on index page - skipping 30 recipes load');
+        return;
+    }
+    
+    if (isLoading) return;
+    
+    try {
+        isLoading = true;
+        showLoadingState();
+        
+        // Fetch 30 random recipes (only on index page)
+        const recipes = await getRandomRecipes(30);
+        allRecipes = recipes;
+        currentRecipes = recipes;
+        displayRecipes(recipes);
+        
+        showToast(`Loaded ${recipes.length} delicious recipes! 🍴`);
+        
+    } catch (error) {
+        console.error('Error loading recipes:', error);
+        showErrorState('Failed to load recipes. Please check your connection and try again.');
+    } finally {
+        isLoading = false;
+    }
+}
+
+// ===== Modified Display Recipes for Index Page Only =====
+function displayRecipes(recipes) {
+    if (!recipeList) return;
+    
+    // Check if we're on a page that should show recipes
+    if (!isIndexPage()) {
+        recipeList.innerHTML = `
+            <div class="empty-state">
+                <i data-lucide="book-open" class="empty-icon"></i>
+                <h3>Browse Recipes</h3>
+                <p>Use the navigation to explore different recipe sections.</p>
+                <a href="recipes.html" class="btn btn-primary">
+                    <i data-lucide="chef-hat"></i> View All Recipes
+                </a>
+            </div>
+        `;
+        lucide.createIcons();
+        return;
+    }
+    
+    // Rest of your existing displayRecipes code...
+    if (recipes.length === 0) {
+        recipeList.innerHTML = `
+            <div class="empty-state">
+                <i data-lucide="search" class="empty-icon"></i>
+                <h3>No recipes found</h3>
+                <p>Try adjusting your search terms or browse all recipes.</p>
+                <button class="btn btn-primary" onclick="loadRecipes()">
+                    <i data-lucide="refresh-cw"></i> Load 30 Recipes
+                </button>
+            </div>
+        `;
+        lucide.createIcons();
+        return;
+    }
+    
+    recipeList.innerHTML = recipes.map((recipe, index) => {
+        if (!recipe) return '';
+        
+        // Determine difficulty based on ingredients count
+        const ingredientCount = getIngredientCount(recipe);
+        const difficulty = getDifficulty(ingredientCount);
+        const difficultyClass = `difficulty-${difficulty.level}`;
+        const isFav = isFavorite(recipe.idMeal);
+        
+        return `
+            <div class="recipe-card" data-id="${recipe.idMeal}" style="animation-delay: ${index * 0.05}s">
+                <div class="recipe-image-container">
+                    <img src="${recipe.strMealThumb}" alt="${recipe.strMeal}" class="recipe-image" loading="lazy">
+                    <div class="recipe-overlay"></div>
+                    <div class="difficulty-badge ${difficultyClass}">
+                        ${difficulty.level}
+                    </div>
+                </div>
+                
+                <div class="recipe-content">
+                    <h3 class="recipe-title">${recipe.strMeal}</h3>
+                    
+                    <div class="recipe-meta">
+                        <span class="recipe-cuisine">
+                            <i data-lucide="map-pin"></i>
+                            ${recipe.strArea || 'International'}
+                        </span>
+                        <span class="recipe-category">
+                            <i data-lucide="tag"></i>
+                            ${recipe.strCategory || 'Main Course'}
+                        </span>
+                    </div>
+                    
+                    <div class="recipe-actions">
+                        <button class="btn-view view-recipe" data-id="${recipe.idMeal}">
+                            <i data-lucide="eye"></i>
+                            View Recipe
+                        </button>
+                        <button class="btn-favorite favorite-btn ${isFav ? 'active' : ''}" 
+                                data-id="${recipe.idMeal}" 
+                                aria-label="${isFav ? 'Remove from favorites' : 'Add to favorites'}">
+                            <i data-lucide="heart"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="recipe-stats">
+                    <span class="stat-item">
+                        <i data-lucide="clock"></i>
+                        ${difficulty.time}
+                    </span>
+                    <span class="stat-item">
+                        <i data-lucide="list"></i>
+                        ${ingredientCount} ingredients
+                    </span>
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    if (resultCount) {
+        resultCount.textContent = recipes.length;
+        // Add animation to result count
+        resultCount.style.transform = 'scale(1.2)';
+        setTimeout(() => {
+            resultCount.style.transform = 'scale(1)';
+        }, 300);
+    }
+    
+    // Add event listeners
+    addRecipeEventListeners();
+    lucide.createIcons();
+}
+
+// ===== Modified Search Functionality for Index Page Only =====
+function handleSearch(event) {
+    // Only search on index page
+    if (!isIndexPage()) {
+        return;
+    }
+    
+    const searchTerm = event.target.value.toLowerCase().trim();
+    
+    if (!searchTerm) {
+        currentRecipes = allRecipes;
+        displayRecipes(currentRecipes);
+        return;
+    }
+    
+    const filteredRecipes = allRecipes.filter(recipe => 
+        recipe.strMeal.toLowerCase().includes(searchTerm) ||
+        (recipe.strArea && recipe.strArea.toLowerCase().includes(searchTerm)) ||
+        (recipe.strCategory && recipe.strCategory.toLowerCase().includes(searchTerm))
+    );
+    
+    currentRecipes = filteredRecipes;
+    displayRecipes(filteredRecipes);
+}
+
+// ===== Modified Favorites View for Index Page Only =====
+function toggleFavoritesView() {
+    // Only toggle favorites on index page
+    if (!isIndexPage()) {
+        // Redirect to recipes page for favorites view
+        window.location.href = 'recipes.html';
+        return;
+    }
+    
+    if (favoritesToggle.textContent.includes('Favorites')) {
+        // Show favorites
+        currentRecipes = favorites;
+        favoritesToggle.innerHTML = '<i data-lucide="list"></i> All Recipes';
+        showToast(`Showing ${favorites.length} favorite recipes ❤️`);
+    } else {
+        // Show all recipes
+        currentRecipes = allRecipes;
+        favoritesToggle.innerHTML = '<i data-lucide="heart"></i> Favorites';
+        showToast('Showing all recipes 📚');
+    }
+    
+    displayRecipes(currentRecipes);
+    lucide.createIcons();
+}
+
+// ===== Override the existing functions with the modified versions =====
+// This ensures that when other parts of your code call these functions,
+// they use the index-page-only versions
+
+// Update the global exports to use our modified functions
+window.loadRecipes = loadRecipes;
+window.toggleFavoritesView = toggleFavoritesView;
+
+// ===== Automatic Save Triggers =====
+
+// Save progress before page unload
+window.addEventListener('beforeunload', function() {
+    saveDashboardProgress();
+});
+
+// Save progress when user leaves the page
+window.addEventListener('pagehide', function() {
+    saveDashboardProgress();
+});
+
+// Auto-save progress periodically (every 30 seconds)
+setInterval(function() {
+    if (!dashboardCleared) {
+        saveDashboardProgress();
+        console.log('Auto-saved dashboard progress');
+    }
+}, 30000);
+
+// ===== Enhanced Save Points for User Interactions =====
+
+// Override the toggleFavorite function to ensure saving
+const originalToggleFavorite = window.toggleFavorite;
+window.toggleFavorite = function(recipeId) {
+    originalToggleFavorite(recipeId);
+    // Force immediate save after favorite change
+    setTimeout(() => {
+        saveDashboardProgress();
+    }, 100);
+};
+
+// Override meal plan functions to ensure saving
+const originalRemoveMealFromPlan = window.removeMealFromPlan;
+window.removeMealFromPlan = function(day, index) {
+    originalRemoveMealFromPlan(day, index);
+    setTimeout(() => {
+        saveDashboardProgress();
+    }, 100);
+};
+
+// Ensure autoAddToMealPlan saves progress
+window.autoAddToMealPlan = function(recipeName, recipeId) {
+    // Find the first available day with less than 3 meals
+    const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+    let availableDay = null;
+    
+    for (const day of days) {
+        if (!mealPlan[day]) {
+            mealPlan[day] = [];
+        }
+        
+        // Check if meal already exists in any day
+        const existingMeal = Object.values(mealPlan).flat().find(meal => meal.id === recipeId);
+        if (existingMeal) {
+            showToast(`"${recipeName}" is already in your meal plan!`, 'error');
+            closeModal();
+            return;
+        }
+        
+        // Find day with available slot (max 3 meals per day)
+        if (mealPlan[day].length < 3) {
+            availableDay = day;
+            break;
+        }
+    }
+    
+    if (availableDay) {
+        // Add to the available day
+        mealPlan[availableDay].push({
+            name: recipeName,
+            id: recipeId,
+            added: new Date().toISOString()
+        });
+        
+        saveMealPlan();
+        saveDashboardProgress(); // Force immediate save
+        updateDashboard();
+        updateMealPlanDisplay();
+        
+        showToast(`"${recipeName}" automatically added to ${availableDay.charAt(0).toUpperCase() + availableDay.slice(1)}! 📅`);
+        closeModal();
+    } else {
+        // All days are full
+        showToast('All days are full! Remove some meals or reset your plan.', 'error');
+    }
+};
+
+// ===== Session Storage Backup =====
+// Use sessionStorage as additional backup for current session
+
+function saveSessionBackup() {
+    if (!dashboardCleared) {
+        const sessionData = {
+            favorites: favorites,
+            mealPlan: mealPlan,
+            timestamp: new Date().getTime()
+        };
+        sessionStorage.setItem('sessionBackup', JSON.stringify(sessionData));
+    }
+}
+
+function loadSessionBackup() {
+    const backup = sessionStorage.getItem('sessionBackup');
+    if (backup) {
+        try {
+            const data = JSON.parse(backup);
+            // Use session backup if it's from the current session (less than 1 hour old)
+            if (new Date().getTime() - data.timestamp < 3600000) {
+                favorites = data.favorites || favorites;
+                mealPlan = data.mealPlan || mealPlan;
+                console.log('Session backup loaded');
+            }
+        } catch (error) {
+            console.error('Error loading session backup:', error);
+        }
+    }
+}
+
+// Initialize session backup
+document.addEventListener('DOMContentLoaded', function() {
+    // Load session backup in addition to persistent storage
+    setTimeout(loadSessionBackup, 100);
+    
+    // Save to session storage frequently
+    setInterval(saveSessionBackup, 10000); // Every 10 seconds
+});
+
+// ===== Debugging Helper =====
+window.getStorageStatus = function() {
+    const persistent = localStorage.getItem(DASHBOARD_STORAGE_KEY);
+    const session = sessionStorage.getItem('sessionBackup');
+    const individualFavs = localStorage.getItem('favorites');
+    const individualMealPlan = localStorage.getItem('mealPlan');
+    
+    console.log('=== STORAGE STATUS ===');
+    console.log('Dashboard Progress:', persistent ? 'EXISTS' : 'MISSING');
+    console.log('Session Backup:', session ? 'EXISTS' : 'MISSING');
+    console.log('Individual Favorites:', individualFavs ? 'EXISTS' : 'MISSING');
+    console.log('Individual Meal Plan:', individualMealPlan ? 'EXISTS' : 'MISSING');
+    console.log('Current Favorites:', favorites.length, 'items');
+    console.log('Current Meal Plan:', Object.values(mealPlan).flat().length, 'meals');
+    console.log('Dashboard Cleared Flag:', dashboardCleared);
+    console.log('====================');
+};
+
+// Call this function in browser console to check storage status
+console.log('Dashboard persistence system loaded. Use getStorageStatus() to check storage state.');
+
+// ===== Final Initialization =====
+// Ensure everything is loaded properly
+setTimeout(() => {
+    updateDashboard();
+    updateMealPlanDisplay();
+    console.log('Dashboard fully initialized with persistence');
+}, 500);
+
+

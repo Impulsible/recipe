@@ -629,3 +629,145 @@ document.addEventListener('visibilitychange', () => {
         window.shoppingList.render();
     }
 });
+
+// COMPLETE FIX - No blur and modal works
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 COMPLETE OVERRIDE ACTIVATED');
+    
+    // FIRST: Force hide modal and backdrop on page load
+    const modal = document.getElementById('addItemModal');
+    const backdrop = document.getElementById('backdrop');
+    
+    if (modal) {
+        modal.classList.add('hidden');
+        console.log('✅ Modal hidden on page load');
+    }
+    if (backdrop) {
+        backdrop.classList.add('hidden');
+        console.log('✅ Backdrop hidden on page load');
+    }
+    
+    function showModal() {
+        console.log('🎯 Opening modal!');
+        if (modal) {
+            modal.classList.remove('hidden');
+            console.log('Modal classes after remove:', modal.className);
+        }
+        if (backdrop) {
+            backdrop.classList.remove('hidden');
+        }
+    }
+
+    function setupButtons() {
+        const customBtn = document.getElementById('addCustomItem');
+        const emptyBtn = document.getElementById('addEmptyItem');
+        
+        console.log('Setting up buttons:', {
+            customBtn: !!customBtn,
+            emptyBtn: !!emptyBtn
+        });
+
+        if (customBtn) {
+            // Nuclear approach - replace button completely
+            const newCustomBtn = customBtn.cloneNode(true);
+            customBtn.parentNode.replaceChild(newCustomBtn, customBtn);
+            
+            // Multiple layers of event handling
+            newCustomBtn.setAttribute('onclick', '');
+            newCustomBtn.onclick = showModal;
+            newCustomBtn.addEventListener('click', showModal, true);
+            newCustomBtn.addEventListener('click', showModal, false);
+            
+            console.log('✅ Custom button fully overridden');
+        }
+
+        if (emptyBtn) {
+            // Nuclear approach - replace button completely
+            const newEmptyBtn = emptyBtn.cloneNode(true);
+            emptyBtn.parentNode.replaceChild(newEmptyBtn, emptyBtn);
+            
+            // Multiple layers of event handling
+            newEmptyBtn.setAttribute('onclick', '');
+            newEmptyBtn.onclick = showModal;
+            newEmptyBtn.addEventListener('click', showModal, true);
+            newEmptyBtn.addEventListener('click', showModal, false);
+            
+            console.log('✅ Empty button fully overridden');
+        }
+    }
+
+    // Setup buttons with multiple attempts
+    setupButtons();
+    setTimeout(setupButtons, 300);
+    setTimeout(setupButtons, 800);
+    
+    // Final nuclear option - document level event capture
+    document.addEventListener('click', function(e) {
+        const target = e.target;
+        if (target && (target.id === 'addCustomItem' || target.closest('#addCustomItem'))) {
+            console.log('💣 DOCUMENT LEVEL: Custom button intercepted!');
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+            showModal();
+            return false;
+        }
+        
+        if (target && (target.id === 'addEmptyItem' || target.closest('#addEmptyItem'))) {
+            console.log('💣 DOCUMENT LEVEL: Empty button intercepted!');
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+            showModal();
+            return false;
+        }
+    }, true); // CAPTURE phase - intercept before anyone else
+});
+
+// COMPLETE CSS - Handle both hidden and visible states
+if (!document.querySelector('style[data-complete-override]')) {
+    const completeCSS = `
+    /* HIDDEN STATE - Ensure modal is hidden on page load */
+    #addItemModal.hidden {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+    }
+    
+    #backdrop.hidden {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+    }
+    
+    /* VISIBLE STATE - Show modal when not hidden */
+    #addItemModal:not(.hidden) {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        z-index: 9999 !important;
+    }
+
+    #backdrop:not(.hidden) {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        z-index: 9998 !important;
+    }
+
+    /* Ensure buttons work */
+    #addCustomItem, #addEmptyItem {
+        cursor: pointer !important;
+        pointer-events: auto !important;
+        position: relative !important;
+    }
+    `;
+
+    const style = document.createElement('style');
+    style.setAttribute('data-complete-override', 'true');
+    style.textContent = completeCSS;
+    document.head.appendChild(style);
+    console.log('✅ Complete CSS injected');
+}
+
+

@@ -85,11 +85,11 @@
     
     <nav>
       <ul>
-        <li><a href="index.html"><i data-lucide="home"></i><span>Home</span></a></li>
-        <li><a href="recipes.html"><i data-lucide="book-open"></i><span>Recipes</span></a></li>
-        <li><a href="planner.html"><i data-lucide="calendar"></i><span>Planner</span></a></li>
-        <li><a href="shoppinglist.html"><i data-lucide="shopping-cart"></i><span>Shopping List</span></a></li>
-        <li><a href="about.html"><i data-lucide="info"></i><span>About</span></a></li>
+        <li><a href="index.html" class="nav-link" data-page="index"><i data-lucide="home"></i><span>Home</span></a></li>
+        <li><a href="recipes.html" class="nav-link" data-page="recipes"><i data-lucide="book-open"></i><span>Recipes</span></a></li>
+        <li><a href="planner.html" class="nav-link" data-page="planner"><i data-lucide="calendar"></i><span>Planner</span></a></li>
+        <li><a href="shoppinglist.html" class="nav-link" data-page="shoppinglist"><i data-lucide="shopping-cart"></i><span>Shopping List</span></a></li>
+        <li><a href="about.html" class="nav-link" data-page="about"><i data-lucide="info"></i><span>About</span></a></li>
       </ul>
     </nav>
     <div class="sidebar-footer">
@@ -104,7 +104,7 @@
   <div id="backdrop" class="backdrop"></div>
 
   <!-- ================= HERO ================= -->
-  <!-- ================= HERO SECTION ================= -->
+
 <section class="hero" id="hero" role="banner" aria-label="Recipe Finder Introduction">
   <!-- Background Image -->
   <div class="hero-background">
@@ -308,23 +308,23 @@
 
   <!-- ================= BOTTOM NAV ================= -->
   <nav class="bottom-nav">
-    <a href="index.html" class="nav-item active">
+    <a href="index.html" class="nav-item nav-link" data-page="index">
       <i data-lucide="home"></i>
       <span>Home</span>
     </a>
-    <a href="recipes.html" class="nav-item">
+    <a href="recipes.html" class="nav-item nav-link" data-page="recipes">
       <i data-lucide="book-open"></i>
       <span>Recipes</span>
     </a>
-    <a href="planner.html" class="nav-item">
+    <a href="planner.html" class="nav-item nav-link" data-page="planner">
       <i data-lucide="calendar"></i>
       <span>Planner</span>
     </a>
-    <a href="shoppinglist.html" class="nav-item">
+    <a href="shoppinglist.html" class="nav-item nav-link" data-page="shoppinglist">
       <i data-lucide="shopping-cart"></i>
       <span>List</span>
     </a>
-    <a href="about.html" class="nav-item">
+    <a href="about.html" class="nav-item nav-link" data-page="about">
       <i data-lucide="info"></i>
       <span>About</span>
     </a>
@@ -359,7 +359,61 @@
       if (typeof lucide !== 'undefined') {
         lucide.createIcons();
       }
+      
+      // Active navigation functionality
+      function setActiveNav() {
+        // Get current page from URL
+        const currentPath = window.location.pathname;
+        const currentPage = currentPath.split('/').pop() || 'index.html';
+        const pageName = currentPage.replace('.html', '') || 'index';
+        
+        // Remove active class from all nav items
+        document.querySelectorAll('.nav-link').forEach(link => {
+          link.classList.remove('active');
+        });
+        
+        // Add active class to current page nav item
+        document.querySelectorAll('.nav-link').forEach(link => {
+          const linkPage = link.getAttribute('data-page');
+          if (linkPage === pageName) {
+            link.classList.add('active');
+          }
+        });
+        
+        // Also update bottom nav (it uses different structure)
+        document.querySelectorAll('.bottom-nav .nav-item').forEach(item => {
+          item.classList.remove('active');
+          const href = item.getAttribute('href');
+          if (href === currentPage || (currentPage === 'index.html' && href === 'index.html')) {
+            item.classList.add('active');
+          }
+        });
+      }
+      
+      // Set active nav on page load
+      setActiveNav();
+      
+      // Update active nav when navigating (for SPA-like behavior if applicable)
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', function() {
+          // Small delay to ensure the page has started navigating
+          setTimeout(setActiveNav, 50);
+        });
+      });
     });
   </script>
+  <!-- Add this before closing </body> in profile.html -->
+<script>
+// Debug script - check if data is being saved
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Profile page loaded');
+    console.log('Current user from localStorage:', JSON.parse(localStorage.getItem('currentUser')));
+    
+    // Monitor localStorage changes
+    window.addEventListener('storage', function(e) {
+        console.log('Storage changed:', e.key, e.newValue);
+    });
+});
+</script>
 </body>
 </html>

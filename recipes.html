@@ -1,36 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- ================= META ================= -->
+  <!-- META -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Recipe Finder + Nutrition Tracker — discover recipes, track macros, plan meals, and shop smarter.">
-  <meta name="keywords" content="recipes, nutrition tracker, meal planner, calories, macros, food app, Nigerian recipes">
+  <meta name="description" content="Discover delicious recipes, filter by dietary needs, save favorites, and plan your meals with Recipe Finder.">
+  <meta name="keywords" content="recipes, cooking, meal planning, nutrition, healthy eating, food">
   <meta name="author" content="Henry Osuagwu">
-  <meta name="theme-color" content="#4CAF50">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <!-- ================= TITLE ================= -->
-  <title>Recipe Finder + Nutrition Tracker</title>
+  <!-- TITLE -->
+  <title>Recipes | Recipe Finder + Nutrition Tracker</title>
 
-  <!-- ================= FONTS + ICONS ================= -->
+  <!-- PERFORMANCE -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- FONTS + ICONS -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest" defer></script>
 
-  <!-- ================= STYLES ================= -->
-  <link rel="stylesheet" href="css/styles.css">
-   <link rel="stylesheet" href="css/recipe.css">
+  <!-- STYLES -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/recipe.css">
 
-  <!-- ================= PWA + SOCIAL ================= -->
-  <link rel="icon" type="image/png" href="images/favicon.png">
+  <!-- Favicon and PWA -->
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="images/favicon.png">
+  <link rel="apple-touch-icon" href="images/favicon.png">
   <link rel="manifest" href="manifest.json">
-  <meta property="og:title" content="Recipe Finder + Nutrition Tracker">
-  <meta property="og:description" content="Find healthy recipes, filter by diet, and track your daily nutrition.">
-  <meta property="og:image" content="images/cook.jpg">
+  <meta name="theme-color" content="#4CAF50">
 </head>
-
 <body>
+  
   <!-- ================= HEADER ================= -->
   <header class="site-header" role="banner">
     <div class="container header-inner">
@@ -39,13 +42,14 @@
           <i data-lucide="menu"></i>
         </button>
         <a href="index.html" class="logo" aria-label="Recipe Finder Home">
-          <i data-lucide="fork-knife"></i>
+          <i data-lucide="utensils" class="logo-icon"></i>
           <span class="logo-text">
             <strong>Recipe Finder</strong>
             <small class="tagline">+ Nutrition Tracker</small>
           </span>
         </a>
       </div>
+
       <div class="header-right">
         <button id="darkModeToggle" class="icon-btn" aria-pressed="false" aria-label="Toggle dark mode">
           <i data-lucide="moon"></i>
@@ -58,7 +62,7 @@
   </header>
 
   <!-- ================= SIDEBAR ================= -->
-  <aside id="sidebar" class="sidebar" aria-label="Main navigation">
+  <aside id="sidebar" class="sidebar">
     <div class="sidebar-top">
       <div class="brand profile-section">
         <i data-lucide="user"></i>
@@ -71,228 +75,444 @@
         <i data-lucide="x"></i>
       </button>
     </div>
+    
     <nav>
       <ul>
-        <li><a href="index.html"><i data-lucide="home"></i><span>Home</span></a></li>
-        <li><a href="recipes.html" class="active" aria-current="page"><i data-lucide="book-open"></i><span>Recipes</span></a></li>
-        <li><a href="planner.html"><i data-lucide="calendar"></i><span>Planner</span></a></li>
-        <li><a href="shoppinglist.html"><i data-lucide="shopping-cart"></i><span>Shopping List</span></a></li>
-        <li><a href="about.html"><i data-lucide="info"></i><span>About</span></a></li>
+        <li><a href="index.html" class="nav-link" data-page="index"><i data-lucide="home"></i><span>Home</span></a></li>
+        <li><a href="recipes.html" class="nav-link active" data-page="recipes"><i data-lucide="book-open"></i><span>Recipes</span></a></li>
+        <li><a href="planner.html" class="nav-link" data-page="planner"><i data-lucide="calendar"></i><span>Planner</span></a></li>
+        <li><a href="shoppinglist.html" class="nav-link" data-page="shoppinglist"><i data-lucide="shopping-cart"></i><span>Shopping List</span></a></li>
+        <li><a href="about.html" class="nav-link" data-page="about"><i data-lucide="info"></i><span>About</span></a></li>
       </ul>
     </nav>
     <div class="sidebar-footer">
-      <button id="logoutBtn" class="ghost">Sign out</button>
+      <button id="logoutBtn" class="btn btn-outline sign-out-btn">
+        <i data-lucide="log-out"></i>
+        Sign out
+      </button>
     </div>
   </aside>
 
+  <!-- BACKDROP -->
   <div id="backdrop" class="backdrop"></div>
 
-  <section class="hero" id="heroSection">
-  <picture class="hero-picture">
-    <img src="images/nut.png" alt="Fresh healthy meal" class="hero-img" loading="lazy">
-  </picture>
-
-  <div class="hero-overlay"></div>
-
-  <div class="hero-content container">
-    <h1 class="hero-title">🥗 Find Your Next Favorite Recipe</h1>
-    <p class="hero-sub">
-      Discover nutritious, delicious meals based on your ingredients, dietary goals, or region. Track macros and plan smarter.
-    </p>
-  </div>
-</section>
-<section class="dashboard" id="dashboardSection">
-  <div class="container">
-    <h2>📊 Nutrition & Recipe Dashboard</h2>
-    <p class="dashboard-sub">
-      Explore healthy meals, track your macros, and discover new recipes—all in one interactive space.
-    </p>
-
-    <div class="dashboard-grid" id="dashboardGrid">
-      <!-- JS will generate 12 random recipes here -->
+  <!-- ================= HERO ================= -->
+  <section class="hero" id="hero" role="banner" aria-label="Recipe Collection Introduction">
+    <!-- Background Image -->
+    <div class="hero-background">
+      <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
+           alt="Beautiful assortment of fresh ingredients and cooked dishes arranged artistically"
+           class="hero-img"
+           loading="eager"
+           width="1920"
+           height="1080">
     </div>
-  </div>
 
-<div id="dashboardLoader" class="dashboard-loader">
-  <div class="spinner"></div>
-  <p>Loading recipes...</p>
-</div>
+    <!-- Overlay -->
+    <div class="hero-overlay" aria-hidden="true"></div>
 
-  <!-- Modal -->
-  <div id="dashboardModal" class="dashboard-modal hidden">
-    <div class="dashboard-modal-content">
-      <button class="modal-close" aria-label="Close modal">&times;</button>
-      <h3 id="modalTitle"></h3>
-      <p id="modalDescription"></p>
-      <h4>Recipe Steps:</h4>
-      <p id="modalSteps"></p>
-      <button id="backToDashboard" class="btn orange">Back to Dashboard</button>
-    </div>
-  </div>
-</section>
+    <!-- Hero Content -->
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="hero-title">
+          Discover <span class="highlight">Amazing Recipes</span><br class="mobile-break">
+          For Every <span class="highlight">Occasion</span>
+        </h1>
 
-  <!-- ================= MAIN ================= -->
-  <main class="main-content container">
-    <!-- ========== RECIPES SECTION ========== -->
-    <section class="recipes" aria-labelledby="resultsHeading" id="recipesSection">
-      <h2 id="resultsHeading">Find Recipes</h2>
+        <p class="hero-sub">
+          Explore thousands of carefully curated recipes, from quick weekday meals to impressive dinner party dishes. 
+          Your culinary adventure starts here.
+        </p>
 
-      <!-- Filters -->
-      <div class="filters">
-        <div class="search-group">
-          <input type="search" id="searchInput" placeholder="Search recipes..." aria-label="Search recipes">
-          <button id="randomBtn" class="btn">🎲 Surprise Me</button>
-        </div>
-
-        <div class="filter-grid">
-          <div>
-            <label for="filterCategory">Category</label>
-            <select id="filterCategory">
-              <option value="">All</option>
-            </select>
-          </div>
-          <div>
-            <label for="filterArea">Area</label>
-            <select id="filterArea">
-              <option value="">All</option>
-            </select>
-          </div>
-          <div>
-            <label for="dietSelect">Diet</label>
-            <select id="dietSelect">
-              <option value="">Any</option>
-              <option value="vegan">Vegan</option>
-              <option value="vegetarian">Vegetarian</option>
-              <option value="gluten">Gluten-Free</option>
-              <option value="low">Low-Carb</option>
-            </select>
-          </div>
-          <div>
-            <label for="caloriesRange">Max Calories: <span id="calLabel">800</span></label>
-            <input type="range" id="caloriesRange" min="100" max="1200" step="50" value="800">
-          </div>
-          <div class="filter-actions">
-            <button id="applyFilters" class="btn small">Apply Filters</button>
-            <button id="clearFilters" class="btn ghost small">Reset</button>
-            <button id="favoritesToggle" class="btn ghost small">❤️ Favorites</button>
-          </div>
+        <div class="hero-cta" role="group" aria-label="Call to Action Buttons">
+          <button id="heroRandomBtn" class="cta-btn green" aria-label="Get random recipe">
+            <i data-lucide="dice-5" aria-hidden="true"></i>
+            Surprise Me!
+          </button>
+          <button id="heroSearchBtn" class="cta-btn orange" aria-label="Start searching recipes">
+            <i data-lucide="search" aria-hidden="true"></i>
+            Start Exploring
+          </button>
         </div>
       </div>
-
-     <dl id="macroSummary" class="macro-summary">
-  <!-- Calories -->
-  <div class="ms-item">
-    <div class="progress-ring">
-      <svg width="80" height="80">
-        <circle class="track" cx="40" cy="40" r="35"></circle>
-        <circle class="progress calories" cx="40" cy="40" r="35"></circle>
-      </svg>
-      <div class="progress-value"><span id="summaryCaloriesValue">0</span>%</div>
     </div>
-    <dt>🍽️ Calories</dt>
-    <dd><span id="summaryCalories">0</span> / <span id="goalCalories">2000</span> kcal</dd>
-  </div>
+  </section>
 
-  <!-- Protein -->
-  <div class="ms-item">
-    <div class="progress-ring">
-      <svg width="80" height="80">
-        <circle class="track" cx="40" cy="40" r="35"></circle>
-        <circle class="progress protein" cx="40" cy="40" r="35"></circle>
-      </svg>
-      <div class="progress-value"><span id="summaryProteinValue">0</span>%</div>
+  <!-- ================= MAIN CONTENT ================= -->
+  <main class="app-container">
+    <div class="recipes-container">
+      
+      <!-- Quick Stats -->
+      <section class="stats-section">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">🍲</div>
+            <div class="stat-content">
+              <span class="stat-number">5000+</span>
+              <span class="stat-label">Recipes</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">⏱️</div>
+            <div class="stat-content">
+              <span class="stat-number">15-60</span>
+              <span class="stat-label">Min Prep</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">🌱</div>
+            <div class="stat-content">
+              <span class="stat-number">200+</span>
+              <span class="stat-label">Vegetarian</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">⚡</div>
+            <div class="stat-content">
+              <span class="stat-number">1000+</span>
+              <span class="stat-label">Quick Meals</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- Nutrition Tracker Section -->
+<section class="nutrition-tracker-section card">
+    <div class="nutrition-tracker-header">
+        <h3>📊 Nutrition Tracker</h3>
+        <button class="btn btn-outline" onclick="nutritionTracker.resetDay()">
+            <i data-lucide="refresh-cw"></i>
+            Reset Day
+        </button>
     </div>
-    <dt>🥩 Protein</dt>
-    <dd><span id="summaryProtein">0</span> / <span id="goalProtein">150</span> g</dd>
-  </div>
 
-  <!-- Carbs -->
-  <div class="ms-item">
-    <div class="progress-ring">
-      <svg width="80" height="80">
-        <circle class="track" cx="40" cy="40" r="35"></circle>
-        <circle class="progress carbs" cx="40" cy="40" r="35"></circle>
-      </svg>
-      <div class="progress-value"><span id="summaryCarbsValue">0</span>%</div>
+    <!-- Daily Goals -->
+    <div class="daily-goals-input">
+        <div class="goal-input-group">
+            <label for="caloriesGoal">Daily Calories Goal</label>
+            <input type="number" id="caloriesGoal" class="goal-input" min="500" max="5000" step="50">
+        </div>
+        <div class="goal-input-group">
+            <label for="proteinGoal">Protein (g)</label>
+            <input type="number" id="proteinGoal" class="goal-input" min="10" max="200" step="5">
+        </div>
+        <div class="goal-input-group">
+            <label for="carbsGoal">Carbs (g)</label>
+            <input type="number" id="carbsGoal" class="goal-input" min="50" max="500" step="10">
+        </div>
+        <div class="goal-input-group">
+            <label for="fatsGoal">Fats (g)</label>
+            <input type="number" id="fatsGoal" class="goal-input" min="10" max="150" step="5">
+        </div>
     </div>
-    <dt>🥖 Carbs</dt>
-    <dd><span id="summaryCarbs">0</span> / <span id="goalCarbs">250</span> g</dd>
-  </div>
 
-  <!-- Fat -->
-  <div class="ms-item">
-    <div class="progress-ring">
-      <svg width="80" height="80">
-        <circle class="track" cx="40" cy="40" r="35"></circle>
-        <circle class="progress fat" cx="40" cy="40" r="35"></circle>
-      </svg>
-      <div class="progress-value"><span id="summaryFatValue">0</span>%</div>
+    <!-- Nutrition Summary -->
+    <div class="nutrition-summary">
+        <div class="nutrition-summary-item">
+            <span class="nutrition-summary-value" id="totalCalories">0</span>
+            <span class="nutrition-summary-label">Calories</span>
+        </div>
+        <div class="nutrition-summary-item">
+            <span class="nutrition-summary-value" id="totalProtein">0g</span>
+            <span class="nutrition-summary-label">Protein</span>
+        </div>
+        <div class="nutrition-summary-item">
+            <span class="nutrition-summary-value" id="totalCarbs">0g</span>
+            <span class="nutrition-summary-label">Carbs</span>
+        </div>
+        <div class="nutrition-summary-item">
+            <span class="nutrition-summary-value" id="totalFats">0g</span>
+            <span class="nutrition-summary-label">Fats</span>
+        </div>
     </div>
-    <dt>🥑 Fat</dt>
-    <dd><span id="summaryFat">0</span> / <span id="goalFat">70</span> g</dd>
-  </div>
 
-  <div class="ms-actions">
-    <button id="addFavoritesToTracker" class="btn small">Add Favorites to Tracker</button>
-    <button id="clearTracker" class="btn ghost small">Clear Tracker</button>
-  </div>
-</dl>
+    <!-- Progress Bars -->
+    <div class="nutrition-progress-bars">
+        <div class="nutrition-progress-item">
+            <div class="nutrition-progress-header">
+                <span class="nutrition-progress-label">Calories</span>
+                <span class="nutrition-progress-stats calories">0/2000 (2000 left)</span>
+            </div>
+            <div class="nutrition-progress-bar">
+                <div class="nutrition-progress-fill calories" style="width: 0%"></div>
+            </div>
+        </div>
+        <div class="nutrition-progress-item">
+            <div class="nutrition-progress-header">
+                <span class="nutrition-progress-label">Protein</span>
+                <span class="nutrition-progress-stats protein">0/50g (50g left)</span>
+            </div>
+            <div class="nutrition-progress-bar">
+                <div class="nutrition-progress-fill protein" style="width: 0%"></div>
+            </div>
+        </div>
+        <div class="nutrition-progress-item">
+            <div class="nutrition-progress-header">
+                <span class="nutrition-progress-label">Carbs</span>
+                <span class="nutrition-progress-stats carbs">0/250g (250g left)</span>
+            </div>
+            <div class="nutrition-progress-bar">
+                <div class="nutrition-progress-fill carbs" style="width: 0%"></div>
+            </div>
+        </div>
+        <div class="nutrition-progress-item">
+            <div class="nutrition-progress-header">
+                <span class="nutrition-progress-label">Fats</span>
+                <span class="nutrition-progress-stats fats">0/70g (70g left)</span>
+            </div>
+            <div class="nutrition-progress-bar">
+                <div class="nutrition-progress-fill fats" style="width: 0%"></div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Today's History -->
+    <div class="nutrition-history">
+        <h4>Today's Meals</h4>
+        <div class="nutrition-history-list" id="nutritionHistoryList">
+            <!-- Filled dynamically -->
+        </div>
+    </div>
+</section>
 
-      <!-- Recipe Grid -->
-      <div id="recipeList" class="recipe-grid" aria-live="polite"></div>
-      <p id="statusMsg" class="status-msg" aria-live="polite"></p>
-      <p class="count">Results: <span id="resultCount">0</span></p>
-    </section>
+      <!-- Filters & Controls -->
+      <section class="controls-section card">
+        <div class="controls-header">
+          <div class="search-container">
+            <i data-lucide="search"></i>
+            <input type="search" id="searchInput" placeholder="Search recipes by name, ingredient, or category..." aria-label="Search recipes">
+            <button id="clearSearch" class="clear-search" aria-label="Clear search">
+              <i data-lucide="x"></i>
+            </button>
+          </div>
+          
+          <div class="view-controls">
+            <button id="gridViewBtn" class="view-btn active" aria-label="Grid view">
+              <i data-lucide="grid-3x3"></i>
+            </button>
+            <button id="listViewBtn" class="view-btn" aria-label="List view">
+              <i data-lucide="list"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Quick Filters -->
+        <div class="quick-filters">
+          <div class="filter-group">
+            <label>Category:</label>
+            <div class="category-filters">
+              <button class="filter-btn active" data-category="all">All</button>
+              <button class="filter-btn" data-category="breakfast">🍳 Breakfast</button>
+              <button class="filter-btn" data-category="lunch">🥪 Lunch</button>
+              <button class="filter-btn" data-category="dinner">🍽️ Dinner</button>
+              <button class="filter-btn" data-category="dessert">🍰 Dessert</button>
+              <button class="filter-btn" data-category="vegetarian">🥬 Vegetarian</button>
+              <button class="filter-btn" data-category="quick">⚡ Quick</button>
+            </div>
+          </div>
+          
+          <div class="filter-actions">
+            <button id="favoritesToggle" class="btn btn-outline">
+              <i data-lucide="heart"></i>
+              Favorites
+            </button>
+            <button id="advancedFiltersBtn" class="btn btn-outline">
+              <i data-lucide="filter"></i>
+              More Filters
+            </button>
+          </div>
+        </div>
+
+        <!-- Advanced Filters -->
+        <div id="advancedFilters" class="advanced-filters hidden">
+          <div class="filter-row">
+            <div class="filter-field">
+              <label for="difficultyFilter">Difficulty</label>
+              <select id="difficultyFilter">
+                <option value="all">Any Difficulty</option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+              </select>
+            </div>
+            
+            <div class="filter-field">
+              <label for="timeFilter">Max Prep Time</label>
+              <select id="timeFilter">
+                <option value="all">Any Time</option>
+                <option value="15">15 minutes</option>
+                <option value="30">30 minutes</option>
+                <option value="45">45 minutes</option>
+                <option value="60">60+ minutes</option>
+              </select>
+            </div>
+            
+            <div class="filter-field">
+              <label for="caloriesFilter">Max Calories</label>
+              <select id="caloriesFilter">
+                <option value="all">Any Calories</option>
+                <option value="300">300 cal</option>
+                <option value="500">500 cal</option>
+                <option value="700">700 cal</option>
+                <option value="1000">1000+ cal</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="filter-actions">
+            <button id="applyFilters" class="btn btn-primary">
+              <i data-lucide="check"></i>
+              Apply Filters
+            </button>
+            <button id="resetFilters" class="btn btn-outline">
+              <i data-lucide="refresh-cw"></i>
+              Reset All
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Results Header -->
+      <section class="results-header">
+        <h2 id="resultsHeading">Recipes (<span id="resultCount">0</span>)</h2>
+        <div class="sort-controls">
+          <label for="sortSelect">Sort by:</label>
+          <select id="sortSelect">
+            <option value="popular">Most Popular</option>
+            <option value="newest">Newest First</option>
+            <option value="calories">Calories (Low to High)</option>
+            <option value="time">Prep Time (Shortest First)</option>
+            <option value="rating">Highest Rated</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- Recipes Grid/List -->
+      <section class="recipes-section">
+        <div id="loadingState" class="loading-state">
+          <div class="loading-spinner"></div>
+          <p>Loading delicious recipes...</p>
+        </div>
+        
+        <div id="emptyState" class="empty-state card hidden">
+          <div class="empty-illustration">
+            <i data-lucide="chef-hat" class="empty-icon"></i>
+          </div>
+          <h3>No recipes found</h3>
+          <p>Try adjusting your search terms or filters to see more results.</p>
+          <button id="resetSearch" class="btn btn-primary">
+            <i data-lucide="refresh-cw"></i>
+            Reset Search
+          </button>
+        </div>
+        
+        <div id="recipeList" class="recipe-grid" aria-live="polite"></div>
+        
+        <!-- Load More Button -->
+        <div class="load-more-section">
+          <button id="loadMoreBtn" class="btn btn-outline load-more-btn hidden">
+            <i data-lucide="plus"></i>
+            Load More Recipes
+          </button>
+        </div>
+      </section>
+
+    </div>
   </main>
 
-  <!-- ================= MODAL ================= -->
+  <!-- Recipe Detail Modal -->
   <div id="recipeModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal-content">
-      <button id="modalClose" class="modal-close" aria-label="Close modal">&times;</button>
-      <div id="modalBody"></div>
+    <div class="modal-content recipe-modal-content">
+      <button id="modalClose" class="modal-close">&times;</button>
+      <div id="modalBody" class="modal-body"></div>
     </div>
   </div>
 
-  <!-- ================= BOTTOM NAV ================= -->
-  <nav class="bottom-nav" aria-label="Bottom navigation">
-    <a href="index.html"><i data-lucide="home"></i><span>Home</span></a>
-    <a href="recipes.html" class="active" aria-current="page"><i data-lucide="book-open"></i><span>Recipes</span></a>
-    <a href="planner.html"><i data-lucide="calendar"></i><span>Planner</span></a>
-    <a href="shoppinglist.html"><i data-lucide="shopping-cart"></i><span>List</span></a>
-    <a href="about.html"><i data-lucide="info"></i><span>About</span></a>
-  </nav>
+  <!-- Day Selection Modal -->
+  <div id="daySelectionModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Add to Meal Plan</h3>
+        <button class="modal-close" id="cancelDaySelection">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Choose which day you'd like to add this recipe to:</p>
+        
+        <div class="days-grid-selection" id="daysGridSelection">
+          <button class="day-option" data-day="monday">Monday</button>
+          <button class="day-option" data-day="tuesday">Tuesday</button>
+          <button class="day-option" data-day="wednesday">Wednesday</button>
+          <button class="day-option" data-day="thursday">Thursday</button>
+          <button class="day-option" data-day="friday">Friday</button>
+          <button class="day-option" data-day="saturday">Saturday</button>
+          <button class="day-option" data-day="sunday">Sunday</button>
+        </div>
+        
+        <div class="modal-actions">
+          <button class="btn btn-outline" id="cancelDaySelectionBtn">
+            <i data-lucide="x"></i>
+            Cancel
+          </button>
+          <button class="btn btn-primary" id="confirmDaySelection" disabled>
+            <i data-lucide="check"></i>
+            Add to Selected Day
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <!-- ================= FOOTER ================= -->
+  <!-- Toast Container -->
+  <div id="toastArea" class="toast-area"></div>
+
+  <!-- ================= BOTTOM NAV ================= -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item nav-link" data-page="index">
+      <i data-lucide="home"></i>
+      <span>Home</span>
+    </a>
+    <a href="recipes.html" class="nav-item nav-link active" data-page="recipes">
+      <i data-lucide="book-open"></i>
+      <span>Recipes</span>
+    </a>
+    <a href="planner.html" class="nav-item nav-link" data-page="planner">
+      <i data-lucide="calendar"></i>
+      <span>Planner</span>
+    </a>
+    <a href="shoppinglist.html" class="nav-item nav-link" data-page="shoppinglist">
+      <i data-lucide="shopping-cart"></i>
+      <span>List</span>
+    </a>
+    <a href="about.html" class="nav-item nav-link" data-page="about">
+      <i data-lucide="info"></i>
+      <span>About</span>
+    </a>
+  </nav>
+<!-- FOOTER -->
   <footer class="footer" role="contentinfo">
-    <div class="footer-content">
-      <i data-lucide="fork-knife"></i>
-      <p>
-        © <span id="year"></span> Recipe Finder + Nutrition Tracker — All rights reserved.<br>
-        Built with ❤️ by <strong>Henry Osuagwu</strong>.
-      </p>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <i data-lucide="utensils"></i>
+          <span>Recipe Finder</span>
+        </div>
+        <p>
+          © <span id="year"></span> Recipe Finder + Nutrition Tracker — All rights reserved.<br>
+          Built with ❤️ by Henry Osuagwu
+        </p>
+      </div>
+      <small id="lastModified"></small>
     </div>
   </footer>
 
-  <!-- ================= SCRIPTS ================= -->
+  <!-- Scroll to Top Button -->
+  <button id="scrollTopBtn" class="scroll-top-btn" aria-label="Scroll to Top">
+    <i data-lucide="chevron-up"></i>
+  </button>
+
+  <!-- SCRIPTS -->
   <script src="js/main.js" defer></script>
   <script src="js/recipes.js" defer></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      lucide.createIcons();
-      document.getElementById('year').textContent = new Date().getFullYear();
-      
-      // Close modal on Escape key
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          document.getElementById('recipeModal').classList.add('hidden');
-        }
-      });
-    });
-  </script>
-  <!-- Scroll to Top Button -->
-<button id="scrollTopBtn" aria-label="Scroll to Top">
-  🍴
-</button>
 </body>
 </html>

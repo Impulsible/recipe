@@ -22,7 +22,7 @@
   <script src="https://unpkg.com/lucide@latest" defer></script>
 
   <!-- STYLES -->
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/about.css">
 
   <!-- Favicon and PWA -->
@@ -52,7 +52,7 @@
           <i data-lucide="menu"></i>
         </button>
         <a href="index.html" class="logo" aria-label="Recipe Finder Home">
-          <i data-lucide="fork-knife" class="logo-icon"></i>
+          <i data-lucide="utensils" class="logo-icon"></i>
           <span class="logo-text">
             <strong>Recipe Finder</strong>
             <small class="tagline">+ Nutrition Tracker</small>
@@ -90,81 +90,135 @@
     
     <nav>
       <ul>
-        <li><a href="index.html"><i data-lucide="home"></i><span>Home</span></a></li>
-        <li><a href="recipes.html"><i data-lucide="book-open"></i><span>Recipes</span></a></li>
-        <li><a href="planner.html"><i data-lucide="calendar"></i><span>Planner</span></a></li>
-        <li><a href="shoppinglist.html"><i data-lucide="shopping-cart"></i><span>Shopping List</span></a></li>
-        <li><a href="about.html" class="active"><i data-lucide="info"></i><span>About</span></a></li>
+        <li><a href="index.html" class="nav-link" data-page="index"><i data-lucide="home"></i><span>Home</span></a></li>
+        <li><a href="recipes.html" class="nav-link" data-page="recipes"><i data-lucide="book-open"></i><span>Recipes</span></a></li>
+        <li><a href="planner.html" class="nav-link" data-page="planner"><i data-lucide="calendar"></i><span>Planner</span></a></li>
+        <li><a href="shoppinglist.html" class="nav-link" data-page="shoppinglist"><i data-lucide="shopping-cart"></i><span>Shopping List</span></a></li>
+        <li><a href="about.html" class="nav-link active" data-page="about"><i data-lucide="info"></i><span>About</span></a></li>
       </ul>
     </nav>
     <div class="sidebar-footer">
-      <button id="logoutBtn" class="ghost">Sign out</button>
+      <button id="logoutBtn" class="btn btn-outline sign-out-btn">
+        <i data-lucide="log-out"></i>
+        Sign out
+      </button>
     </div>
   </aside>
 
   <!-- BACKDROP -->
   <div id="backdrop" class="backdrop"></div>
 
+  <!-- ================= HERO ================= -->
+  <section class="hero" id="hero" role="banner" aria-label="About Recipe Finder">
+    <!-- Background Image -->
+    <div class="hero-background">
+      <img src="images/find.avif" 
+           alt="Fresh healthy ingredients and cooking utensils arranged beautifully"
+           class="hero-img"
+           loading="eager"
+           width="1920"
+           height="1080">
+    </div>
+
+    <!-- Overlay -->
+    <div class="hero-overlay" aria-hidden="true"></div>
+
+    <!-- Hero Content -->
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="hero-title">
+          About <span class="highlight">Recipe Finder</span><br class="mobile-break">
+          Your Kitchen <span class="highlight">Companion</span>
+        </h1>
+
+        <p class="hero-sub">
+          Discover the story behind your favorite cooking app and the team dedicated to making healthy eating accessible and enjoyable.
+        </p>
+
+        <div class="hero-cta" role="group" aria-label="Call to Action Buttons">
+          <a href="#mission" class="cta-btn green" aria-label="Learn about our mission">
+            <i data-lucide="heart" aria-hidden="true"></i>
+            Our Mission
+          </a>
+          <a href="#features" class="cta-btn orange" aria-label="Explore features">
+            <i data-lucide="zap" aria-hidden="true"></i>
+            Features
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ================= MAIN CONTENT ================= -->
   <main class="app-container">
     <div class="about-container">
       
-      <!-- Hero Section -->
-      <section class="about-hero">
-        <div class="hero-content">
-          <h1>About Recipe Finder</h1>
-          <p class="hero-subtitle">Your personal kitchen companion for healthier, happier eating</p>
-          <div class="hero-stats">
-            <div class="stat-card">
+      <!-- Stats Section -->
+      <section class="stats-section">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">🍲</div>
+            <div class="stat-content">
               <span class="stat-number">5000+</span>
               <span class="stat-label">Recipes</span>
             </div>
-            <div class="stat-card">
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-content">
               <span class="stat-number">50K+</span>
               <span class="stat-label">Users</span>
             </div>
-            <div class="stat-card">
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">🌍</div>
+            <div class="stat-content">
               <span class="stat-number">100+</span>
               <span class="stat-label">Countries</span>
             </div>
           </div>
-        </div>
-        <div class="hero-illustration">
-          <div class="floating-elements">
-            <div class="floating-item" style="--delay: 0s">🍲</div>
-            <div class="floating-item" style="--delay: 1s">🥗</div>
-            <div class="floating-item" style="--delay: 2s">🍎</div>
-            <div class="floating-item" style="--delay: 3s">🥑</div>
+          <div class="stat-card">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-content">
+              <span class="stat-number">4.8</span>
+              <span class="stat-label">Rating</span>
+            </div>
           </div>
         </div>
       </section>
 
       <!-- Mission Section -->
-      <section class="mission-section">
+      <section id="mission" class="mission-section card">
+        <div class="section-header">
+          <h2>Our Mission</h2>
+          <p class="section-subtitle">Making healthy eating accessible and enjoyable for everyone</p>
+        </div>
+        
         <div class="mission-content">
           <div class="mission-text">
-            <h2>Our Mission</h2>
             <p>We believe that healthy eating should be accessible, enjoyable, and personalized to your unique tastes and nutritional needs.</p>
             <p>Recipe Finder was born from a simple idea: what if technology could help us eat better without sacrificing flavor or the joy of cooking?</p>
+            
             <div class="mission-quote">
               <blockquote>
                 "Every kitchen is a canvas. Every meal, a masterpiece."
               </blockquote>
             </div>
           </div>
-          <div class="mission-visual">
-            <div class="visual-card">
-              <i data-lucide="heart" class="visual-icon"></i>
+          
+          <div class="mission-values">
+            <div class="value-card">
+              <i data-lucide="heart" class="value-icon"></i>
               <h3>Health First</h3>
               <p>Nutrition-focused recipes that don't compromise on taste</p>
             </div>
-            <div class="visual-card">
-              <i data-lucide="users" class="visual-icon"></i>
+            <div class="value-card">
+              <i data-lucide="users" class="value-icon"></i>
               <h3>For Everyone</h3>
               <p>Dietary restrictions? No problem. We've got you covered</p>
             </div>
-            <div class="visual-card">
-              <i data-lucide="zap" class="visual-icon"></i>
+            <div class="value-card">
+              <i data-lucide="zap" class="value-icon"></i>
               <h3>Save Time</h3>
               <p>Smart planning tools that make meal prep effortless</p>
             </div>
@@ -172,39 +226,45 @@
         </div>
       </section>
 
-      <!-- Features Showcase -->
-      <section class="features-section">
+      <!-- Features Section -->
+      <section id="features" class="features-section">
         <div class="section-header">
           <h2>Why Choose Recipe Finder?</h2>
-          <p>Discover the features that make cooking enjoyable and stress-free</p>
+          <p class="section-subtitle">Discover the features that make cooking enjoyable and stress-free</p>
         </div>
+        
         <div class="features-grid">
-          <div class="feature-card">
+          <div class="feature-card card">
             <div class="feature-icon">🔍</div>
             <h3>Smart Recipe Discovery</h3>
             <p>Find recipes by ingredients you have, dietary preferences, or cooking time. Our AI-powered search understands what you're looking for.</p>
           </div>
-          <div class="feature-card">
+          
+          <div class="feature-card card">
             <div class="feature-icon">📊</div>
             <h3>Nutrition Tracking</h3>
             <p>Get detailed nutritional information for every recipe. Track calories, macros, and micronutrients to meet your health goals.</p>
           </div>
-          <div class="feature-card">
+          
+          <div class="feature-card card">
             <div class="feature-icon">📅</div>
             <h3>Meal Planning</h3>
             <p>Plan your weekly meals in minutes. Our smart planner helps balance nutrition and variety throughout the week.</p>
           </div>
-          <div class="feature-card">
+          
+          <div class="feature-card card">
             <div class="feature-icon">🛒</div>
             <h3>Shopping Lists</h3>
             <p>Automatically generate shopping lists from your meal plans. Organize by category and track your progress in real-time.</p>
           </div>
-          <div class="feature-card">
+          
+          <div class="feature-card card">
             <div class="feature-icon">❤️</div>
             <h3>Personal Favorites</h3>
             <p>Save your favorite recipes and create custom collections. Your personal cookbook, always at your fingertips.</p>
           </div>
-          <div class="feature-card">
+          
+          <div class="feature-card card">
             <div class="feature-icon">🌍</div>
             <h3>Global Cuisine</h3>
             <p>Explore recipes from around the world. From Nigerian classics to international favorites, expand your culinary horizons.</p>
@@ -213,40 +273,45 @@
       </section>
 
       <!-- Team Section -->
-      <section class="team-section">
+      <section class="team-section card">
         <div class="section-header">
           <h2>Meet the Creator</h2>
-          <p>The passionate developer behind Recipe Finder</p>
+          <p class="section-subtitle">The passionate developer behind Recipe Finder</p>
         </div>
-        <div class="team-grid">
+        
+        <div class="team-content">
           <div class="team-card">
             <div class="team-avatar">
               <i data-lucide="user" class="avatar-icon"></i>
             </div>
-            <h3>Henry Osuagwu</h3>
-            <p class="team-role">Founder & Developer</p>
-            <p class="team-bio">A passionate developer and food enthusiast who believes technology can transform how we approach cooking and nutrition. Henry combines his love for coding with his interest in healthy eating to create tools that make a real difference in people's lives.</p>
-            <div class="team-social">
-              <a href="#" class="social-link" aria-label="GitHub">
-                <i data-lucide="github"></i>
-              </a>
-              <a href="#" class="social-link" aria-label="Twitter">
-                <i data-lucide="twitter"></i>
-              </a>
-              <a href="#" class="social-link" aria-label="LinkedIn">
-                <i data-lucide="linkedin"></i>
-              </a>
+            <div class="team-info">
+              <h3>Henry Osuagwu</h3>
+              <p class="team-role">Founder & Developer</p>
+              <p class="team-bio">A passionate developer and food enthusiast who believes technology can transform how we approach cooking and nutrition. Henry combines his love for coding with his interest in healthy eating to create tools that make a real difference in people's lives.</p>
+              
+              <div class="team-social">
+                <a href="#" class="social-link" aria-label="GitHub">
+                  <i data-lucide="github"></i>
+                </a>
+                <a href="#" class="social-link" aria-label="Twitter">
+                  <i data-lucide="twitter"></i>
+                </a>
+                <a href="#" class="social-link" aria-label="LinkedIn">
+                  <i data-lucide="linkedin"></i>
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Technology Stack -->
-      <section class="tech-section">
+      <!-- Technology Section -->
+      <section class="tech-section card">
         <div class="section-header">
           <h2>Built With Modern Technology</h2>
-          <p>We use the latest web technologies to deliver a fast, reliable experience</p>
+          <p class="section-subtitle">We use the latest web technologies to deliver a fast, reliable experience</p>
         </div>
+        
         <div class="tech-grid">
           <div class="tech-item">
             <i data-lucide="code" class="tech-icon"></i>
@@ -275,14 +340,15 @@
         </div>
       </section>
 
-      <!-- Testimonials -->
+      <!-- Testimonials Section -->
       <section class="testimonials-section">
         <div class="section-header">
           <h2>What Our Users Say</h2>
-          <p>Join thousands of happy home cooks who transformed their kitchen experience</p>
+          <p class="section-subtitle">Join thousands of happy home cooks who transformed their kitchen experience</p>
         </div>
+        
         <div class="testimonials-grid">
-          <div class="testimonial-card">
+          <div class="testimonial-card card">
             <div class="testimonial-content">
               <p>"Recipe Finder completely changed how I approach meal planning. I've saved so much time and eat much healthier now!"</p>
             </div>
@@ -294,7 +360,8 @@
               </div>
             </div>
           </div>
-          <div class="testimonial-card">
+          
+          <div class="testimonial-card card">
             <div class="testimonial-content">
               <p>"As someone with dietary restrictions, finding recipes used to be a chore. Now I discover new favorites every week!"</p>
             </div>
@@ -306,7 +373,8 @@
               </div>
             </div>
           </div>
-          <div class="testimonial-card">
+          
+          <div class="testimonial-card card">
             <div class="testimonial-content">
               <p>"The shopping list feature alone is worth it. My grocery trips are faster and I never forget ingredients anymore."</p>
             </div>
@@ -322,7 +390,7 @@
       </section>
 
       <!-- CTA Section -->
-      <section class="cta-section">
+      <section class="cta-section card">
         <div class="cta-content">
           <h2>Ready to Transform Your Cooking?</h2>
           <p>Join thousands of home cooks who've made Recipe Finder their kitchen companion</p>
@@ -344,24 +412,50 @@
 
   <!-- ================= BOTTOM NAV ================= -->
   <nav class="bottom-nav">
-    <a href="index.html"><i data-lucide="home"></i><span>Home</span></a>
-    <a href="recipes.html"><i data-lucide="book-open"></i><span>Recipes</span></a>
-    <a href="planner.html"><i data-lucide="calendar"></i><span>Planner</span></a>
-    <a href="shoppinglist.html"><i data-lucide="shopping-cart"></i><span>List</span></a>
-    <a href="about.html" class="active"><i data-lucide="info"></i><span>About</span></a>
+    <a href="index.html" class="nav-item nav-link" data-page="index">
+      <i data-lucide="home"></i>
+      <span>Home</span>
+    </a>
+    <a href="recipes.html" class="nav-item nav-link" data-page="recipes">
+      <i data-lucide="book-open"></i>
+      <span>Recipes</span>
+    </a>
+    <a href="planner.html" class="nav-item nav-link" data-page="planner">
+      <i data-lucide="calendar"></i>
+      <span>Planner</span>
+    </a>
+    <a href="shoppinglist.html" class="nav-item nav-link" data-page="shoppinglist">
+      <i data-lucide="shopping-cart"></i>
+      <span>List</span>
+    </a>
+    <a href="about.html" class="nav-item nav-link active" data-page="about">
+      <i data-lucide="info"></i>
+      <span>About</span>
+    </a>
   </nav>
 
   <!-- FOOTER -->
   <footer class="footer" role="contentinfo">
-    <div class="footer-content">
-      <i data-lucide="fork-knife" class="footer-icon"></i>
-      <p>
-        © <span id="year"></span> Recipe Finder + Nutrition Tracker — All rights reserved. <br>
-        Built with ❤️ by Henry Osuagwu
-      </p>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <i data-lucide="utensils"></i>
+          <span>Recipe Finder</span>
+        </div>
+        <p>
+          © <span id="year"></span> Recipe Finder + Nutrition Tracker — All rights reserved.<br>
+          Built with ❤️ by Henry Osuagwu
+        </p>
+      </div>
+      <small id="lastModified"></small>
     </div>
-    <small id="lastModified"></small>
   </footer>
+
+  <!-- Scroll to Top Button -->
+  <button id="scrollTopBtn" class="scroll-top-btn" aria-label="Scroll to Top">
+    <i data-lucide="chevron-up"></i>
+  </button>
+
 
   <!-- SCRIPTS -->
   <script src="js/main.js" defer></script>
