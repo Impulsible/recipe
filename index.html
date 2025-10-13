@@ -42,7 +42,7 @@
 <body>
   
   <!-- ================= HEADER ================= -->
- <header class="site-header" role="banner">
+<header class="site-header" role="banner">
   <div class="container header-inner">
     <div class="header-left">
       <button id="menuBtn" class="icon-btn hamburger" aria-label="Open menu">
@@ -56,20 +56,18 @@
         </span>
       </a>
     </div>
-    <!-- rest of your header code -->
+    
+    <!-- Header Right - This should be inside header-inner -->
+    <div class="header-right">
+      <button id="darkModeToggle" class="icon-btn" aria-pressed="false" aria-label="Toggle dark mode">
+        <i data-lucide="moon"></i>
+      </button>
+      <a href="profile.html" id="profileBtn" class="icon-btn profile-btn" aria-label="Profile">
+        <i data-lucide="user"></i>
+      </a>
+    </div>
   </div>
 </header>
-
-      <div class="header-right">
-        <button id="darkModeToggle" class="icon-btn" aria-pressed="false" aria-label="Toggle dark mode">
-          <i data-lucide="moon"></i>
-        </button>
-        <a href="profile.html" id="profileBtn" class="icon-btn profile-btn" aria-label="Profile">
-          <i data-lucide="user"></i>
-        </a>
-      </div>
-    </div>
-  </header>
 
   <!-- ================= SIDEBAR ================= -->
   <aside id="sidebar" class="sidebar">
