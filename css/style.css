@@ -4708,73 +4708,26 @@ body.no-scroll {
 }
 
 
-/* Ensure logo text is always visible on mobile */
+/* ===== EMERGENCY FIX FOR MOBILE LOGO ===== */
 @media (max-width: 480px) {
   .logo-text {
     display: flex !important;
-    flex-direction: column;
-    line-height: 1.2;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
   
   .logo-text strong {
-    font-size: 1rem !important;
-    font-weight: 700;
+    font-size: 0.9rem !important;
   }
   
-  .tagline {
-    font-size: 0.7rem !important;
+  .logo-text .tagline {
+    font-size: 0.6rem !important;
     display: block !important;
-    opacity: 0.8;
   }
   
   .header-left {
-    gap: 0.75rem !important;
+    gap: 0.5rem !important;
   }
 }
 
-/* Override any hiding styles that might be affecting the logo */
-.logo {
-  display: flex !important;
-  align-items: center !important;
-  gap: 0.5rem !important;
-}
-
-.logo-text {
-  display: flex !important;
-  flex-direction: column !important;
-}
-
-/* Ensure the header has proper spacing */
-.site-header {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  z-index: 9999 !important;
-  background: var(--card) !important;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
-}
-
-.header-inner {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  padding: 1rem !important;
-  min-height: 70px !important;
-}
-
-
-/* Emergency override - add this if still not visible */
-.header-left .logo-text {
-  display: flex !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-}
-
-.header-left .logo-text strong,
-.header-left .logo-text .tagline {
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-}
 
