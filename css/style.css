@@ -4764,3 +4764,17 @@ body.no-scroll {
 }
 
 
+/* Emergency override - add this if still not visible */
+.header-left .logo-text {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.header-left .logo-text strong,
+.header-left .logo-text .tagline {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
