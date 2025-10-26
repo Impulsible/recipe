@@ -1,6 +1,6 @@
 {
-  "name": "Recipe Finder + Nutrition Tracker",
-  "short_name": "Recipe Finder",
+  "name": "Spoonfull – Recipe Finder + Nutrition Tracker",
+  "short_name": "Spoonfull",
   "description": "Discover recipes, track nutrition, save favorites, and plan healthy meals.",
   "start_url": "/",
   "display": "standalone",
