@@ -2519,3 +2519,63 @@ if ('serviceWorker' in navigator) {
       });
   });
 }
+
+// Sidebar Version Block Animation
+(function () {
+  const sidebar = document.getElementById('sidebar');
+  const versionBlock = document.getElementById('sidebarVersion');
+  const openBtn = document.getElementById('menuBtn');
+  const closeBtn = document.getElementById('closeSidebar');
+  const backdrop = document.getElementById('backdrop');
+
+  if (!sidebar || !versionBlock) return;
+
+  function animateVersionBlock() {
+    versionBlock.classList.remove('sv-animate', 'sv-stagger');
+    versionBlock.style.opacity = '0';
+    versionBlock.style.transform = 'translateY(4px)';
+    void versionBlock.offsetWidth; // reflow to reset animation
+    versionBlock.classList.add('sv-animate', 'sv-stagger');
+  }
+
+  function isOpen() {
+    return sidebar.classList.contains('open');
+  }
+
+  function triggerIfOpen() {
+    if (isOpen()) animateVersionBlock();
+  }
+
+  // Animate when sidebar opens via menu button
+  openBtn && openBtn.addEventListener('click', () => {
+    setTimeout(triggerIfOpen, 0);
+  });
+
+  [closeBtn, backdrop].forEach(el => {
+    el && el.addEventListener('click', () => {
+      // no animation needed on close
+    });
+  });
+
+  // Detect sidebar open class changes (programmatic opens)
+  const observer = new MutationObserver(mutations => {
+    for (const m of mutations) {
+      if (m.attributeName === 'class' && isOpen()) {
+        animateVersionBlock();
+      }
+    }
+  });
+  observer.observe(sidebar, { attributes: true });
+
+  // Animate if sidebar already open on page load
+  document.addEventListener('DOMContentLoaded', triggerIfOpen);
+})();
+const CACHE_NAME = 'spoonfull-v1';
+const urlsToCache = [
+  '/',
+  '/index.html',
+  '/styles.css',
+  '/app.js',
+  '/images/icon.png',
+  '/images/icon.png'
+];
