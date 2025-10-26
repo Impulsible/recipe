@@ -1,284 +1,253 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Profile – Recipe Finder</title>
+  <title>Profile - Spoonfull</title>
+  
+  <!-- Fonts + Icons -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/profile.css">
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="icon" href="images/favicon.png">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins','system-ui'], roboto: ['Roboto','system-ui'] },
+          boxShadow: { 
+            soft: '0 10px 30px rgba(0,0,0,.12)',
+            'card-hover': '0 20px 40px rgba(0,0,0,0.15)'
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .nav-link { position: relative; }
+    .nav-link::after {
+      content: ""; position: absolute; left: 12px; right: 12px; bottom: 6px; height: 2px;
+      background: #22c55e; transform: scaleX(0); transform-origin: left; transition: transform .25s ease;
+      border-radius: 2px;
+    }
+    .nav-link.active::after { transform: scaleX(1); }
+  </style>
 </head>
-<body>
-  <!-- Sidebar -->
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-top">
-      <div class="brand profile-section">
-        <i data-lucide="user"></i>
-        <div>
-          <h2 id="sidebarName">Guest</h2>
-          <small id="sidebarEmail">Not signed in</small>
-        </div>
-      </div>
-      <button id="closeSidebar" class="icon-btn" aria-label="Close menu">
-        <i data-lucide="x"></i>
-      </button>
-    </div>
-    
-    <nav>
-      <ul>
-        <li><a href="index.html"><i data-lucide="home"></i><span>Home</span></a></li>
-        <li><a href="recipes.html"><i data-lucide="book-open"></i><span>Recipes</span></a></li>
-        <li><a href="planner.html"><i data-lucide="calendar"></i><span>Planner</span></a></li>
-        <li><a href="shoppinglist.html"><i data-lucide="shopping-cart"></i><span>Shopping List</span></a></li>
-        <li><a href="about.html"><i data-lucide="info"></i><span>About</span></a></li>
-      </ul>
-    </nav>
-    <div class="sidebar-footer">
-      <button id="logoutBtn" class="btn btn-outline sign-out-btn">
-        <i data-lucide="log-out"></i>
-        Sign out
-      </button>
-    </div>
-  </aside>
-
-  <!-- Overlay for mobile sidebar -->
-  <div id="overlay" class="overlay"></div>
-
-  <!-- Main Content -->
-  <div class="main-content">
-    <header class="site-header">
-      <div class="container header-inner">
-        <button id="menuToggle" class="icon-btn" aria-label="Open menu">
-          <i data-lucide="menu"></i>
-        </button>
-        <a href="index.html" class="logo">
-          <i data-lucide="fork-knife" class="logo-icon"></i>
-          <span class="logo-text"><strong>Recipe Finder</strong><small>+ Nutrition Tracker</small></span>
+<body class="bg-white text-gray-800 dark:bg-gray-950 dark:text-gray-100 font-roboto min-h-screen">
+  
+  <!-- Header -->
+  <header class="border-b border-gray-200 dark:border-gray-800 bg-white/90 dark:bg-gray-950/90 backdrop-blur sticky top-0 z-40">
+    <div class="container mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="flex items-center gap-2">
+          <i data-lucide="utensils" class="w-6 h-6 text-emerald-600"></i>
+          <span>
+            <strong class="font-poppins text-lg">Spoonfull</strong>
+            <small class="block text-xs opacity-70">Recipe + Nutrition</small>
+          </span>
         </a>
       </div>
-    </header>
+      
+      <div class="flex items-center gap-2">
+        <button id="darkModeToggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+          <i data-lucide="moon" class="w-5 h-5"></i>
+        </button>
+        <a href="index.html" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+          <i data-lucide="home" class="w-5 h-5"></i>
+        </a>
+      </div>
+    </div>
+  </header>
 
-    <main class="page">
-      <div class="profile-container">
-        <div class="profile-header">
-          <h1>Your Profile</h1>
-          <p>Manage your personal information and preferences</p>
+  <!-- Main Content -->
+  <main class="container mx-auto px-4 py-8 max-w-2xl">
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold mb-2">Your Profile</h1>
+      <p class="text-gray-600 dark:text-gray-400">Manage your account settings and preferences</p>
+    </div>
+
+    <div class="rounded-2xl p-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-soft mb-6">
+      <form id="profileForm" class="space-y-6">
+        <div class="text-center mb-6">
+          <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400 flex items-center justify-center text-white text-2xl font-bold">
+            <i data-lucide="user" class="w-10 h-10"></i>
+          </div>
+          <h2 class="text-xl font-semibold" id="profileName">Guest User</h2>
+          <p class="text-gray-500 dark:text-gray-400" id="profileEmail">guest@example.com</p>
         </div>
 
-        <!-- Profile Picture Section -->
-        <div class="profile-card">
-          <div class="card-header">
-            <i data-lucide="image" class="card-icon"></i>
-            <h2>Profile Picture</h2>
+        <div class="space-y-4">
+          <div>
+            <label for="name" class="block text-sm font-medium mb-2">Full Name</label>
+            <input type="text" id="name" name="name" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors" placeholder="Enter your full name">
           </div>
-          <div class="profile-picture-section">
-            <div class="avatar-container">
-              <div class="avatar" id="profileAvatar">
-                <i data-lucide="user"></i>
-              </div>
-              <button id="changeAvatar" class="btn btn-outline btn-small">
-                <i data-lucide="camera"></i>
-                Change Photo
-              </button>
-            </div>
-            <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
+
+          <div>
+            <label for="email" class="block text-sm font-medium mb-2">Email Address</label>
+            <input type="email" id="email" name="email" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors" placeholder="Enter your email">
+          </div>
+
+          <div>
+            <label for="diet" class="block text-sm font-medium mb-2">Dietary Preferences</label>
+            <select id="diet" name="diet" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors">
+              <option value="">No specific diet</option>
+              <option value="vegetarian">Vegetarian</option>
+              <option value="vegan">Vegan</option>
+              <option value="gluten-free">Gluten-Free</option>
+              <option value="keto">Keto</option>
+              <option value="low-carb">Low-Carb</option>
+              <option value="mediterranean">Mediterranean</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="allergies" class="block text-sm font-medium mb-2">Allergies & Restrictions</label>
+            <textarea id="allergies" name="allergies" rows="3" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors" placeholder="List any food allergies or restrictions..."></textarea>
           </div>
         </div>
 
-        <!-- Personal Information -->
-        <div class="profile-card">
-          <div class="card-header">
-            <i data-lucide="user" class="card-icon"></i>
-            <h2>Personal Information</h2>
-          </div>
-          <form id="profileForm" class="profile-form">
-            <div class="form-group">
-              <label for="profileName">Full Name</label>
-              <input type="text" id="profileName" placeholder="Enter your full name" required>
-            </div>
-            <div class="form-group">
-              <label for="profileEmail">Email Address</label>
-              <input type="email" id="profileEmail" placeholder="Enter your email address" required>
-            </div>
-            <button type="submit" class="btn btn-primary btn-full">
-              <i data-lucide="save"></i>
-              Save Changes
-            </button>
-          </form>
-        </div>
-
-        <!-- Password Change -->
-        <div class="profile-card">
-          <div class="card-header">
-            <i data-lucide="lock" class="card-icon"></i>
-            <h2>Change Password</h2>
-          </div>
-          <form id="passwordForm" class="profile-form">
-            <div class="form-group">
-              <label for="currentPassword">Current Password</label>
-              <input type="password" id="currentPassword" placeholder="Enter current password">
-            </div>
-            <div class="form-group">
-              <label for="newPassword">New Password</label>
-              <input type="password" id="newPassword" placeholder="Enter new password">
-            </div>
-            <div class="form-group">
-              <label for="confirmPassword">Confirm New Password</label>
-              <input type="password" id="confirmPassword" placeholder="Confirm new password">
-            </div>
-            <button type="submit" class="btn btn-primary btn-full">
-              <i data-lucide="key"></i>
-              Update Password
-            </button>
-          </form>
-        </div>
-
-        <!-- Dietary Preferences -->
-        <div class="profile-card">
-          <div class="card-header">
-            <i data-lucide="settings" class="card-icon"></i>
-            <h2>Dietary Preferences</h2>
-          </div>
-          <div class="preferences-grid">
-            <label class="preference-item">
-              <input type="checkbox" id="vegetarian">
-              <span class="checkmark"></span>
-              <div class="preference-content">
-                <i data-lucide="leaf"></i>
-                <span>Vegetarian</span>
-              </div>
-            </label>
-            <label class="preference-item">
-              <input type="checkbox" id="vegan">
-              <span class="checkmark"></span>
-              <div class="preference-content">
-                <i data-lucide="sprout"></i>
-                <span>Vegan</span>
-              </div>
-            </label>
-            <label class="preference-item">
-              <input type="checkbox" id="glutenFree">
-              <span class="checkmark"></span>
-              <div class="preference-content">
-                <i data-lucide="wheat"></i>
-                <span>Gluten-Free</span>
-              </div>
-            </label>
-            <label class="preference-item">
-              <input type="checkbox" id="dairyFree">
-              <span class="checkmark"></span>
-              <div class="preference-content">
-                <i data-lucide="milk"></i>
-                <span>Dairy-Free</span>
-              </div>
-            </label>
-          </div>
-          <button id="savePreferences" class="btn btn-outline btn-full">
-            <i data-lucide="check-circle"></i>
-            Save Preferences
+        <div class="flex gap-3 pt-4">
+          <button type="submit" class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-colors shadow-md">
+            <i data-lucide="save" class="w-5 h-5"></i>
+            Save Profile
           </button>
+          <a href="index.html" class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+            Back to Home
+          </a>
         </div>
+      </form>
+    </div>
 
-        <!-- Allergies Section -->
-        <div class="profile-card">
-          <div class="card-header">
-            <i data-lucide="alert-triangle" class="card-icon"></i>
-            <h2>Allergies & Intolerances</h2>
-          </div>
-          <div class="preferences-grid">
-            <label class="preference-item">
-              <input type="checkbox" id="nuts">
-              <span class="checkmark"></span>
-              <div class="preference-content">
-                <i data-lucide="nut"></i>
-                <span>Nuts</span>
-              </div>
-            </label>
-            <label class="preference-item">
-              <input type="checkbox" id="shellfish">
-              <span class="checkmark"></span>
-              <div class="preference-content">
-                <i data-lucide="fish"></i>
-                <span>Shellfish</span>
-              </div>
-            </label>
-            <label class="preference-item">
-              <input type="checkbox" id="eggs">
-              <span class="checkmark"></span>
-              <div class="preference-content">
-                <i data-lucide="egg"></i>
-                <span>Eggs</span>
-              </div>
-            </label>
-            <label class="preference-item">
-              <input type="checkbox" id="soy">
-              <span class="checkmark"></span>
-              <div class="preference-content">
-                <i data-lucide="soybean"></i>
-                <span>Soy</span>
-              </div>
-            </label>
-          </div>
-          <button id="saveAllergies" class="btn btn-outline btn-full">
-            <i data-lucide="check-circle"></i>
-            Save Allergies
-          </button>
+    <!-- Stats Card -->
+    <div class="rounded-2xl p-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-soft">
+      <h3 class="text-lg font-semibold mb-4">Your Cooking Stats</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="text-center p-4 rounded-lg bg-emerald-50 dark:bg-emerald-900/30">
+          <div class="text-2xl font-bold text-emerald-600 dark:text-emerald-400" id="statRecipes">0</div>
+          <div class="text-sm text-emerald-600 dark:text-emerald-400">Recipes Tried</div>
         </div>
-
-        <!-- Nutritional Goals -->
-        <div class="profile-card">
-          <div class="card-header">
-            <i data-lucide="target" class="card-icon"></i>
-            <h2>Nutritional Goals</h2>
-          </div>
-          <div class="nutrition-goals">
-            <div class="form-group">
-              <label for="calorieGoal">Daily Calorie Goal</label>
-              <input type="number" id="calorieGoal" placeholder="e.g., 2000">
-            </div>
-            <div class="form-group">
-              <label for="proteinGoal">Daily Protein Goal (g)</label>
-              <input type="number" id="proteinGoal" placeholder="e.g., 50">
-            </div>
-            <div class="form-group">
-              <label for="carbsGoal">Daily Carbs Goal (g)</label>
-              <input type="number" id="carbsGoal" placeholder="e.g., 250">
-            </div>
-            <div class="form-group">
-              <label for="fatGoal">Daily Fat Goal (g)</label>
-              <input type="number" id="fatGoal" placeholder="e.g., 70">
-            </div>
-          </div>
-          <button id="saveGoals" class="btn btn-outline btn-full">
-            <i data-lucide="check-circle"></i>
-            Save Goals
-          </button>
+        <div class="text-center p-4 rounded-lg bg-blue-50 dark:bg-blue-900/30">
+          <div class="text-2xl font-bold text-blue-600 dark:text-blue-400" id="statFavorites">0</div>
+          <div class="text-sm text-blue-600 dark:text-blue-400">Favorites</div>
         </div>
-
-        <!-- Account Management -->
-        <div class="profile-card">
-          <div class="card-header">
-            <i data-lucide="shield" class="card-icon"></i>
-            <h2>Account Management</h2>
-          </div>
-          <div class="account-actions">
-            <button id="exportData" class="btn btn-outline btn-full">
-              <i data-lucide="download"></i>
-              Export My Data
-            </button>
-            <button id="deleteAccount" class="btn btn-danger btn-full">
-              <i data-lucide="trash-2"></i>
-              Delete Account
-            </button>
-          </div>
+        <div class="text-center p-4 rounded-lg bg-purple-50 dark:bg-purple-900/30">
+          <div class="text-2xl font-bold text-purple-600 dark:text-purple-400" id="statPlanned">0</div>
+          <div class="text-sm text-purple-600 dark:text-purple-400">Meals Planned</div>
+        </div>
+        <div class="text-center p-4 rounded-lg bg-orange-50 dark:bg-orange-900/30">
+          <div class="text-2xl font-bold text-orange-600 dark:text-orange-400" id="statProgress">0%</div>
+          <div class="text-sm text-orange-600 dark:text-orange-400">Progress</div>
         </div>
       </div>
-    </main>
-  </div>
+    </div>
+  </main>
 
-  <script src="js/main.js"></script>
-  <script src="js/profile.js"></script>
+  <!-- Bottom Navigation (Mobile Only) -->
+  <nav class="md:hidden border-t border-gray-200 dark:border-gray-800 bg-white/95 dark:bg-gray-950/95 backdrop-blur">
+    <div class="container mx-auto px-4 grid grid-cols-5 text-center text-xs">
+      <a href="index.html" class="nav-item nav-link py-3 flex flex-col items-center gap-1" data-page="index">
+        <i data-lucide="home" class="w-5 h-5"></i><span>Home</span>
+      </a>
+      <a href="index.html#featured-recipes" class="nav-item nav-link py-3 flex flex-col items-center gap-1" data-page="recipes">
+        <i data-lucide="book-open" class="w-5 h-5"></i><span>Recipes</span>
+      </a>
+      <a href="planner.html" class="nav-item nav-link py-3 flex flex-col items-center gap-1" data-page="planner">
+        <i data-lucide="calendar" class="w-5 h-5"></i><span>Planner</span>
+      </a>
+      <a href="shopping.html" class="nav-item nav-link py-3 flex flex-col items-center gap-1" data-page="shopping">
+        <i data-lucide="shopping-cart" class="w-5 h-5"></i><span>List</span>
+      </a>
+      <a href="profile.html" class="nav-item nav-link py-3 flex flex-col items-center gap-1 active" data-page="profile">
+        <i data-lucide="user" class="w-5 h-5"></i><span>Profile</span>
+      </a>
+    </div>
+  </nav>
+
+  <script>
+    // Profile page functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load saved profile
+      const savedProfile = localStorage.getItem('spoonfull_profile');
+      if (savedProfile) {
+        const profile = JSON.parse(savedProfile);
+        document.getElementById('name').value = profile.name || '';
+        document.getElementById('email').value = profile.email || '';
+        document.getElementById('diet').value = profile.diet || '';
+        document.getElementById('allergies').value = profile.allergies || '';
+        
+        // Update display
+        document.getElementById('profileName').textContent = profile.name || 'Guest User';
+        document.getElementById('profileEmail').textContent = profile.email || 'guest@example.com';
+      }
+
+      // Load stats
+      const favorites = JSON.parse(localStorage.getItem('spoonfull_favorites') || '[]');
+      const mealPlan = JSON.parse(localStorage.getItem('spoonfull_mealPlan') || '{}');
+      
+      let totalMeals = 0;
+      Object.values(mealPlan).forEach(day => {
+        if (typeof day === 'object') {
+          Object.values(day).forEach(meals => {
+            if (Array.isArray(meals)) {
+              totalMeals += meals.length;
+            }
+          });
+        }
+      });
+      
+      document.getElementById('statFavorites').textContent = favorites.length;
+      document.getElementById('statPlanned').textContent = totalMeals;
+      document.getElementById('statProgress').textContent = `${Math.min(Math.floor((totalMeals + favorites.length) * 5), 100)}%`;
+
+      // Save profile
+      document.getElementById('profileForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const profile = {
+          name: document.getElementById('name').value,
+          email: document.getElementById('email').value,
+          diet: document.getElementById('diet').value,
+          allergies: document.getElementById('allergies').value,
+          updated: new Date().toISOString()
+        };
+        
+        localStorage.setItem('spoonfull_profile', JSON.stringify(profile));
+        
+        // Show success message
+        alert('Profile saved successfully! Your information will be updated across the app.');
+        
+        // Update display
+        document.getElementById('profileName').textContent = profile.name || 'Guest User';
+        document.getElementById('profileEmail').textContent = profile.email || 'guest@example.com';
+      });
+
+      // Dark mode toggle
+      document.getElementById('darkModeToggle').addEventListener('click', function() {
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('spoonfull_darkMode', JSON.stringify(isDark));
+        
+        if (isDark) {
+          this.innerHTML = '<i data-lucide="sun" class="w-5 h-5"></i>';
+        } else {
+          this.innerHTML = '<i data-lucide="moon" class="w-5 h-5"></i>';
+        }
+        lucide.createIcons();
+      });
+
+      // Initialize dark mode
+      const isDarkMode = JSON.parse(localStorage.getItem('spoonfull_darkMode') || 'false');
+      if (isDarkMode) {
+        document.documentElement.classList.add('dark');
+        document.getElementById('darkModeToggle').innerHTML = '<i data-lucide="sun" class="w-5 h-5"></i>';
+      }
+
+      // Initialize icons
+      lucide.createIcons();
+    });
+  </script>
 </body>
 </html>

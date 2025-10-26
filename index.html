@@ -1,420 +1,1416 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <!-- META -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Recipe Finder + Nutrition Tracker — discover recipes by ingredient or diet, view nutrition facts, save favorites, plan meals, and generate shopping lists.">
-  <meta name="keywords" content="recipe finder, nutrition tracker, meal planner, shopping list, healthy recipes, Nigerian recipes, food app">
-  <meta name="author" content="Henry Osuagwu">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- TITLE -->
-  <title>Recipe Finder + Nutrition Tracker</title>
+    <!-- SEO -->
+    <meta name="title" content="Spoonfull – Recipe Finder + Nutrition Tracker" />
+    <meta name="description" content="Spoonfull helps you discover delicious recipes, track nutrition, plan meals, and manage shopping lists — all in one smart, modern app." />
+    <meta name="keywords" content="recipe finder, nutrition tracker, meal planner, healthy recipes, food app, diet app, Nigerian recipes, Spoonfull app, cooking ideas" />
+    <meta name="author" content="Henry Osuagwu" />
+    <meta name="robots" content="index, follow" />
 
-  <!-- PERFORMANCE -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- App / PWA -->
+    <meta name="application-name" content="Spoonfull" />
+    <meta name="theme-color" content="#22c55e" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="manifest" href="manifest.json" />
 
-  <!-- FONTS + ICONS -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/lucide@latest" defer></script>
+    <title>Spoonfull – Recipe Finder + Nutrition Tracker</title>
 
-  <!-- STYLES -->
-  <link rel="stylesheet" href="css/style.css">
+    <!-- Fonts + Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/lucide@latest" defer></script>
 
-  <!-- Favicon and PWA -->
-  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="images/favicon.png">
-  <link rel="apple-touch-icon" href="images/favicon.png">
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#4CAF50">
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              poppins: ['Poppins', 'system-ui'],
+              roboto: ['Roboto', 'system-ui']
+            },
+            boxShadow: {
+              soft: '0 10px 30px rgba(0,0,0,.12)',
+              'card-hover': '0 20px 40px rgba(0,0,0,0.15)'
+            },
+            keyframes: {
+              fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+              slideUp: { '0%': { transform: 'translateY(10px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
+              bounceIn: { '0%': { transform: 'scale(0.3)', opacity: '0' }, '50%': { transform: 'scale(1.05)' }, '70%': { transform: 'scale(0.9)' }, '100%': { transform: 'scale(1)', opacity: '1' } },
+              slideInRight: { '0%': { transform: 'translateX(100%)', opacity: '0' }, '100%': { transform: 'translateX(0)', opacity: '1' } },
+              pulse: { '0%, 100%': { opacity: '1' }, '50%': { opacity: '0.5' } },
+              spin: { to: { transform: 'rotate(360deg)' } },
+              ping: { '75%, 100%': { transform: 'scale(2)', opacity: '0' } },
+              bounce: { '0%, 100%': { transform: 'translateY(-25%)', animationTimingFunction: 'cubic-bezier(0.8,0,1,1)' }, '50%': { transform: 'none', animationTimingFunction: 'cubic-bezier(0,0,0.2,1)' } }
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.5s ease-in-out',
+              'slide-up': 'slideUp 0.3s ease-out',
+              'bounce-in': 'bounceIn 0.6s ease-out',
+              'slide-in-right': 'slideInRight 0.5s ease-out',
+              pulse: 'pulse 2s infinite',
+              spin: 'spin 1s linear infinite',
+              ping: 'ping 1s cubic-bezier(0,0,0.2,1) infinite',
+              bounce: 'bounce 1s infinite'
+            }
+          }
+        }
+      };
+    </script>
 
-  <!-- SOCIAL META -->
-  <meta property="og:title" content="Recipe Finder + Nutrition Tracker">
-  <meta property="og:description" content="Discover recipes, track nutrition, save favorites, and plan healthy meals.">
-  <meta property="og:image" content="images/cook.jpg">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://impulsible.github.io/recipe/">
-  <meta name="twitter:card" content="summary_large_image">
-</head>
-<body>
-  
-  <!-- ================= HEADER ================= -->
-<header class="site-header" role="banner">
-  <div class="container header-inner">
-    <div class="header-left">
-      <button id="menuBtn" class="icon-btn hamburger" aria-label="Open menu">
-        <i data-lucide="menu"></i>
-      </button>
-      <a href="index.html" class="logo" aria-label="Recipe Finder Home">
-        <i data-lucide="utensils" class="logo-icon"></i>
-        <span class="logo-text">
-          <strong>Recipe Finder</strong>
-          <small class="tagline">+ Nutrition Tracker</small>
-        </span>
-      </a>
-    </div>
-    
-    <!-- Header Right - This should be inside header-inner -->
-    <div class="header-right">
-      <button id="darkModeToggle" class="icon-btn" aria-pressed="false" aria-label="Toggle dark mode">
-        <i data-lucide="moon"></i>
-      </button>
-      <a href="profile.html" id="profileBtn" class="icon-btn profile-btn" aria-label="Profile">
-        <i data-lucide="user"></i>
-      </a>
-    </div>
-  </div>
-</header>
+    <!-- Custom Styles -->
+    <style>
+      /* Mobile-First Responsive Design */
+      .nav-link {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+      }
 
-  <!-- ================= SIDEBAR ================= -->
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-top">
-      <div class="brand profile-section">
-        <i data-lucide="user"></i>
-        <div>
-          <h2 id="sidebarName">Guest</h2>
-          <small id="sidebarEmail">Not signed in</small>
+      .nav-link::after {
+        content: '';
+        position: absolute;
+        left: 12px;
+        right: 12px;
+        bottom: 6px;
+        height: 2px;
+        background: #22c55e;
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.25s ease;
+        border-radius: 2px;
+      }
+
+      .nav-link.active::after {
+        transform: scaleX(1);
+      }
+
+      /* Sidebar for Mobile */
+      #sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        width: 100%;
+        max-width: 320px;
+      }
+
+      #sidebar.open {
+        transform: translateX(0);
+      }
+
+      #backdrop {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+
+      #backdrop.show {
+        opacity: 0.5;
+        pointer-events: auto;
+      }
+
+      /* Recipe Cards */
+      .recipe-card {
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 1rem;
+        overflow: hidden;
+        background: white;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        border: 1px solid #e5e7eb;
+      }
+
+      .recipe-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Enhanced Navigation Styles */
+      .nav-link {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        border-radius: 0.75rem;
+        transition: all 0.3s ease;
+        background: transparent;
+      }
+
+      .nav-link.active {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        transform: translateX(4px);
+      }
+
+      .nav-link.active::after {
+        display: none;
+      }
+
+      .nav-link:not(.active):hover {
+        background: #f8fafc;
+        transform: translateX(4px);
+      }
+
+      .dark .nav-link:not(.active):hover {
+        background: #1f2937;
+      }
+
+      /* Compact Dashboard Enhancements */
+      .dashboard-compact {
+        font-size: 0.875rem;
+      }
+
+      .dashboard-compact .goal-item {
+        padding: 0.5rem;
+        margin-bottom: 0.25rem;
+        border-radius: 0.5rem;
+      }
+
+      .dashboard-compact .quick-action-btn {
+        padding: 0.75rem 0.25rem;
+        font-size: 0.75rem;
+        gap: 0.25rem;
+        border-radius: 0.5rem;
+      }
+
+      .dashboard-compact .quick-action-btn i {
+        width: 1rem;
+        height: 1rem;
+      }
+
+      .dashboard-compact .recommendation-card {
+        padding: 1rem;
+        border-radius: 0.75rem;
+      }
+
+      .dashboard-compact .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+      }
+
+      .dashboard-compact .weather-seasonal-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .dashboard-compact .text-3xl {
+        font-size: 1.5rem;
+      }
+
+      .dashboard-compact .text-2xl {
+        font-size: 1.25rem;
+      }
+
+      /* Professional Footer */
+      .footer-compact {
+        padding: 2rem 0 1rem;
+      }
+
+      .footer-compact .container {
+        max-width: 1200px;
+      }
+
+      .footer-compact a:hover {
+        color: #10b981;
+        transform: translateY(-1px);
+      }
+
+      /* Mobile optimizations */
+      @media (max-width: 768px) {
+        .dashboard-compact .goal-checkbox {
+          width: 1rem;
+          height: 1rem;
+          font-size: 0.75rem;
+        }
+
+        .dashboard-compact .goal-item span {
+          font-size: 0.75rem;
+        }
+
+        .dashboard-compact .quick-actions-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 0.5rem;
+        }
+
+        .dashboard-compact .recommendation-card .flex.items-center.gap-4 {
+          gap: 1rem;
+        }
+
+        .dashboard-compact .recommendation-card h4 {
+          font-size: 0.875rem;
+        }
+
+        .dashboard-compact .recommendation-card p {
+          font-size: 0.75rem;
+        }
+
+        .footer-compact {
+          padding: 1.5rem 0 1rem;
+        }
+      }
+
+      /* Ultra-compact for very small screens */
+      @media (max-width: 480px) {
+        .dashboard-compact .grid.grid-cols-1.lg\:grid-cols-3.gap-6 {
+          gap: 1rem;
+        }
+
+        .dashboard-compact .rounded-2xl.p-6 {
+          padding: 1rem;
+        }
+
+        .dashboard-compact .text-lg {
+          font-size: 1rem;
+        }
+      }
+
+      /* Enhanced Active States */
+      .quick-action-btn:active {
+        transform: scale(0.95);
+      }
+
+      .recommendation-card:active {
+        transform: scale(0.98);
+      }
+
+      /* Smooth transitions */
+      .dashboard-compact * {
+        transition: all 0.2s ease-in-out;
+      }
+
+      /* Quick Action Buttons */
+      .quick-action-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem 0.5rem;
+        border-radius: 0.75rem;
+        border: 1px solid #e5e7eb;
+        background: white;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .quick-action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        border-color: #22c55e;
+      }
+
+      .dark .quick-action-btn {
+        background: #1f2937;
+        border-color: #374151;
+      }
+
+      .dark .quick-action-btn:hover {
+        border-color: #22c55e;
+      }
+
+      /* Goal Items */
+      .goal-item {
+        padding: 0.75rem;
+        border-radius: 0.75rem;
+        border: 1px solid #e5e7eb;
+        transition: all 0.3s ease;
+      }
+
+      .goal-item.completed {
+        background: #f0fdf4;
+        border-color: #bbf7d0;
+      }
+
+      .dark .goal-item {
+        border-color: #374151;
+      }
+
+      .dark .goal-item.completed {
+        background: #052e16;
+        border-color: #14532d;
+      }
+
+      .goal-checkbox {
+        width: 1.25rem;
+        height: 1.25rem;
+        border: 2px solid #d1d5db;
+        border-radius: 0.375rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .goal-checkbox.completed {
+        background: #10b981;
+        border-color: #10b981;
+        color: white;
+      }
+
+      /* Recommendation Cards */
+      .recommendation-card {
+        padding: 1.5rem;
+        border-radius: 1rem;
+        border: 1px solid #e5e7eb;
+        background: white;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .recommendation-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .dark .recommendation-card {
+        background: #1f2937;
+        border-color: #374151;
+      }
+
+      /* Modal System */
+      .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 50;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        padding: 1rem;
+      }
+
+      .modal.active {
+        opacity: 1;
+        pointer-events: all;
+      }
+
+      .modal-content {
+        transform: scale(0.9);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        max-width: 100%;
+        max-height: 90vh;
+        width: 100%;
+        border-radius: 1rem;
+        overflow: hidden;
+      }
+
+      .modal.active .modal-content {
+        transform: scale(1);
+      }
+
+      /* Difficulty Badges */
+      .difficulty-easy {
+        background: linear-gradient(135deg, #10b981, #059669);
+      }
+
+      .difficulty-medium {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+      }
+
+      .difficulty-hard {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+      }
+
+      .nutrition-score {
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      }
+
+      /* Action Buttons */
+      .action-btn {
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .action-btn::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        transform: translate(-50%, -50%);
+      }
+
+      .action-btn:hover::before {
+        width: 100%;
+        height: 100%;
+      }
+
+      .action-btn.favorite.active {
+        background: #ef4444;
+        color: white;
+      }
+
+      /* Beautiful Quote Animation */
+      .animate-quote-slide {
+        animation: quoteSlide 1s ease-in-out;
+      }
+
+      @keyframes quoteSlide {
+        0% {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        50% {
+          opacity: 0.7;
+          transform: translateY(-2px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Custom Scrollbar for Modal */
+      .custom-scrollbar {
+        scrollbar-width: thin;
+        scrollbar-color: #22c55e #f1f5f9;
+      }
+
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 3px;
+      }
+
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #22c55e;
+        border-radius: 3px;
+      }
+
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #16a34a;
+      }
+
+      /* Smooth transitions for quote display */
+      #foodTalk,
+      #tipTalk {
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      /* Fix for Ingredients & Instructions - Full Height Display */
+      .ingredients-instructions-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        align-items: start;
+        min-height: auto; /* Remove fixed height */
+      }
+
+      .ingredients-column,
+      .instructions-column {
+        display: flex;
+        flex-direction: column;
+        min-height: 200px; /* Minimum height but can grow */
+        height: auto; /* Allow natural height */
+      }
+
+      .ingredients-header,
+      .instructions-header {
+        flex-shrink: 0;
+        margin-bottom: 1rem;
+      }
+
+      .ingredients-list,
+      .instructions-list {
+        flex: 1;
+        overflow-y: visible; /* Remove scrolling - show all content */
+        max-height: none; /* Remove height restriction */
+        border: 1px solid #e5e7eb;
+        border-radius: 0.75rem;
+        padding: 1rem;
+        background: #f9fafb;
+      }
+
+      .dark .ingredients-list,
+      .dark .instructions-list {
+        background: #1f2937;
+        border-color: #374151;
+      }
+
+      /* Remove scrollbars since we're showing all content */
+      .ingredients-list::-webkit-scrollbar,
+      .instructions-list::-webkit-scrollbar {
+        display: none;
+      }
+
+      .ingredients-list,
+      .instructions-list {
+        scrollbar-width: none;
+      }
+
+      /* Individual list items styling */
+      .ingredient-item,
+      .instruction-item {
+        padding: 0.75rem;
+        margin-bottom: 0.5rem;
+        border-radius: 0.5rem;
+        background: white;
+        border: 1px solid #e5e7eb;
+        transition: all 0.2s ease;
+      }
+
+      .dark .ingredient-item,
+      .dark .instruction-item {
+        background: #374151;
+        border-color: #4b5563;
+      }
+
+      .ingredient-item:hover,
+      .instruction-item:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .dark .ingredient-item:hover,
+      .dark .instruction-item:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Checkbox styling for ingredients */
+      .ingredient-checkbox {
+        width: 1.25rem;
+        height: 1.25rem;
+        border: 2px solid #d1d5db;
+        border-radius: 0.375rem;
+        background: white;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .ingredient-checkbox:checked {
+        background-color: #10b981;
+        border-color: #10b981;
+      }
+
+      .ingredient-checkbox:checked::before {
+        content: '✓';
+        color: white;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Instruction number styling */
+      .instruction-number {
+        width: 2rem;
+        height: 2rem;
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 0.875rem;
+        flex-shrink: 0;
+        box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+      }
+
+      /* Responsive design */
+      @media (max-width: 768px) {
+        .ingredients-instructions-grid {
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+        }
+
+        .ingredients-list,
+        .instructions-list {
+          padding: 0.75rem;
+        }
+
+        .ingredient-item,
+        .instruction-item {
+          padding: 0.625rem;
+        }
+      }
+
+      /* Modal body adjustments for full content */
+      #modalBody {
+        max-height: 85vh; /* Slightly reduced to ensure fit */
+        overflow-y: auto;
+      }
+
+      /* Ensure modal can accommodate content */
+      .modal-content {
+        max-height: 95vh; /* Increased to show more content */
+      }
+
+      /* Beautiful Quote Animation */
+      .animate-quote-slide {
+        animation: quoteSlide 1s ease-in-out;
+      }
+
+      @keyframes quoteSlide {
+        0% {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        50% {
+          opacity: 0.7;
+          transform: translateY(-2px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Modal adjustments for full content display */
+      .modal-content {
+        max-height: 95vh;
+        width: 95%;
+        max-width: 1200px; /* Increased max-width for better content display */
+      }
+
+      #modalBody {
+        max-height: 85vh;
+        overflow-y: auto;
+        padding: 1.5rem;
+      }
+
+      /* Better scrolling for very long content */
+      #modalBody::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      #modalBody::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 4px;
+      }
+
+      #modalBody::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+      }
+
+      #modalBody::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+
+      .dark #modalBody::-webkit-scrollbar-track {
+        background: #374151;
+      }
+
+      .dark #modalBody::-webkit-scrollbar-thumb {
+        background: #4b5563;
+      }
+
+      .dark #modalBody::-webkit-scrollbar-thumb:hover {
+        background: #6b7280;
+      }
+
+      /* Footer */
+      .footer {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        color: #f8fafc;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .footer::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent 0%, #22c55e 50%, transparent 100%);
+      }
+
+      /* Video Container */
+      .video-container {
+        position: relative;
+        padding-bottom: 56.25%;
+        height: 0;
+        overflow: hidden;
+        border-radius: 0.5rem;
+      }
+
+      .video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 0.5rem;
+      }
+
+      /* Loading Animation */
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease-in-out infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Text Utilities */
+      .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      /* Day Buttons */
+      .day-btn {
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      /* Dark Mode Support */
+      .dark .recipe-card {
+        background: #1f2937;
+        border-color: #374151;
+      }
+
+      /* Mobile Optimizations */
+      @media (max-width: 640px) {
+        .container {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+
+        .modal-content {
+          margin: 0.5rem;
+        }
+
+        .recipe-grid {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+
+        .toolbar {
+          flex-wrap: wrap;
+          gap: 0.5rem;
+        }
+
+        .search-container {
+          width: 100%;
+        }
+
+        #searchInput {
+          width: 100%;
+        }
+      }
+
+      /* Tablet Optimizations */
+      @media (min-width: 768px) and (max-width: 1024px) {
+        .recipe-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      /* Desktop Optimizations */
+      @media (min-width: 1024px) {
+        .recipe-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+    </style>
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" href="images/favicon.png" />
+    <link rel="apple-touch-icon" href="images/favicon.png" />
+  </head>
+
+  <body class="bg-white text-gray-800 dark:bg-gray-950 dark:text-gray-100 font-roboto min-h-screen">
+    <!-- Header -->
+    <header class="border-b border-gray-200 dark:border-gray-800 bg-white/90 dark:bg-gray-950/90 backdrop-blur sticky top-0 z-40">
+      <div class="container mx-auto px-4 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="menuBtn" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="Open menu">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+          </button>
+          <a href="index.html" class="flex items-center gap-2" aria-label="Spoonfull Home">
+            <i data-lucide="utensils" class="w-6 h-6 text-emerald-600"></i>
+            <span>
+              <strong class="font-poppins text-lg">Spoonfull</strong>
+              <small class="block text-xs opacity-70">Recipe + Nutrition</small>
+            </span>
+          </a>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="darkModeToggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-pressed="false" aria-label="Toggle dark mode">
+            <i data-lucide="moon" class="w-5 h-5"></i>
+          </button>
+          <a href="profile.html" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="Profile">
+            <i data-lucide="user" class="w-5 h-5"></i>
+          </a>
         </div>
       </div>
-      <button id="closeSidebar" class="icon-btn" aria-label="Close menu">
-        <i data-lucide="x"></i>
-      </button>
-    </div>
-    
-    <nav>
-      <ul>
-        <li><a href="index.html" class="nav-link" data-page="index"><i data-lucide="home"></i><span>Home</span></a></li>
-        <li><a href="recipes.html" class="nav-link" data-page="recipes"><i data-lucide="book-open"></i><span>Recipes</span></a></li>
-        <li><a href="planner.html" class="nav-link" data-page="planner"><i data-lucide="calendar"></i><span>Planner</span></a></li>
-        <li><a href="shoppinglist.html" class="nav-link" data-page="shoppinglist"><i data-lucide="shopping-cart"></i><span>Shopping List</span></a></li>
-        <li><a href="about.html" class="nav-link" data-page="about"><i data-lucide="info"></i><span>About</span></a></li>
-      </ul>
-    </nav>
-    <div class="sidebar-footer">
-      <button id="logoutBtn" class="btn btn-outline sign-out-btn">
-        <i data-lucide="log-out"></i>
-        Sign out
-      </button>
-    </div>
-  </aside>
+    </header>
 
-  <!-- BACKDROP -->
-  <div id="backdrop" class="backdrop"></div>
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 w-80 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 shadow-soft z-50">
+      <div class="flex items-center justify-between px-4 h-16 border-b border-gray-200 dark:border-gray-800">
+        <div class="flex items-center gap-3">
+          <i data-lucide="user" class="w-6 h-6"></i>
+          <div>
+            <h2 id="sidebarName" class="font-semibold">Guest</h2>
+            <small id="sidebarEmail" class="text-xs text-gray-500 dark:text-gray-400">Not signed in</small>
+          </div>
+        </div>
+        <button id="closeSidebar" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="Close menu">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
 
-  <!-- ================= HERO ================= -->
+      <nav class="p-3">
+        <ul class="space-y-1">
+          <li><a href="index.html" class="nav-link active"><i data-lucide="home" class="w-5 h-5"></i><span>Home</span></a></li>
+          <li><a href="recipes.html" class="nav-link"><i data-lucide="book-open" class="w-5 h-5"></i><span>Recipes</span></a></li>
+          <li><a href="planner.html" class="nav-link"><i data-lucide="calendar" class="w-5 h-5"></i><span>Planner</span></a></li>
+          <li><a href="shopping.html" class="nav-link"><i data-lucide="shopping-cart" class="w-5 h-5"></i><span>Shopping List</span></a></li>
+          <li><a href="about.html" class="nav-link"><i data-lucide="info" class="w-5 h-5"></i><span>About</span></a></li>
+        </ul>
+      </nav>
 
-<section class="hero" id="hero" role="banner" aria-label="Recipe Finder Introduction">
-  <!-- Background Image -->
-  <div class="hero-background">
-    <img src="images/find.avif" 
-         alt="Fresh healthy ingredients and cooking utensils arranged beautifully"
-         class="hero-img"
-         loading="eager"
-         width="1920"
-         height="1080">
+      <div class="p-4 border-t border-gray-200 dark:border-gray-800">
+        <button id="logoutBtn" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+          <i data-lucide="log-out" class="w-5 h-5"></i> Sign out
+        </button>
+      </div>
+    </aside>
+
+    <!-- Backdrop -->
+    <div id="backdrop" class="fixed inset-0 bg-black/50 z-40"></div>
+
+    <!-- Hero Section - Professionally Fitted -->
+<section class="relative w-full" id="hero" role="banner" aria-label="Spoonfull Intro">
+  <!-- Background Image Container -->
+  <div class="relative w-full h-[45vh] sm:h-[55vh] md:h-[60vh] lg:h-[65vh] overflow-hidden">
+    <img 
+      src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=2070&q=80" 
+      alt="Fresh healthy food" 
+      class="w-full h-full object-cover object-center"
+      loading="eager"
+    />
+    <!-- Gradient Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
   </div>
 
-  <!-- Overlay -->
-  <div class="hero-overlay" aria-hidden="true"></div>
-
-  <!-- Hero Content -->
-  <div class="container">
-    <div class="hero-content">
-      <h1 class="hero-title">
-        Plan Smarter, Eat <span class="highlight">Healthier</span>.<br class="mobile-break">
-        <span class="highlight">Discover</span> Recipes. Track <span class="highlight">Nutrition</span>.
-      </h1>
-
-      <p class="hero-sub">
-        Every kitchen is a canvas. Every meal, a masterpiece. Start with what you have and create something unforgettable.
-      </p>
-
-      <div class="hero-cta" role="group" aria-label="Call to Action Buttons">
-        <a href="recipes.html" class="cta-btn green" aria-label="Browse all recipes">
-          <i data-lucide="chef-hat" aria-hidden="true"></i>
-          Browse Recipes
-        </a>
-        <a href="planner.html" class="cta-btn orange" aria-label="Open meal planner">
-          <i data-lucide="calendar" aria-hidden="true"></i>
-          Meal Planner
-        </a>
+  <!-- Content Container -->
+  <div class="absolute inset-0 flex items-center">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 w-full">
+      <div class="text-white max-w-full lg:max-w-2xl">
+        <!-- Main Heading -->
+        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4 sm:mb-6">
+          Plan Smarter,<br>
+          <span class="text-emerald-300">Eat Healthier.</span>
+        </h1>
+        
+        <!-- Subtitle -->
+        <p class="text-base sm:text-lg md:text-xl text-white/90 mb-6 sm:mb-8 leading-relaxed max-w-full md:max-w-xl">
+          Discover recipes by ingredients, track nutrition, save favorites, plan meals, and build shopping lists.
+        </p>
+        
+        <!-- Call to Action Buttons -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3" role="group" aria-label="Call to Action">
+          <!-- Primary Button -->
+          <a 
+            href="recipes.html" 
+            class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 shadow-lg transition-all duration-200 text-base font-semibold sm:flex-none text-center min-w-[140px]"
+          >
+            <i data-lucide="chef-hat" class="w-4 h-4 sm:w-5 sm:h-5"></i> 
+            Browse Recipes
+          </a>
+          
+          <!-- Secondary Button -->
+          <button 
+            class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg border-2 border-white/70 text-white hover:bg-white/10 transition-all duration-200 text-base font-semibold sm:flex-none text-center min-w-[140px]"
+            data-action="surprise"
+            onclick="window.spoonfullApp?.recipeManager?.getRandomRecipe?.() || console.log('Surprise me!')"
+          >
+            <i data-lucide="dice-5" class="w-4 h-4 sm:w-5 sm:h-5"></i> 
+            Surprise Me
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-  <main class="app-container">
-    <!-- Dashboard Grid -->
-    <div class="dashboard-grid">
-      
-      <!-- Welcome Card -->
-      <div class="card welcome-card">
-        <div class="card-header">
-          <div class="card-emoji">🥗</div>
-          <h3 id="greeting">Welcome 👋 Henry</h3>
+   <!-- Main Content -->
+<main class="container mx-auto px-4 py-6 sm:py-8">
+  <!-- Dashboard Section -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
+    <!-- Welcome Card -->
+    <section class="lg:col-span-2 rounded-2xl p-4 sm:p-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-soft">
+      <header class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-3">
+          <div class="text-2xl sm:text-3xl">🥗</div>
+          <h3 id="greeting" class="text-lg sm:text-xl font-semibold">
+            Welcome 👋 <span id="welcomeName">Guest</span>
+          </h3>
         </div>
-        
-        <!-- Food Quotes Container -->
-        <div class="quote-container">
-          <div class="quote-icon">💬</div>
-          <p class="quote-text" id="foodQuote">
-            Healthy meals, happy life 🥦
+        <span id="today" class="text-sm text-gray-500 dark:text-gray-400"></span>
+      </header>
+
+      <div class="flex items-start gap-3 p-3 sm:p-4 rounded-xl bg-gradient-to-r from-emerald-50 to-blue-50 dark:from-emerald-900/20 dark:to-blue-900/20 mb-4">
+        <div class="text-xl sm:text-2xl">💬</div>
+        <div class="flex-1">
+          <p id="foodTalk" class="font-medium text-gray-800 dark:text-gray-200 mb-1 text-sm sm:text-base">
+            Good food is the foundation of genuine happiness.
           </p>
-        </div>
-
-        <!-- Quick Stats -->
-        <div class="quick-stats">
-          <div class="stat">
-            <span class="stat-num" id="plannedMeals">0</span>
-            <span class="stat-label">Meals Planned</span>
-          </div>
-          <div class="stat">
-            <span class="stat-num" id="favorites">0</span>
-            <span class="stat-label">Favorites</span>
-          </div>
-          <div class="stat">
-            <span class="stat-num" id="progress">0%</span>
-            <span class="stat-label">Progress</span>
-          </div>
-        </div>
-
-        <!-- Daily Tip -->
-        <div class="tip-box">
-          <p id="dailyTip">💡 Eat a colorful plate for better nutrition!</p>
-        </div>
-
-        <!-- Call to Actions -->
-        <div class="card-actions">
-          <a href="recipes.html" class="btn btn-primary">
-            <span id="btnEmoji">🍲</span> Find Recipes
-          </a>
-          <a href="planner.html" class="btn btn-outline">
-            <i data-lucide="calendar"></i> Go to Planner
-          </a>
+          <p id="tipTalk" class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+            Tip: Batch-prep grains on Sunday to save weeknight time.
+          </p>
         </div>
       </div>
 
-      <!-- Meal Plan Card -->
-      <aside class="card meal-plan-card" aria-labelledby="plannerHeading">
-        <div class="card-header">
-          <div class="card-emoji">🍽️</div>
-          <h3 id="plannerHeading">Meal Plan</h3>
+      <!-- Stats Section -->
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div class="text-center p-4 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 text-white">
+          <div class="text-2xl font-bold" id="cookingStreak">5</div>
+          <div class="text-sm opacity-90">Day Streak</div>
+          <div class="w-full bg-white/20 rounded-full h-2 mt-2">
+            <div class="bg-white rounded-full h-2" style="width: 70%"></div>
+          </div>
+        </div>
+        <div class="text-center p-4 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 text-white">
+          <div class="text-2xl font-bold" id="recipesLearned">12</div>
+          <div class="text-sm opacity-90">Recipes Mastered</div>
+          <div class="w-full bg-white/20 rounded-full h-2 mt-2">
+            <div class="bg-white rounded-full h-2" style="width: 60%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-3 gap-3 sm:gap-4 mb-4">
+        <div class="rounded-xl p-3 sm:p-4 bg-emerald-50/60 dark:bg-emerald-900/30 border border-emerald-100 dark:border-emerald-800">
+          <span id="plannedMeals" class="text-xl sm:text-2xl font-bold text-emerald-700 dark:text-emerald-300">0</span>
+          <span class="block text-xs sm:text-sm text-emerald-700/80 dark:text-emerald-300/80">Meals Planned</span>
+        </div>
+        <div class="rounded-xl p-3 sm:p-4 bg-pink-50/60 dark:bg-pink-900/30 border border-pink-100 dark:border-pink-800">
+          <span id="favorites" class="text-xl sm:text-2xl font-bold text-pink-700 dark:text-pink-300">0</span>
+          <span class="block text-xs sm:text-sm text-pink-700/80 dark:text-pink-300/80">Favorites</span>
+        </div>
+        <div class="rounded-xl p-3 sm:p-4 bg-blue-50/60 dark:bg-blue-900/30 border border-blue-100 dark:border-blue-800">
+          <span id="progress" class="text-xl sm:text-2xl font-bold text-blue-700 dark:text-blue-300">0%</span>
+          <span class="block text-xs sm:text-sm text-blue-700/80 dark:text-blue-300/80">Progress</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap gap-2 sm:gap-3 mb-6">
+        <a href="#featured-recipes" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-colors shadow-md text-sm sm:text-base">
+          <span id="btnEmoji">🍲</span> Find Recipes
+        </a>
+  
+      </div>
+
+      <!-- Weekly Goals Section -->
+      <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+        <div class="flex items-center justify-between mb-4">
+          <h4 class="font-semibold">Weekly Goals</h4>
+          <span class="text-sm text-emerald-600 font-medium" id="goalsProgress">1/3 completed</span>
         </div>
 
-        <!-- Days Grid -->
-        <div class="days-grid">
+        <div class="space-y-3">
+          <div class="goal-item cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors" data-goal="plan-dinners">
+            <div class="flex items-center gap-3">
+              <div class="goal-checkbox w-5 h-5 border-2 border-emerald-500 rounded-full flex items-center justify-center text-white text-xs transition-all duration-200" data-goal="plan-dinners">✓</div>
+              <span class="text-sm">Plan 3 dinners</span>
+            </div>
+          </div>
+          <div class="goal-item cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors" data-goal="try-new-recipe">
+            <div class="flex items-center gap-3">
+              <div class="goal-checkbox w-5 h-5 border-2 border-gray-300 dark:border-gray-600 rounded-full flex items-center justify-center text-white text-xs transition-all duration-200" data-goal="try-new-recipe"></div>
+              <span class="text-sm">Try 1 new recipe</span>
+            </div>
+          </div>
+          <div class="goal-item cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors" data-goal="meal-prep-lunch">
+            <div class="flex items-center gap-3">
+              <div class="goal-checkbox w-5 h-5 border-2 border-gray-300 dark:border-gray-600 rounded-full flex items-center justify-center text-white text-xs transition-all duration-200" data-goal="meal-prep-lunch"></div>
+              <span class="text-sm">Meal prep lunch</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Column - Meal Plan & Quick Actions -->
+    <div class="space-y-6">
+      <!-- Quick Actions Card -->
+      <section class="rounded-2xl p-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-soft">
+        <header class="flex items-center gap-3 mb-4">
+          <div class="text-2xl">⚡</div>
+          <h3 class="text-lg font-semibold">Quick Actions</h3>
+        </header>
+
+        <div class="grid grid-cols-2 gap-3">
+          <button class="quick-action-btn flex flex-col items-center gap-2 p-4 rounded-xl bg-gray-50 dark:bg-gray-800 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 border border-gray-200 dark:border-gray-700 hover:border-emerald-200 dark:hover:border-emerald-800 transition-all duration-200 active:scale-95" onclick="window.spoonfullApp.quickAddToPlan('breakfast')">
+            <i data-lucide="sunrise" class="w-5 h-5 text-emerald-600"></i>
+            <span class="text-sm font-medium">Add Breakfast</span>
+          </button>
+          <button class="quick-action-btn flex flex-col items-center gap-2 p-4 rounded-xl bg-gray-50 dark:bg-gray-800 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 border border-gray-200 dark:border-gray-700 hover:border-emerald-200 dark:hover:border-emerald-800 transition-all duration-200 active:scale-95" onclick="window.spoonfullApp.quickAddToPlan('lunch')">
+            <i data-lucide="sun" class="w-5 h-5 text-emerald-600"></i>
+            <span class="text-sm font-medium">Add Lunch</span>
+          </button>
+          <button class="quick-action-btn flex flex-col items-center gap-2 p-4 rounded-xl bg-gray-50 dark:bg-gray-800 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 border border-gray-200 dark:border-gray-700 hover:border-emerald-200 dark:hover:border-emerald-800 transition-all duration-200 active:scale-95" onclick="window.spoonfullApp.quickAddToPlan('dinner')">
+            <i data-lucide="moon" class="w-5 h-5 text-emerald-600"></i>
+            <span class="text-sm font-medium">Add Dinner</span>
+          </button>
+          <button class="quick-action-btn flex flex-col items-center gap-2 p-4 rounded-xl bg-gray-50 dark:bg-gray-800 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 border border-gray-200 dark:border-gray-700 hover:border-emerald-200 dark:hover:border-emerald-800 transition-all duration-200 active:scale-95" onclick="window.spoonfullApp.generateShoppingList()">
+            <i data-lucide="shopping-cart" class="w-5 h-5 text-emerald-600"></i>
+            <span class="text-sm font-medium">Shopping List</span>
+          </button>
+        </div>
+
+        <div class="mt-4 p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
+          <div class="flex items-center gap-2 text-amber-800 dark:text-amber-200">
+            <i data-lucide="lightbulb" class="w-4 h-4"></i>
+            <span class="text-sm font-medium">Pro Tip</span>
+          </div>
+          <p class="text-xs text-amber-700 dark:text-amber-300 mt-1" id="quickTip">Plan 3 meals ahead to save time!</p>
+        </div>
+      </section>
+
+      <!-- Meal Plan Card -->
+      <aside class="rounded-2xl p-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-soft" aria-labelledby="plannerHeading">
+        <header class="flex items-center gap-3 mb-4">
+          <div class="text-xl sm:text-2xl">🍽️</div>
+          <h3 id="plannerHeading" class="text-lg font-semibold">Meal Plan</h3>
+        </header>
+
+        <div class="grid grid-cols-2 gap-3 mb-4 text-sm">
           <div class="day-item" data-day="monday">
-            <button class="day-btn">Mon <span class="meal-count">0</span></button>
-            <ul class="meal-list" id="mondayMeals"></ul>
+            <button class="day-btn w-full px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Mon <span id="monCount">0</span></button>
+            <ul id="mondayMeals" class="mt-2 space-y-1"></ul>
           </div>
           <div class="day-item" data-day="tuesday">
-            <button class="day-btn">Tue <span class="meal-count">0</span></button>
-            <ul class="meal-list" id="tuesdayMeals"></ul>
+            <button class="day-btn w-full px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Tue <span id="tueCount">0</span></button>
+            <ul id="tuesdayMeals" class="mt-2 space-y-1"></ul>
           </div>
           <div class="day-item" data-day="wednesday">
-            <button class="day-btn">Wed <span class="meal-count">0</span></button>
-            <ul class="meal-list" id="wednesdayMeals"></ul>
+            <button class="day-btn w-full px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Wed <span id="wedCount">0</span></button>
+            <ul id="wednesdayMeals" class="mt-2 space-y-1"></ul>
           </div>
           <div class="day-item" data-day="thursday">
-            <button class="day-btn">Thu <span class="meal-count">0</span></button>
-            <ul class="meal-list" id="thursdayMeals"></ul>
+            <button class="day-btn w-full px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Thu <span id="thuCount">0</span></button>
+            <ul id="thursdayMeals" class="mt-2 space-y-1"></ul>
           </div>
-          <div class="day-item" data-day="friday">
-            <button class="day-btn">Fri <span class="meal-count">0</span></button>
-            <ul class="meal-list" id="fridayMeals"></ul>
+          <div class="day-item col-span-2" data-day="friday">
+            <button class="day-btn w-full px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Fri <span id="friCount">0</span></button>
+            <ul id="fridayMeals" class="mt-2 space-y-1"></ul>
           </div>
         </div>
 
-        <!-- Planner Actions -->
-        <div class="planner-actions">
-          <a href="planner.html" class="btn btn-primary block">
-            <i data-lucide="calendar"></i> Open Planner
+        <div class="grid gap-2">
+          <a href="planner.html" class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-colors shadow-md text-sm">
+            <i data-lucide="calendar" class="w-4 h-4"></i> Open Planner
           </a>
-          <a href="shopping.html" class="btn btn-outline block">
-            <i data-lucide="shopping-cart"></i> Shopping List
+          <a href="shopping.html" class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-sm">
+            <i data-lucide="shopping-cart" class="w-4 h-4"></i> Shopping List
           </a>
-          <button id="resetPlannerLink" class="btn btn-danger block">
-            <i data-lucide="refresh-cw"></i> Reset Planner
+          <button id="resetPlannerLink" class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-rose-600 text-white hover:bg-rose-700 transition-colors text-sm">
+            <i data-lucide="refresh-cw" class="w-4 h-4"></i> Reset Planner
           </button>
         </div>
       </aside>
     </div>
-
-    <!-- Recipes Section -->
-    <section class="recipes-section" aria-labelledby="resultsHeading">
-      <div class="section-header">
-        <h2 id="resultsHeading">Recipes (<span id="resultCount">0</span>)</h2>
-
-        <!-- Toolbar -->
-        <div class="toolbar">
-          <div class="search-container">
-            <i data-lucide="search"></i>
-            <input type="search" id="searchInput" placeholder="Search recipes..." aria-label="Search recipes">
+  </div>
+      <!-- Weather & Seasonal Section -->
+      <section class="mb-12">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Weather Card -->
+          <div class="rounded-2xl p-6 bg-gradient-to-br from-blue-500 to-purple-600 text-white cursor-pointer" id="weatherCard">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-semibold">Cooking Weather</h3>
+              <div id="weatherIcon">🌤️</div>
+            </div>
+            <div class="text-3xl font-bold mb-2" id="weatherTemp">24°C</div>
+            <p class="text-blue-100" id="weatherDescription">Perfect for indoor cooking!</p>
+            <div class="mt-4 flex items-center gap-2 text-sm">
+              <i data-lucide="clock" class="w-4 h-4"></i>
+              <span>Golden hour: 6:30 PM</span>
+            </div>
           </div>
-          <div class="actions">
-            <button id="randomBtnToolbar" class="btn btn-outline">
-              <i data-lucide="dice-5"></i> Surprise Me
-            </button>
-            <button id="favoritesToggle" class="btn btn-outline">
-              <i data-lucide="heart"></i> Favorites
+
+          <!-- Seasonal Spotlight -->
+          <div class="lg:col-span-2 rounded-2xl p-6 bg-gradient-to-br from-orange-400 to-red-500 text-white cursor-pointer" id="seasonalCard">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-semibold">Seasonal Spotlight</h3>
+              <div class="text-2xl">🎃</div>
+            </div>
+            <h4 class="text-xl font-bold mb-2" id="seasonalRecipe">Pumpkin Spice Delights</h4>
+            <p class="text-orange-100 mb-4">Perfect autumn recipes featuring seasonal ingredients</p>
+            <button class="inline-flex items-center gap-2 px-4 py-2 bg-white text-orange-600 rounded-lg font-semibold hover:bg-orange-50 transition-colors">
+              <i data-lucide="chef-hat" class="w-4 h-4"></i>
+              Explore Seasonal
             </button>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Recipe Grid -->
-      <div id="recipeList" class="recipe-grid" aria-live="polite"></div>
-      <div id="statusMsg" class="visually-hidden" aria-live="polite"></div>
-    </section>
-  </main>
+      <!-- Featured Recipes Section -->
+      <section id="featured-recipes" class="mt-8 sm:mt-12">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-bold">Featured Recipes (<span id="resultCount">6</span>)</h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Handpicked recipes for your cooking inspiration</p>
+          </div>
+
+          <div class="toolbar flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+            <div class="search-container flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 transition-colors">
+              <i data-lucide="search" class="w-4 h-4 text-gray-500"></i>
+              <input type="search" id="searchInput" placeholder="Search recipes..." aria-label="Search recipes" class="bg-transparent outline-none placeholder:text-gray-400 w-full sm:w-48" />
+            </div>
+            <div class="flex gap-2">
+              <button id="randomBtnToolbar" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-sm">
+                <i data-lucide="dice-5" class="w-4 h-4"></i> Surprise Me
+              </button>
+              <button id="favoritesToggle" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-sm">
+                <i data-lucide="heart" class="w-4 h-4"></i> Favorites
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="recipeList" class="recipe-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6" aria-live="polite">
+          <!-- Recipe cards will be populated by JavaScript -->
+        </div>
+      </section>
+
+      <!-- Recommended For You Section -->
+      <section class="mt-12">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold">Recommended For You</h2>
+          <div class="flex items-center gap-2 text-sm text-gray-500">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            <span>Based on your preferences</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="recommendation-card" id="healthBoostCard">
+            <div class="flex items-center gap-4">
+              <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-600 rounded-2xl flex items-center justify-center">
+                <i data-lucide="heart" class="w-6 h-6 text-white"></i>
+              </div>
+              <div>
+                <h4 class="font-semibold">Health Boost</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Try these high-protein meals</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="recommendation-card" id="timeSaverCard">
+            <div class="flex items-center gap-4">
+              <div class="w-16 h-16 bg-gradient-to-br from-orange-400 to-red-500 rounded-2xl flex items-center justify-center">
+                <i data-lucide="clock" class="w-6 h-6 text-white"></i>
+              </div>
+              <div>
+                <h4 class="font-semibold">Time Saver</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Quick 15-minute recipes</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
 
   <!-- Recipe Modal -->
-  <div id="recipeModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalBody">
-    <div class="modal-content">
-      <button id="modalClose" class="modal-close">&times;</button>
-      <div id="modalBody"></div>
+<div id="recipeModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="absolute inset-0 bg-black/50" aria-hidden="true"></div>
+  <div class="modal-content relative z-10 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-soft overflow-hidden w-full max-w-4xl max-h-[90vh]">
+    <div class="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-gray-200 dark:border-gray-800">
+      <h3 id="modalTitle" class="text-lg font-semibold">Recipe Details</h3>
+      <button id="modalClose" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="Close">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+    <div id="modalBody" class="p-4 sm:p-6 overflow-y-auto">
+      <!-- Modal content will be populated by JavaScript -->
     </div>
   </div>
+</div>
 
-  <!-- Day Selection Modal -->
-  <div id="daySelectionModal" class="modal day-selection-modal hidden">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Add to Meal Plan</h3>
-        <button class="modal-close" id="cancelDaySelection">&times;</button>
-      </div>
-      <div class="modal-body">
-        <p>Choose which day you'd like to add this recipe to:</p>
-        
-        <div class="days-grid-selection" id="daysGridSelection">
-          <!-- Days will be populated by JavaScript -->
+<!-- Add to Plan Modal -->
+<div id="planModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="planModalTitle">
+  <div class="absolute inset-0 bg-black/50" aria-hidden="true"></div>
+  <div class="modal-content relative z-10 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-soft overflow-hidden w-full max-w-md">
+    <div class="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-gray-200 dark:border-gray-800">
+      <h3 id="planModalTitle" class="text-lg font-semibold">Add to Meal Plan</h3>
+      <button id="planModalClose" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="Close">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+    <div class="p-4 sm:p-6">
+      <div class="space-y-4">
+        <div>
+          <label for="planDay" class="block text-sm font-medium mb-2">Select Day:</label>
+          <select id="planDay" class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors">
+            <option value="monday">Monday</option>
+            <option value="tuesday">Tuesday</option>
+            <option value="wednesday">Wednesday</option>
+            <option value="thursday">Thursday</option>
+            <option value="friday">Friday</option>
+            <option value="saturday">Saturday</option>
+            <option value="sunday">Sunday</option>
+          </select>
         </div>
-        
-        <div class="modal-actions">
-          <button class="btn btn-outline" id="cancelDaySelectionBtn">
-            <i data-lucide="x"></i>
+        <div>
+          <label for="planMealType" class="block text-sm font-medium mb-2">Meal Type:</label>
+          <select id="planMealType" class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors">
+            <option value="breakfast">Breakfast</option>
+            <option value="lunch">Lunch</option>
+            <option value="dinner">Dinner</option>
+            <option value="snack">Snack</option>
+          </select>
+        </div>
+        <div class="flex gap-3 pt-4">
+          <button id="confirmAddToPlan" class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-colors">
+            Add to Plan
+          </button>
+          <button id="cancelAddToPlan" class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
             Cancel
           </button>
-          <button class="btn btn-primary" id="confirmDaySelection" disabled>
-            <i data-lucide="check"></i>
-            Add to Selected Day
-          </button>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- ================= BOTTOM NAV ================= -->
-  <nav class="bottom-nav">
-    <a href="index.html" class="nav-item nav-link" data-page="index">
-      <i data-lucide="home"></i>
-      <span>Home</span>
-    </a>
-    <a href="recipes.html" class="nav-item nav-link" data-page="recipes">
-      <i data-lucide="book-open"></i>
-      <span>Recipes</span>
-    </a>
-    <a href="planner.html" class="nav-item nav-link" data-page="planner">
-      <i data-lucide="calendar"></i>
-      <span>Planner</span>
-    </a>
-    <a href="shoppinglist.html" class="nav-item nav-link" data-page="shoppinglist">
-      <i data-lucide="shopping-cart"></i>
-      <span>List</span>
-    </a>
-    <a href="about.html" class="nav-item nav-link" data-page="about">
-      <i data-lucide="info"></i>
-      <span>About</span>
-    </a>
-  </nav>
+    <!-- Professional Compact Footer -->
+    <footer class="footer footer-compact mt-12 sm:mt-16">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 sm:gap-8">
+          <!-- Brand & Description -->
+          <div class="md:col-span-2">
+            <div class="flex items-center gap-2 mb-4">
+              <i data-lucide="utensils" class="w-6 h-6 text-emerald-400"></i>
+              <span class="font-poppins text-xl font-bold text-white">Spoonfull</span>
+            </div>
+            <p class="text-gray-400 mb-6 max-w-md text-sm">
+              Your modern kitchen companion for discovering recipes, tracking nutrition, and planning meals with ease. Cook smarter, eat healthier.
+            </p>
+            <div class="flex gap-3">
+              <a href="#" class="p-2 rounded-lg bg-gray-800 hover:bg-emerald-600 transition-colors transform hover:scale-110" aria-label="Twitter">
+                <i data-lucide="twitter" class="w-4 h-4 text-gray-400"></i>
+              </a>
+              <a href="#" class="p-2 rounded-lg bg-gray-800 hover:bg-emerald-600 transition-colors transform hover:scale-110" aria-label="Instagram">
+                <i data-lucide="instagram" class="w-4 h-4 text-gray-400"></i>
+              </a>
+              <a href="#" class="p-2 rounded-lg bg-gray-800 hover:bg-emerald-600 transition-colors transform hover:scale-110" aria-label="Facebook">
+                <i data-lucide="facebook" class="w-4 h-4 text-gray-400"></i>
+              </a>
+              <a href="#" class="p-2 rounded-lg bg-gray-800 hover:bg-emerald-600 transition-colors transform hover:scale-110" aria-label="YouTube">
+                <i data-lucide="youtube" class="w-4 h-4 text-gray-400"></i>
+              </a>
+            </div>
+          </div>
 
-  <!-- FOOTER -->
-  <footer class="footer" role="contentinfo">
-    <div class="container">
-      <div class="footer-content">
-        <div class="footer-logo">
-          <i data-lucide="utensils"></i>
-          <span>Recipe Finder</span>
+          <!-- Product Links -->
+          <div>
+            <h4 class="text-white font-semibold mb-4 text-sm">Product</h4>
+            <ul class="space-y-2">
+              <li>
+                <a href="recipes.html" class="text-gray-400 hover:text-white transition-colors text-sm">
+                  Recipe Finder
+                </a>
+              </li>
+              <li>
+                <a href="planner.html" class="text-gray-400 hover:text-white transition-colors text-sm">
+                  Meal Planner
+                </a>
+              </li>
+              <li>
+                <a href="shopping.html" class="text-gray-400 hover:text-white transition-colors text-sm">
+                  Shopping List
+                </a>
+              </li>
+              <li>
+                <a href="nutrition.html" class="text-gray-400 hover:text-white transition-colors text-sm">
+                  Nutrition Tracker
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Support -->
+          <div>
+            <h4 class="text-white font-semibold mb-4 text-sm">Support</h4>
+            <ul class="space-y-2">
+              <li>
+                <a href="about.html" class="text-gray-400 hover:text-white transition-colors text-sm">
+                  About Us
+                </a>
+              </li>
+              <li>
+                <a href="help.html" class="text-gray-400 hover:text-white transition-colors text-sm">
+                  Help Center
+                </a>
+              </li>
+              <li>
+                <a href="privacy.html" class="text-gray-400 hover:text-white transition-colors text-sm">
+                  Privacy Policy
+                </a>
+              </li>
+              <li>
+                <a href="terms.html" class="text-gray-400 hover:text-white transition-colors text-sm">
+                  Terms of Service
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
-        <p>
-          © <span id="year"></span> Recipe Finder + Nutrition Tracker — All rights reserved.<br>
-          Built with ❤️ by Henry Osuagwu
-        </p>
+
+        <div class="border-t border-gray-800 mt-6 sm:mt-8 pt-6 sm:pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div class="flex gap-4 sm:gap-6 text-xs">
+            <a href="privacy.html" class="text-gray-400 hover:text-white transition-colors">Privacy</a>
+            <a href="terms.html" class="text-gray-400 hover:text-white transition-colors">Terms</a>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors">Cookies</a>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors">Sitemap</a>
+          </div>
+          <div class="text-gray-400 text-xs">
+            © <span id="currentYear">2025</span> Spoonfull. Crafted with <i data-lucide="heart" class="w-3 h-3 inline text-rose-500"></i> for food lovers.
+          </div>
+        </div>
       </div>
-      <small id="lastModified"></small>
-    </div>
-  </footer>
+    </footer>
 
-  <!-- Scroll to Top Button -->
-  <button id="scrollTopBtn" class="scroll-top-btn" aria-label="Scroll to Top">
-    <i data-lucide="chevron-up"></i>
-  </button>
-
-  <!-- SCRIPTS -->
-  <script src="js/main.js" defer></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-      }
-      
-      // Active navigation functionality
-      function setActiveNav() {
-        // Get current page from URL
-        const currentPath = window.location.pathname;
-        const currentPage = currentPath.split('/').pop() || 'index.html';
-        const pageName = currentPage.replace('.html', '') || 'index';
-        
-        // Remove active class from all nav items
-        document.querySelectorAll('.nav-link').forEach(link => {
-          link.classList.remove('active');
-        });
-        
-        // Add active class to current page nav item
-        document.querySelectorAll('.nav-link').forEach(link => {
-          const linkPage = link.getAttribute('data-page');
-          if (linkPage === pageName) {
-            link.classList.add('active');
-          }
-        });
-        
-        // Also update bottom nav (it uses different structure)
-        document.querySelectorAll('.bottom-nav .nav-item').forEach(item => {
-          item.classList.remove('active');
-          const href = item.getAttribute('href');
-          if (href === currentPage || (currentPage === 'index.html' && href === 'index.html')) {
-            item.classList.add('active');
-          }
-        });
-      }
-      
-      // Set active nav on page load
-      setActiveNav();
-      
-      // Update active nav when navigating (for SPA-like behavior if applicable)
-      document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', function() {
-          // Small delay to ensure the page has started navigating
-          setTimeout(setActiveNav, 50);
-        });
-      });
-    });
-  </script>
-  <!-- Add this before closing </body> in profile.html -->
-<script>
-// Debug script - check if data is being saved
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Profile page loaded');
-    console.log('Current user from localStorage:', JSON.parse(localStorage.getItem('currentUser')));
-    
-    // Monitor localStorage changes
-    window.addEventListener('storage', function(e) {
-        console.log('Storage changed:', e.key, e.newValue);
-    });
-});
-</script>
-</body>
+    <!-- JavaScript Files -->
+    <script src="js/main.js"></script>
+    <script src="js/recipe-manager.js"></script>
+  </body>
 </html>
+
