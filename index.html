@@ -917,6 +917,36 @@
         background: #6b7280;
       }
 
+      .scroll-top-btn {
+  position: fixed;
+  bottom: 5rem;
+  right: 1rem;
+  z-index: 40;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+}
+
+.scroll-top-btn:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.6);
+}
+
+.scroll-top-btn:active {
+  transform: translateY(-1px) scale(1.02);
+}
+
       /* Footer */
       .footer {
         background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
@@ -1513,6 +1543,14 @@
     </div>
   </div>
 </div>
+
+<!-- Beautiful Scroll to Top Button -->
+<button id="scrollTopBtn" class="scroll-top-btn group" aria-label="Scroll to Top">
+  <i data-lucide="utensils" class="w-5 h-5 transform group-hover:scale-110 group-hover:-translate-y-0.5 transition-transform duration-200"></i>
+  <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-white bg-black/80 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+    Back to Top
+  </span>
+</button>
 
     <!-- Professional Compact Footer -->
     <footer class="footer footer-compact mt-12 sm:mt-16">

@@ -1,100 +1,1792 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-  <!-- META -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Discover delicious recipes, filter by dietary needs, save favorites, and plan your meals with Recipe Finder.">
+  <meta name="description" content="Discover delicious recipes, filter by dietary needs, save favorites, and plan your meals with Spoonfull.">
   <meta name="keywords" content="recipes, cooking, meal planning, nutrition, healthy eating, food">
   <meta name="author" content="Henry Osuagwu">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <!-- TITLE -->
-  <title>Recipes | Recipe Finder + Nutrition Tracker</title>
+  <!-- SEO -->
+  <meta name="title" content="Recipes | Spoonfull – Recipe Finder + Nutrition Tracker" />
+  <meta name="description" content="Browse thousands of delicious recipes, filter by dietary preferences, track nutrition, and save your favorites with Spoonfull." />
+  <meta name="keywords" content="recipe finder, nutrition tracker, meal planner, healthy recipes, food app, diet app, Nigerian recipes, Spoonfull app, cooking ideas" />
+  <meta name="author" content="Henry Osuagwu" />
+  <meta name="robots" content="index, follow" />
 
-  <!-- PERFORMANCE -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- App / PWA -->
+  <meta name="application-name" content="Spoonfull" />
+  <meta name="theme-color" content="#22c55e" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Spoonfull" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="msapplication-TileColor" content="#22c55e" />
+  <meta name="msapplication-tap-highlight" content="no" />
+
+  <!-- Icons -->
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <link rel="shortcut icon" href="images/favicon.png" />
+
+  <!-- Apple Touch Icons -->
+  <link rel="apple-touch-icon" href="images/icon-192x192.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="images/icon-152x152.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="images/icon-180x180.png" />
+  <link rel="apple-touch-icon" sizes="167x167" href="images/icon-167x167.png" />
+
+  <!-- TITLE -->
+  <title>Recipes | Spoonfull – Recipe Finder + Nutrition Tracker</title>
 
   <!-- FONTS + ICONS -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest" defer></script>
 
-  <!-- STYLES -->
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/recipe.css">
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            poppins: ['Poppins', 'system-ui'],
+            roboto: ['Roboto', 'system-ui']
+          },
+          boxShadow: {
+            soft: '0 10px 30px rgba(0,0,0,.12)',
+            'card-hover': '0 20px 40px rgba(0,0,0,0.15)'
+          },
+          keyframes: {
+            fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+            slideUp: { '0%': { transform: 'translateY(10px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
+            bounceIn: { '0%': { transform: 'scale(0.3)', opacity: '0' }, '50%': { transform: 'scale(1.05)' }, '70%': { transform: 'scale(0.9)' }, '100%': { transform: 'scale(1)', opacity: '1' } },
+            slideInRight: { '0%': { transform: 'translateX(100%)', opacity: '0' }, '100%': { transform: 'translateX(0)', opacity: '1' } },
+            pulse: { '0%, 100%': { opacity: '1' }, '50%': { opacity: '0.5' } },
+            spin: { to: { transform: 'rotate(360deg)' } },
+            ping: { '75%, 100%': { transform: 'scale(2)', opacity: '0' } },
+            bounce: { '0%, 100%': { transform: 'translateY(-25%)', animationTimingFunction: 'cubic-bezier(0.8,0,1,1)' }, '50%': { transform: 'none', animationTimingFunction: 'cubic-bezier(0,0,0.2,1)' } }
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.5s ease-in-out',
+            'slide-up': 'slideUp 0.3s ease-out',
+            'bounce-in': 'bounceIn 0.6s ease-out',
+            'slide-in-right': 'slideInRight 0.5s ease-out',
+            pulse: 'pulse 2s infinite',
+            spin: 'spin 1s linear infinite',
+            ping: 'ping 1s cubic-bezier(0,0,0.2,1) infinite',
+            bounce: 'bounce 1s infinite'
+          }
+        }
+      }
+    };
+  </script>
 
-  <!-- Favicon and PWA -->
-  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="images/favicon.png">
-  <link rel="apple-touch-icon" href="images/favicon.png">
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#4CAF50">
+  <!-- Custom Styles -->
+  <style>
+    /* Mobile-First Responsive Design */
+    .nav-link {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 6px;
+      height: 2px;
+      background: #22c55e;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s ease;
+      border-radius: 2px;
+    }
+
+    .nav-link.active::after {
+      transform: scaleX(1);
+    }
+
+    /* Sidebar for Mobile */
+    #sidebar {
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    #sidebar.open {
+      transform: translateX(0);
+    }
+
+    #backdrop {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    #backdrop.show {
+      opacity: 0.5;
+      pointer-events: auto;
+    }
+
+    /* Sidebar Version Animation Styles */
+    @keyframes riseFade {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #sidebarVersion, #sidebarVersion [data-animate="item"] {
+        transition: none !important;
+        animation: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+      }
+    }
+
+    #sidebarVersion {
+      opacity: 0;
+      transform: translateY(8px);
+      will-change: opacity, transform;
+    }
+
+    .sv-animate {
+      animation: riseFade 420ms ease-out forwards;
+    }
+
+    #sidebarVersion [data-animate="item"] {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+
+    #sidebarVersion.sv-stagger [data-animate="item"]:nth-child(1) {
+      animation: riseFade 400ms ease-out 60ms forwards;
+    }
+    #sidebarVersion.sv-stagger [data-animate="item"]:nth-child(2) {
+      animation: riseFade 400ms ease-out 140ms forwards;
+    }
+    #sidebarVersion.sv-stagger [data-animate="item"]:nth-child(3) {
+      animation: riseFade 400ms ease-out 220ms forwards;
+    }
+
+    /* Mobile responsive adjustments for sidebar version */
+    @media (max-width: 640px) {
+      #sidebarVersion {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+        row-gap: 0.25rem;
+      }
+
+      #sidebarVersion .flex i {
+        width: 18px;
+        height: 18px;
+      }
+
+      #sidebarVersion .flex span {
+        font-size: 0.9rem;
+        line-height: 1.25rem;
+      }
+
+      #sidebarVersion .text-\[11px\] {
+        font-size: 12px;
+      }
+
+      #sidebarVersion small {
+        font-size: 11px;
+      }
+    }
+
+    /* Recipe Cards */
+    .recipe-card {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 1rem;
+      overflow: hidden;
+      background: white;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+      border: 1px solid #e5e7eb;
+    }
+
+    .recipe-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Enhanced Navigation Styles */
+    .nav-link {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-radius: 0.75rem;
+      transition: all 0.3s ease;
+      background: transparent;
+    }
+
+    .nav-link.active {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+      transform: translateX(4px);
+    }
+
+    .nav-link.active::after {
+      display: none;
+    }
+
+    .nav-link:not(.active):hover {
+      background: #f8fafc;
+      transform: translateX(4px);
+    }
+
+    .dark .nav-link:not(.active):hover {
+      background: #1f2937;
+    }
+
+    /* Modal System */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      padding: 1rem;
+    }
+
+    .modal.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal-content {
+      transform: scale(0.9);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      max-width: 100%;
+      max-height: 90vh;
+      width: 100%;
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+
+    .modal.active .modal-content {
+      transform: scale(1);
+    }
+
+    /* Difficulty Badges */
+    .difficulty-easy {
+      background: linear-gradient(135deg, #10b981, #059669);
+    }
+
+    .difficulty-medium {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+    }
+
+    .difficulty-hard {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+    }
+
+    /* Action Buttons */
+    .action-btn {
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .action-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      transition: all 0.3s ease;
+      transform: translate(-50%, -50%);
+    }
+
+    .action-btn:hover::before {
+      width: 100%;
+      height: 100%;
+    }
+
+    .action-btn.favorite.active {
+      background: #ef4444;
+      color: white;
+    }
+
+    /* Fix for Ingredients & Instructions - Full Height Display */
+    .ingredients-instructions-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: start;
+      min-height: auto;
+    }
+
+    .ingredients-column,
+    .instructions-column {
+      display: flex;
+      flex-direction: column;
+      min-height: 200px;
+      height: auto;
+    }
+
+    .ingredients-header,
+    .instructions-header {
+      flex-shrink: 0;
+      margin-bottom: 1rem;
+    }
+
+    .ingredients-list,
+    .instructions-list {
+      flex: 1;
+      overflow-y: visible;
+      max-height: none;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      background: #f9fafb;
+    }
+
+    .dark .ingredients-list,
+    .dark .instructions-list {
+      background: #1f2937;
+      border-color: #374151;
+    }
+
+    /* Individual list items styling */
+    .ingredient-item,
+    .instruction-item {
+      padding: 0.75rem;
+      margin-bottom: 0.5rem;
+      border-radius: 0.5rem;
+      background: white;
+      border: 1px solid #e5e7eb;
+      transition: all 0.2s ease;
+    }
+
+    .dark .ingredient-item,
+    .dark .instruction-item {
+      background: #374151;
+      border-color: #4b5563;
+    }
+
+    .ingredient-item:hover,
+    .instruction-item:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .dark .ingredient-item:hover,
+    .dark .instruction-item:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Checkbox styling for ingredients */
+    .ingredient-checkbox {
+      width: 1.25rem;
+      height: 1.25rem;
+      border: 2px solid #d1d5db;
+      border-radius: 0.375rem;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .ingredient-checkbox:checked {
+      background-color: #10b981;
+      border-color: #10b981;
+    }
+
+    .ingredient-checkbox:checked::before {
+      content: '✓';
+      color: white;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Instruction number styling */
+    .instruction-number {
+      width: 2rem;
+      height: 2rem;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+      box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .ingredients-instructions-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .ingredients-list,
+      .instructions-list {
+        padding: 0.75rem;
+      }
+
+      .ingredient-item,
+      .instruction-item {
+        padding: 0.625rem;
+      }
+    }
+
+    /* Modal body adjustments for full content */
+    #modalBody {
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    /* Ensure modal can accommodate content */
+    .modal-content {
+      max-height: 95vh;
+    }
+
+    .footer-compact {
+        padding: 2rem 0 1rem;
+      }
+
+      .footer-compact .container {
+        max-width: 1200px;
+      }
+
+      .footer-compact a:hover {
+        color: #10b981;
+        transform: translateY(-1px);
+      }
+
+      /* Mobile optimizations */
+      @media (max-width: 768px) {
+        .dashboard-compact .goal-checkbox {
+          width: 1rem;
+          height: 1rem;
+          font-size: 0.75rem;
+        }
+
+        .dashboard-compact .goal-item span {
+          font-size: 0.75rem;
+        }
+
+        .dashboard-compact .quick-actions-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 0.5rem;
+        }
+
+        .dashboard-compact .recommendation-card .flex.items-center.gap-4 {
+          gap: 1rem;
+        }
+
+        .dashboard-compact .recommendation-card h4 {
+          font-size: 0.875rem;
+        }
+
+        .dashboard-compact .recommendation-card p {
+          font-size: 0.75rem;
+        }
+
+        .footer-compact {
+          padding: 1.5rem 0 1rem;
+        }
+      }
+
+      /* Ultra-compact for very small screens */
+      @media (max-width: 480px) {
+        .dashboard-compact .grid.grid-cols-1.lg\:grid-cols-3.gap-6 {
+          gap: 1rem;
+        }
+
+        .dashboard-compact .rounded-2xl.p-6 {
+          padding: 1rem;
+        }
+
+        .dashboard-compact .text-lg {
+          font-size: 1rem;
+        }
+      }
+
+      .scroll-top-btn {
+  position: fixed;
+  bottom: 5rem;
+  right: 1rem;
+  z-index: 40;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+}
+
+.scroll-top-btn:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.6);
+}
+
+.scroll-top-btn:active {
+  transform: translateY(-1px) scale(1.02);
+}
+
+    /* Footer */
+    .footer {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      color: #f8fafc;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, #22c55e 50%, transparent 100%);
+    }
+
+    /* Loading Animation */
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Text Utilities */
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Day Buttons */
+    .day-btn {
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    /* Dark Mode Support */
+    .dark .recipe-card {
+      background: #1f2937;
+      border-color: #374151;
+    }
+
+    /* Mobile Optimizations */
+    @media (max-width: 640px) {
+      .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+
+      .modal-content {
+        margin: 0.5rem;
+      }
+
+      .recipe-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .toolbar {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .search-container {
+        width: 100%;
+      }
+
+      #searchInput {
+        width: 100%;
+      }
+    }
+
+    /* Tablet Optimizations */
+    @media (min-width: 768px) and (max-width: 1024px) {
+      .recipe-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* Desktop Optimizations */
+    @media (min-width: 1024px) {
+      .recipe-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* Nutrition Tracker Styles */
+    .nutrition-tracker-section {
+      border-radius: 1rem;
+      padding: 1.5rem;
+      background: white;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .dark .nutrition-tracker-section {
+      background: #1f2937;
+      border-color: #374151;
+    }
+
+    .nutrition-tracker-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .daily-goals-input {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .goal-input-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .goal-input-group label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: #4b5563;
+    }
+
+    .dark .goal-input-group label {
+      color: #d1d5db;
+    }
+
+    .goal-input {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      background: white;
+      transition: all 0.2s;
+    }
+
+    .dark .goal-input {
+      background: #374151;
+      border-color: #4b5563;
+      color: white;
+    }
+
+    .goal-input:focus {
+      outline: none;
+      border-color: #10b981;
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+    }
+
+    .nutrition-summary {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .nutrition-summary-item {
+      text-align: center;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      background: #f8fafc;
+    }
+
+    .dark .nutrition-summary-item {
+      background: #374151;
+    }
+
+    .nutrition-summary-value {
+      display: block;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1f2937;
+    }
+
+    .dark .nutrition-summary-value {
+      color: white;
+    }
+
+    .nutrition-summary-label {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+
+    .dark .nutrition-summary-label {
+      color: #9ca3af;
+    }
+
+    .nutrition-progress-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .nutrition-progress-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .nutrition-progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nutrition-progress-label {
+      font-weight: 500;
+      color: #374151;
+    }
+
+    .dark .nutrition-progress-label {
+      color: #d1d5db;
+    }
+
+    .nutrition-progress-stats {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+
+    .dark .nutrition-progress-stats {
+      color: #9ca3af;
+    }
+
+    .nutrition-progress-bar {
+      height: 8px;
+      background: #e5e7eb;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .dark .nutrition-progress-bar {
+      background: #4b5563;
+    }
+
+    .nutrition-progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .nutrition-progress-fill.calories {
+      background: linear-gradient(90deg, #ef4444, #f97316);
+    }
+
+    .nutrition-progress-fill.protein {
+      background: linear-gradient(90deg, #10b981, #059669);
+    }
+
+    .nutrition-progress-fill.carbs {
+      background: linear-gradient(90deg, #f59e0b, #d97706);
+    }
+
+    .nutrition-progress-fill.fats {
+      background: linear-gradient(90deg, #8b5cf6, #7c3aed);
+    }
+
+    .nutrition-history {
+      margin-top: 1.5rem;
+    }
+
+    .nutrition-history h4 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #1f2937;
+    }
+
+    .dark .nutrition-history h4 {
+      color: white;
+    }
+
+    .nutrition-history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .nutrition-history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+    }
+
+    .dark .nutrition-history-item {
+      background: #374151;
+      border-color: #4b5563;
+    }
+
+    .nutrition-history-item-name {
+      font-weight: 500;
+      color: #1f2937;
+    }
+
+    .dark .nutrition-history-item-name {
+      color: white;
+    }
+
+    .nutrition-history-item-stats {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+
+    .dark .nutrition-history-item-stats {
+      color: #9ca3af;
+    }
+
+    /* Filter Styles */
+    .controls-section {
+      border-radius: 1rem;
+      padding: 1.5rem;
+      background: white;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      margin-bottom: 1.5rem;
+    }
+
+    .dark .controls-section {
+      background: #1f2937;
+      border-color: #374151;
+    }
+
+    .controls-header {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .controls-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+
+    .search-container {
+      position: relative;
+      flex: 1;
+      max-width: 500px;
+    }
+
+    .search-container i {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #6b7280;
+    }
+
+    .search-container input {
+      width: 100%;
+      padding: 0.75rem 2.5rem 0.75rem 2.5rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.75rem;
+      background: white;
+      transition: all 0.2s;
+    }
+
+    .dark .search-container input {
+      background: #374151;
+      border-color: #4b5563;
+      color: white;
+    }
+
+    .search-container input:focus {
+      outline: none;
+      border-color: #10b981;
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+    }
+
+    .clear-search {
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #6b7280;
+      cursor: pointer;
+      padding: 0.25rem;
+      border-radius: 0.25rem;
+    }
+
+    .clear-search:hover {
+      background: #f3f4f6;
+    }
+
+    .dark .clear-search:hover {
+      background: #4b5563;
+    }
+
+    .view-controls {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .view-btn {
+      padding: 0.5rem;
+      border: 1px solid #d1d5db;
+      background: white;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .dark .view-btn {
+      background: #374151;
+      border-color: #4b5563;
+      color: white;
+    }
+
+    .view-btn.active {
+      background: #10b981;
+      border-color: #10b981;
+      color: white;
+    }
+
+    .view-btn:hover:not(.active) {
+      background: #f3f4f6;
+    }
+
+    .dark .view-btn:hover:not(.active) {
+      background: #4b5563;
+    }
+
+    .quick-filters {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .quick-filters {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    @media (min-width: 640px) {
+      .filter-group {
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+
+    .filter-group label {
+      font-weight: 500;
+      color: #374151;
+      white-space: nowrap;
+    }
+
+    .dark .filter-group label {
+      color: #d1d5db;
+    }
+
+    .category-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .filter-btn {
+      padding: 0.5rem 1rem;
+      border: 1px solid #d1d5db;
+      background: white;
+      border-radius: 2rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.875rem;
+    }
+
+    .dark .filter-btn {
+      background: #374151;
+      border-color: #4b5563;
+      color: white;
+    }
+
+    .filter-btn.active {
+      background: #10b981;
+      border-color: #10b981;
+      color: white;
+    }
+
+    .filter-btn:hover:not(.active) {
+      background: #f3f4f6;
+    }
+
+    .dark .filter-btn:hover:not(.active) {
+      background: #4b5563;
+    }
+
+    .filter-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .advanced-filters {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .dark .advanced-filters {
+      border-top-color: #374151;
+    }
+
+    .filter-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .filter-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .filter-field label {
+      font-weight: 500;
+      color: #374151;
+      font-size: 0.875rem;
+    }
+
+    .dark .filter-field label {
+      color: #d1d5db;
+    }
+
+    .filter-field select {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      background: white;
+      transition: all 0.2s;
+    }
+
+    .dark .filter-field select {
+      background: #374151;
+      border-color: #4b5563;
+      color: white;
+    }
+
+    .filter-field select:focus {
+      outline: none;
+      border-color: #10b981;
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Skeleton Loading */
+    .skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+      border-radius: 0.5rem;
+    }
+
+    .dark .skeleton {
+      background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+      background-size: 200% 100%;
+    }
+
+    @keyframes loading {
+      0% {
+        background-position: 200% 0;
+      }
+      100% {
+        background-position: -200% 0;
+      }
+    }
+
+    /* Toast Notifications */
+    .toast-area {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      max-width: 350px;
+    }
+
+    .toast {
+      padding: 1rem;
+      border-radius: 0.75rem;
+      background: white;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      animation: slideInRight 0.3s ease-out;
+    }
+
+    .dark .toast {
+      background: #1f2937;
+      border-color: #374151;
+    }
+
+    .toast.success {
+      border-left: 4px solid #10b981;
+    }
+
+    .toast.error {
+      border-left: 4px solid #ef4444;
+    }
+
+    .toast.warning {
+      border-left: 4px solid #f59e0b;
+    }
+
+    .toast.info {
+      border-left: 4px solid #3b82f6;
+    }
+
+    /* Scroll to Top Button */
+    .scroll-top-btn {
+      position: fixed;
+      bottom: 5rem;
+      right: 1rem;
+      z-index: 40;
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      background: #10b981;
+      color: white;
+      border: none;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .scroll-top-btn:hover {
+      background: #059669;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-around;
+      padding: 0.5rem;
+      z-index: 40;
+    }
+
+    .dark .bottom-nav {
+      background: #1f2937;
+      border-color: #374151;
+    }
+
+    @media (min-width: 768px) {
+      .bottom-nav {
+        display: none;
+      }
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+      text-decoration: none;
+      color: #6b7280;
+      font-size: 0.75rem;
+    }
+
+    .nav-item.active {
+      color: #10b981;
+      background: #f0fdf4;
+    }
+
+    .dark .nav-item.active {
+      background: #052e16;
+    }
+
+    .nav-item:hover:not(.active) {
+      background: #f8fafc;
+    }
+
+    .dark .nav-item:hover:not(.active) {
+      background: #374151;
+    }
+
+    /* Shopping List Styles */
+    .shopping-list-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      transition: all 0.2s;
+    }
+
+    .dark .shopping-list-item {
+      background: #374151;
+      border-color: #4b5563;
+    }
+
+    .shopping-list-item.completed {
+      opacity: 0.6;
+      text-decoration: line-through;
+    }
+
+    .shopping-list-checkbox {
+      width: 1.25rem;
+      height: 1.25rem;
+      border: 2px solid #d1d5db;
+      border-radius: 0.375rem;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dark .shopping-list-checkbox {
+      background: #4b5563;
+      border-color: #6b7280;
+    }
+
+    .shopping-list-checkbox.checked {
+      background: #10b981;
+      border-color: #10b981;
+      color: white;
+    }
+
+    /* Meal Plan Styles */
+    .meal-plan-day {
+      border-radius: 0.75rem;
+      padding: 1rem;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      transition: all 0.2s;
+    }
+
+    .dark .meal-plan-day {
+      background: #374151;
+      border-color: #4b5563;
+    }
+
+    .meal-plan-day:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .meal-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      background: white;
+      border: 1px solid #e5e7eb;
+      margin-bottom: 0.5rem;
+    }
+
+    .dark .meal-item {
+      background: #4b5563;
+      border-color: #6b7280;
+    }
+
+    /* Star Rating */
+    .star-rating {
+      display: flex;
+      gap: 0.25rem;
+    }
+
+    .star {
+      color: #d1d5db;
+      transition: color 0.2s;
+    }
+
+    .star.filled {
+      color: #f59e0b;
+    }
+
+    /* Grid/List View */
+    .recipe-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .recipe-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .recipe-list .recipe-card {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .recipe-list .recipe-card img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+    }
+
+    .recipe-list .recipe-card-content {
+      flex: 1;
+      padding: 1rem;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+
+    .empty-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    .hero-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7));
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      color: white;
+      padding: 4rem 0;
+    }
+
+    .hero-title {
+      font-size: 3rem;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+
+    .highlight {
+      color: #10b981;
+    }
+
+    .hero-sub {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+      max-width: 600px;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .cta-btn.green {
+      background: #10b981;
+      color: white;
+    }
+
+    .cta-btn.green:hover {
+      background: #059669;
+      transform: translateY(-2px);
+    }
+
+    .cta-btn.orange {
+      background: #f59e0b;
+      color: white;
+    }
+
+    .cta-btn.orange:hover {
+      background: #d97706;
+      transform: translateY(-2px);
+    }
+
+    /* Stats Section */
+    .stats-section {
+      margin: 2rem 0;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+    }
+
+    .stat-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      background: white;
+      border: 1px solid #e5e7eb;
+      transition: all 0.3s ease;
+    }
+
+    .dark .stat-card {
+      background: #1f2937;
+      border-color: #374151;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-icon {
+      font-size: 2rem;
+    }
+
+    .stat-content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-number {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1f2937;
+    }
+
+    .dark .stat-number {
+      color: white;
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+
+    .dark .stat-label {
+      color: #9ca3af;
+    }
+
+    /* Results Header */
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .sort-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .sort-controls select {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      background: white;
+      transition: all 0.2s;
+    }
+
+    .dark .sort-controls select {
+      background: #374151;
+      border-color: #4b5563;
+      color: white;
+    }
+
+    /* Load More Section */
+    .load-more-section {
+      display: flex;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    .load-more-btn {
+      padding: 1rem 2rem;
+    }
+
+    /* Loading State */
+    .loading-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem;
+      gap: 1rem;
+    }
+
+    .loading-spinner {
+      width: 3rem;
+      height: 3rem;
+      border: 4px solid #e5e7eb;
+      border-top: 4px solid #10b981;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    /* Recently Viewed */
+    .recently-viewed {
+      margin-top: 3rem;
+    }
+
+    .recent-recipes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .hero-sub {
+        font-size: 1rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .results-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .nutrition-summary {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .daily-goals-input {
+        grid-template-columns: 1fr;
+      }
+
+      .filter-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title {
+        font-size: 1.75rem;
+      }
+
+      .hero-cta {
+        flex-direction: column;
+      }
+
+      .cta-btn {
+        justify-content: center;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .filter-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
-<body>
-  
-  <!-- ================= HEADER ================= -->
-  <header class="site-header" role="banner">
-    <div class="container header-inner">
-      <div class="header-left">
-        <button id="menuBtn" class="icon-btn hamburger" aria-label="Open menu">
-          <i data-lucide="menu"></i>
+
+<body class="bg-white text-gray-800 dark:bg-gray-950 dark:text-gray-100 font-roboto min-h-screen">
+  <!-- Header -->
+  <header class="border-b border-gray-200 dark:border-gray-800 bg-white/90 dark:bg-gray-950/90 backdrop-blur sticky top-0 z-40">
+    <div class="container mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <button id="menuBtn" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="Open menu">
+          <i data-lucide="menu" class="w-6 h-6"></i>
         </button>
-        <a href="index.html" class="logo" aria-label="Recipe Finder Home">
-          <i data-lucide="utensils" class="logo-icon"></i>
-          <span class="logo-text">
-            <strong>Recipe Finder</strong>
-            <small class="tagline">+ Nutrition Tracker</small>
+        <a href="index.html" class="flex items-center gap-2" aria-label="Spoonfull Home">
+          <i data-lucide="utensils" class="w-6 h-6 text-emerald-600"></i>
+          <span>
+            <strong class="font-poppins text-lg">Spoonfull</strong>
+            <small class="block text-xs opacity-70">Recipe + Nutrition</small>
           </span>
         </a>
       </div>
-
-      <div class="header-right">
-        <button id="darkModeToggle" class="icon-btn" aria-pressed="false" aria-label="Toggle dark mode">
-          <i data-lucide="moon"></i>
+      <div class="flex items-center gap-2">
+        <button id="darkModeToggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-pressed="false" aria-label="Toggle dark mode">
+          <i data-lucide="moon" class="w-5 h-5"></i>
         </button>
-        <a href="profile.html" id="profileBtn" class="icon-btn profile-btn" aria-label="Profile">
-          <i data-lucide="user"></i>
+        <a href="profile.html" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="Profile">
+          <i data-lucide="user" class="w-5 h-5"></i>
         </a>
       </div>
     </div>
   </header>
 
-  <!-- ================= SIDEBAR ================= -->
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-top">
-      <div class="brand profile-section">
-        <i data-lucide="user"></i>
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed inset-y-0 left-0 w-80 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 shadow-soft z-50">
+    <div class="flex items-center justify-between px-4 h-16 border-b border-gray-200 dark:border-gray-800">
+      <div class="flex items-center gap-3">
+        <i data-lucide="user" class="w-6 h-6"></i>
         <div>
-          <h2 id="sidebarName">Guest</h2>
-          <small id="sidebarEmail">Not signed in</small>
+          <h2 id="sidebarName" class="font-semibold">Guest</h2>
+          <small id="sidebarEmail" class="text-xs text-gray-500 dark:text-gray-400">Not signed in</small>
         </div>
       </div>
-      <button id="closeSidebar" class="icon-btn" aria-label="Close menu">
-        <i data-lucide="x"></i>
+      <button id="closeSidebar" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="Close menu">
+        <i data-lucide="x" class="w-5 h-5"></i>
       </button>
     </div>
-    
-    <nav>
-      <ul>
-        <li><a href="index.html" class="nav-link" data-page="index"><i data-lucide="home"></i><span>Home</span></a></li>
-        <li><a href="recipes.html" class="nav-link active" data-page="recipes"><i data-lucide="book-open"></i><span>Recipes</span></a></li>
-        <li><a href="planner.html" class="nav-link" data-page="planner"><i data-lucide="calendar"></i><span>Planner</span></a></li>
-        <li><a href="shoppinglist.html" class="nav-link" data-page="shoppinglist"><i data-lucide="shopping-cart"></i><span>Shopping List</span></a></li>
-        <li><a href="about.html" class="nav-link" data-page="about"><i data-lucide="info"></i><span>About</span></a></li>
+
+    <nav class="p-3">
+      <ul class="space-y-1">
+        <li><a href="index.html" class="nav-link"><i data-lucide="home" class="w-5 h-5"></i><span>Home</span></a></li>
+        <li><a href="recipes.html" class="nav-link active"><i data-lucide="book-open" class="w-5 h-5"></i><span>Recipes</span></a></li>
+        <li><a href="planner.html" class="nav-link"><i data-lucide="calendar" class="w-5 h-5"></i><span>Planner</span></a></li>
+        <li><a href="shopping.html" class="nav-link"><i data-lucide="shopping-cart" class="w-5 h-5"></i><span>Shopping List</span></a></li>
+        <li><a href="about.html" class="nav-link"><i data-lucide="info" class="w-5 h-5"></i><span>About</span></a></li>
       </ul>
     </nav>
-    <div class="sidebar-footer">
-      <button id="logoutBtn" class="btn btn-outline sign-out-btn">
-        <i data-lucide="log-out"></i>
-        Sign out
+
+    <div class="p-4 border-t border-gray-200 dark:border-gray-800">
+      <button id="logoutBtn" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+        <i data-lucide="log-out" class="w-5 h-5"></i> Sign out
       </button>
+    </div>
+
+    <!-- Sidebar Version Footer -->
+    <div id="sidebarVersion" class="px-4 pb-4 text-center text-xs text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-800 pt-3 opacity-0 translate-y-1">
+      <div class="flex items-center justify-center gap-1.5" data-animate="item">
+        <i data-lucide="cpu" class="w-4 h-4 text-green-500"></i>
+        <span class="font-semibold text-gray-700 dark:text-gray-300">Spoonfull</span>
+      </div>
+      <div class="mt-1 text-[11px] text-gray-400 dark:text-gray-500" data-animate="item">
+        Version <span class="font-medium text-green-600 dark:text-green-400">2.1.0</span>
+      </div>
+      <small class="block mt-1 italic text-[10px] text-gray-400 dark:text-gray-500 hover:text-green-500 transition-colors" data-animate="item">
+        Seasoned to perfection by Henry Osuagwu
+      </small>
     </div>
   </aside>
 
-  <!-- BACKDROP -->
-  <div id="backdrop" class="backdrop"></div>
+  <!-- Backdrop -->
+  <div id="backdrop" class="fixed inset-0 bg-black/50 z-40"></div>
 
   <!-- ================= HERO ================= -->
   <section class="hero" id="hero" role="banner" aria-label="Recipe Collection Introduction">
@@ -112,7 +1804,7 @@
     <div class="hero-overlay" aria-hidden="true"></div>
 
     <!-- Hero Content -->
-    <div class="container">
+    <div class="container mx-auto px-4">
       <div class="hero-content">
         <h1 class="hero-title">
           Discover <span class="highlight">Amazing Recipes</span><br class="mobile-break">
@@ -139,325 +1831,387 @@
   </section>
 
   <!-- ================= MAIN CONTENT ================= -->
-  <main class="app-container">
-    <div class="recipes-container">
-      
-      <!-- Quick Stats -->
-      <section class="stats-section">
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-icon">🍲</div>
-            <div class="stat-content">
-              <span class="stat-number">5000+</span>
-              <span class="stat-label">Recipes</span>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon">⏱️</div>
-            <div class="stat-content">
-              <span class="stat-number">15-60</span>
-              <span class="stat-label">Min Prep</span>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon">🌱</div>
-            <div class="stat-content">
-              <span class="stat-number">200+</span>
-              <span class="stat-label">Vegetarian</span>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon">⚡</div>
-            <div class="stat-content">
-              <span class="stat-number">1000+</span>
-              <span class="stat-label">Quick Meals</span>
-            </div>
+  <main class="container mx-auto px-4 py-8">
+    <!-- Quick Stats -->
+    <section class="stats-section">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">🍲</div>
+          <div class="stat-content">
+            <span class="stat-number">5000+</span>
+            <span class="stat-label">Recipes</span>
           </div>
         </div>
-      </section>
+        <div class="stat-card">
+          <div class="stat-icon">⏱️</div>
+          <div class="stat-content">
+            <span class="stat-number">15-60</span>
+            <span class="stat-label">Min Prep</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🌱</div>
+          <div class="stat-content">
+            <span class="stat-number">200+</span>
+            <span class="stat-label">Vegetarian</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⚡</div>
+          <div class="stat-content">
+            <span class="stat-number">1000+</span>
+            <span class="stat-label">Quick Meals</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
-
-      <!-- Nutrition Tracker Section -->
-<section class="nutrition-tracker-section card">
-    <div class="nutrition-tracker-header">
-        <h3>📊 Nutrition Tracker</h3>
-        <button class="btn btn-outline" onclick="nutritionTracker.resetDay()">
-            <i data-lucide="refresh-cw"></i>
-            Reset Day
+    <!-- Nutrition Tracker Section -->
+    <section class="nutrition-tracker-section mb-8">
+      <div class="nutrition-tracker-header">
+        <h3 class="text-xl font-bold">📊 Nutrition Tracker</h3>
+        <button id="resetNutritionBtn" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+          Reset Day
         </button>
-    </div>
+      </div>
 
-    <!-- Daily Goals -->
-    <div class="daily-goals-input">
+      <!-- Daily Goals -->
+      <div class="daily-goals-input">
         <div class="goal-input-group">
-            <label for="caloriesGoal">Daily Calories Goal</label>
-            <input type="number" id="caloriesGoal" class="goal-input" min="500" max="5000" step="50">
-        </div>
-        <div class="goal-input-group">
-            <label for="proteinGoal">Protein (g)</label>
-            <input type="number" id="proteinGoal" class="goal-input" min="10" max="200" step="5">
+          <label for="caloriesGoal">Daily Calories Goal</label>
+          <input type="number" id="caloriesGoal" class="goal-input" min="500" max="5000" step="50" value="2000">
         </div>
         <div class="goal-input-group">
-            <label for="carbsGoal">Carbs (g)</label>
-            <input type="number" id="carbsGoal" class="goal-input" min="50" max="500" step="10">
+          <label for="proteinGoal">Protein (g)</label>
+          <input type="number" id="proteinGoal" class="goal-input" min="10" max="200" step="5" value="50">
         </div>
         <div class="goal-input-group">
-            <label for="fatsGoal">Fats (g)</label>
-            <input type="number" id="fatsGoal" class="goal-input" min="10" max="150" step="5">
+          <label for="carbsGoal">Carbs (g)</label>
+          <input type="number" id="carbsGoal" class="goal-input" min="50" max="500" step="10" value="250">
         </div>
-    </div>
+        <div class="goal-input-group">
+          <label for="fatsGoal">Fats (g)</label>
+          <input type="number" id="fatsGoal" class="goal-input" min="10" max="150" step="5" value="70">
+        </div>
+      </div>
 
-    <!-- Nutrition Summary -->
-    <div class="nutrition-summary">
+      <!-- Nutrition Summary -->
+      <div class="nutrition-summary">
         <div class="nutrition-summary-item">
-            <span class="nutrition-summary-value" id="totalCalories">0</span>
-            <span class="nutrition-summary-label">Calories</span>
+          <span class="nutrition-summary-value" id="totalCalories">0</span>
+          <span class="nutrition-summary-label">Calories</span>
         </div>
         <div class="nutrition-summary-item">
-            <span class="nutrition-summary-value" id="totalProtein">0g</span>
-            <span class="nutrition-summary-label">Protein</span>
+          <span class="nutrition-summary-value" id="totalProtein">0g</span>
+          <span class="nutrition-summary-label">Protein</span>
         </div>
         <div class="nutrition-summary-item">
-            <span class="nutrition-summary-value" id="totalCarbs">0g</span>
-            <span class="nutrition-summary-label">Carbs</span>
+          <span class="nutrition-summary-value" id="totalCarbs">0g</span>
+          <span class="nutrition-summary-label">Carbs</span>
         </div>
         <div class="nutrition-summary-item">
-            <span class="nutrition-summary-value" id="totalFats">0g</span>
-            <span class="nutrition-summary-label">Fats</span>
+          <span class="nutrition-summary-value" id="totalFats">0g</span>
+          <span class="nutrition-summary-label">Fats</span>
         </div>
-    </div>
+      </div>
 
-    <!-- Progress Bars -->
-    <div class="nutrition-progress-bars">
+      <!-- Progress Bars -->
+      <div class="nutrition-progress-bars">
         <div class="nutrition-progress-item">
-            <div class="nutrition-progress-header">
-                <span class="nutrition-progress-label">Calories</span>
-                <span class="nutrition-progress-stats calories">0/2000 (2000 left)</span>
-            </div>
-            <div class="nutrition-progress-bar">
-                <div class="nutrition-progress-fill calories" style="width: 0%"></div>
-            </div>
+          <div class="nutrition-progress-header">
+            <span class="nutrition-progress-label">Calories</span>
+            <span class="nutrition-progress-stats calories">0/2000 (2000 left)</span>
+          </div>
+          <div class="nutrition-progress-bar">
+            <div class="nutrition-progress-fill calories" style="width: 0%"></div>
+          </div>
         </div>
         <div class="nutrition-progress-item">
-            <div class="nutrition-progress-header">
-                <span class="nutrition-progress-label">Protein</span>
-                <span class="nutrition-progress-stats protein">0/50g (50g left)</span>
-            </div>
-            <div class="nutrition-progress-bar">
-                <div class="nutrition-progress-fill protein" style="width: 0%"></div>
-            </div>
+          <div class="nutrition-progress-header">
+            <span class="nutrition-progress-label">Protein</span>
+            <span class="nutrition-progress-stats protein">0/50g (50g left)</span>
+          </div>
+          <div class="nutrition-progress-bar">
+            <div class="nutrition-progress-fill protein" style="width: 0%"></div>
+          </div>
         </div>
         <div class="nutrition-progress-item">
-            <div class="nutrition-progress-header">
-                <span class="nutrition-progress-label">Carbs</span>
-                <span class="nutrition-progress-stats carbs">0/250g (250g left)</span>
-            </div>
-            <div class="nutrition-progress-bar">
-                <div class="nutrition-progress-fill carbs" style="width: 0%"></div>
-            </div>
+          <div class="nutrition-progress-header">
+            <span class="nutrition-progress-label">Carbs</span>
+            <span class="nutrition-progress-stats carbs">0/250g (250g left)</span>
+          </div>
+          <div class="nutrition-progress-bar">
+            <div class="nutrition-progress-fill carbs" style="width: 0%"></div>
+          </div>
         </div>
         <div class="nutrition-progress-item">
-            <div class="nutrition-progress-header">
-                <span class="nutrition-progress-label">Fats</span>
-                <span class="nutrition-progress-stats fats">0/70g (70g left)</span>
-            </div>
-            <div class="nutrition-progress-bar">
-                <div class="nutrition-progress-fill fats" style="width: 0%"></div>
-            </div>
+          <div class="nutrition-progress-header">
+            <span class="nutrition-progress-label">Fats</span>
+            <span class="nutrition-progress-stats fats">0/70g (70g left)</span>
+          </div>
+          <div class="nutrition-progress-bar">
+            <div class="nutrition-progress-fill fats" style="width: 0%"></div>
+          </div>
         </div>
-    </div>
+      </div>
 
-    <!-- Today's History -->
-    <div class="nutrition-history">
-        <h4>Today's Meals</h4>
+      <!-- Today's History -->
+      <div class="nutrition-history">
+        <h4 class="text-lg font-semibold mb-4">Today's Meals</h4>
         <div class="nutrition-history-list" id="nutritionHistoryList">
-            <!-- Filled dynamically -->
+          <!-- Filled dynamically -->
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
-      <!-- Filters & Controls -->
-      <section class="controls-section card">
-        <div class="controls-header">
-          <div class="search-container">
-            <i data-lucide="search"></i>
-            <input type="search" id="searchInput" placeholder="Search recipes by name, ingredient, or category..." aria-label="Search recipes">
-            <button id="clearSearch" class="clear-search" aria-label="Clear search">
-              <i data-lucide="x"></i>
-            </button>
-          </div>
-          
-          <div class="view-controls">
-            <button id="gridViewBtn" class="view-btn active" aria-label="Grid view">
-              <i data-lucide="grid-3x3"></i>
-            </button>
-            <button id="listViewBtn" class="view-btn" aria-label="List view">
-              <i data-lucide="list"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- Quick Filters -->
-        <div class="quick-filters">
-          <div class="filter-group">
-            <label>Category:</label>
-            <div class="category-filters">
-              <button class="filter-btn active" data-category="all">All</button>
-              <button class="filter-btn" data-category="breakfast">🍳 Breakfast</button>
-              <button class="filter-btn" data-category="lunch">🥪 Lunch</button>
-              <button class="filter-btn" data-category="dinner">🍽️ Dinner</button>
-              <button class="filter-btn" data-category="dessert">🍰 Dessert</button>
-              <button class="filter-btn" data-category="vegetarian">🥬 Vegetarian</button>
-              <button class="filter-btn" data-category="quick">⚡ Quick</button>
-            </div>
-          </div>
-          
-          <div class="filter-actions">
-            <button id="favoritesToggle" class="btn btn-outline">
-              <i data-lucide="heart"></i>
-              Favorites
-            </button>
-            <button id="advancedFiltersBtn" class="btn btn-outline">
-              <i data-lucide="filter"></i>
-              More Filters
-            </button>
-          </div>
-        </div>
-
-        <!-- Advanced Filters -->
-        <div id="advancedFilters" class="advanced-filters hidden">
-          <div class="filter-row">
-            <div class="filter-field">
-              <label for="difficultyFilter">Difficulty</label>
-              <select id="difficultyFilter">
-                <option value="all">Any Difficulty</option>
-                <option value="easy">Easy</option>
-                <option value="medium">Medium</option>
-                <option value="hard">Hard</option>
-              </select>
-            </div>
-            
-            <div class="filter-field">
-              <label for="timeFilter">Max Prep Time</label>
-              <select id="timeFilter">
-                <option value="all">Any Time</option>
-                <option value="15">15 minutes</option>
-                <option value="30">30 minutes</option>
-                <option value="45">45 minutes</option>
-                <option value="60">60+ minutes</option>
-              </select>
-            </div>
-            
-            <div class="filter-field">
-              <label for="caloriesFilter">Max Calories</label>
-              <select id="caloriesFilter">
-                <option value="all">Any Calories</option>
-                <option value="300">300 cal</option>
-                <option value="500">500 cal</option>
-                <option value="700">700 cal</option>
-                <option value="1000">1000+ cal</option>
-              </select>
-            </div>
-          </div>
-          
-          <div class="filter-actions">
-            <button id="applyFilters" class="btn btn-primary">
-              <i data-lucide="check"></i>
-              Apply Filters
-            </button>
-            <button id="resetFilters" class="btn btn-outline">
-              <i data-lucide="refresh-cw"></i>
-              Reset All
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <!-- Results Header -->
-      <section class="results-header">
-        <h2 id="resultsHeading">Recipes (<span id="resultCount">0</span>)</h2>
-        <div class="sort-controls">
-          <label for="sortSelect">Sort by:</label>
-          <select id="sortSelect">
-            <option value="popular">Most Popular</option>
-            <option value="newest">Newest First</option>
-            <option value="calories">Calories (Low to High)</option>
-            <option value="time">Prep Time (Shortest First)</option>
-            <option value="rating">Highest Rated</option>
-          </select>
-        </div>
-      </section>
-
-      <!-- Recipes Grid/List -->
-      <section class="recipes-section">
-        <div id="loadingState" class="loading-state">
-          <div class="loading-spinner"></div>
-          <p>Loading delicious recipes...</p>
+    <!-- Filters & Controls -->
+    <section class="controls-section mb-8">
+      <div class="controls-header">
+        <div class="search-container">
+          <i data-lucide="search"></i>
+          <input type="search" id="searchInput" placeholder="Search recipes by name, ingredient, or category..." aria-label="Search recipes">
+          <button id="clearSearch" class="clear-search" aria-label="Clear search">
+            <i data-lucide="x"></i>
+          </button>
         </div>
         
-        <div id="emptyState" class="empty-state card hidden">
-          <div class="empty-illustration">
-            <i data-lucide="chef-hat" class="empty-icon"></i>
+        <div class="view-controls">
+          <button id="gridViewBtn" class="view-btn active" aria-label="Grid view">
+            <i data-lucide="grid-3x3"></i>
+          </button>
+          <button id="listViewBtn" class="view-btn" aria-label="List view">
+            <i data-lucide="list"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Filters -->
+      <div class="quick-filters">
+        <div class="filter-group">
+          <label>Category:</label>
+          <div class="category-filters">
+            <button class="filter-btn active" data-category="all">All</button>
+            <button class="filter-btn" data-category="breakfast">🍳 Breakfast</button>
+            <button class="filter-btn" data-category="lunch">🥪 Lunch</button>
+            <button class="filter-btn" data-category="dinner">🍽️ Dinner</button>
+            <button class="filter-btn" data-category="dessert">🍰 Dessert</button>
+            <button class="filter-btn" data-category="vegetarian">🥬 Vegetarian</button>
+            <button class="filter-btn" data-category="quick">⚡ Quick</button>
           </div>
-          <h3>No recipes found</h3>
-          <p>Try adjusting your search terms or filters to see more results.</p>
-          <button id="resetSearch" class="btn btn-primary">
+        </div>
+        
+        <div class="filter-actions">
+          <button id="favoritesToggle" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+            <i data-lucide="heart"></i>
+            Favorites
+          </button>
+          <button id="advancedFiltersBtn" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+            <i data-lucide="filter"></i>
+            More Filters
+          </button>
+        </div>
+      </div>
+
+      <!-- Advanced Filters -->
+      <div id="advancedFilters" class="advanced-filters hidden">
+        <div class="filter-row">
+          <div class="filter-field">
+            <label for="difficultyFilter">Difficulty</label>
+            <select id="difficultyFilter">
+              <option value="all">Any Difficulty</option>
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </div>
+          
+          <div class="filter-field">
+            <label for="timeFilter">Max Prep Time</label>
+            <select id="timeFilter">
+              <option value="all">Any Time</option>
+              <option value="15">15 minutes</option>
+              <option value="30">30 minutes</option>
+              <option value="45">45 minutes</option>
+              <option value="60">60+ minutes</option>
+            </select>
+          </div>
+          
+          <div class="filter-field">
+            <label for="caloriesFilter">Max Calories</label>
+            <select id="caloriesFilter">
+              <option value="all">Any Calories</option>
+              <option value="300">300 cal</option>
+              <option value="500">500 cal</option>
+              <option value="700">700 cal</option>
+              <option value="1000">1000+ cal</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="filter-actions">
+          <button id="applyFilters" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-colors">
+            <i data-lucide="check"></i>
+            Apply Filters
+          </button>
+          <button id="resetFilters" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
             <i data-lucide="refresh-cw"></i>
-            Reset Search
+            Reset All
           </button>
         </div>
-        
-        <div id="recipeList" class="recipe-grid" aria-live="polite"></div>
-        
-        <!-- Load More Button -->
-        <div class="load-more-section">
-          <button id="loadMoreBtn" class="btn btn-outline load-more-btn hidden">
-            <i data-lucide="plus"></i>
-            Load More Recipes
-          </button>
-        </div>
-      </section>
+      </div>
+    </section>
 
-    </div>
+    <!-- Results Header -->
+    <section class="results-header">
+      <h2 class="text-2xl font-bold">Recipes (<span id="resultCount">0</span>)</h2>
+      <div class="sort-controls">
+        <label for="sortSelect">Sort by:</label>
+        <select id="sortSelect">
+          <option value="popular">Most Popular</option>
+          <option value="newest">Newest First</option>
+          <option value="calories">Calories (Low to High)</option>
+          <option value="time">Prep Time (Shortest First)</option>
+          <option value="rating">Highest Rated</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- Recipes Grid/List -->
+    <section class="recipes-section">
+      <div id="loadingState" class="loading-state">
+        <div class="loading-spinner"></div>
+        <p>Loading delicious recipes...</p>
+      </div>
+      
+      <div id="emptyState" class="empty-state hidden">
+        <div class="empty-illustration">
+          <i data-lucide="chef-hat" class="empty-icon"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">No recipes found</h3>
+        <p class="text-gray-600 dark:text-gray-400 mb-4">Try adjusting your search terms or filters to see more results.</p>
+        <button id="resetSearch" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-colors">
+          <i data-lucide="refresh-cw"></i>
+          Reset Search
+        </button>
+      </div>
+      
+      <div id="recipeList" class="recipe-grid" aria-live="polite"></div>
+      
+      <!-- Load More Button -->
+      <div class="load-more-section">
+        <button id="loadMoreBtn" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors hidden">
+          <i data-lucide="plus"></i>
+          Load More Recipes
+        </button>
+      </div>
+    </section>
+
+    <!-- Recently Viewed Section -->
+    <section class="recently-viewed mt-12">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold">Recently Viewed</h2>
+        <button id="clearRecent" class="inline-flex items-center gap-2 px-3 py-1 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-sm">
+          <i data-lucide="trash-2" class="w-4 h-4"></i>
+          Clear History
+        </button>
+      </div>
+      <div id="recentRecipes" class="recent-recipes-grid">
+        <!-- Filled dynamically -->
+      </div>
+    </section>
   </main>
 
   <!-- Recipe Detail Modal -->
-  <div id="recipeModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal-content recipe-modal-content">
-      <button id="modalClose" class="modal-close">&times;</button>
-      <div id="modalBody" class="modal-body"></div>
+  <div id="recipeModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="absolute inset-0 bg-black/50" aria-hidden="true"></div>
+    <div class="modal-content relative z-10 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-soft overflow-hidden w-full max-w-4xl max-h-[90vh]">
+      <div class="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-gray-200 dark:border-gray-800">
+        <h3 id="modalTitle" class="text-lg font-semibold">Recipe Details</h3>
+        <button id="modalClose" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="Close">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div id="modalBody" class="p-4 sm:p-6 overflow-y-auto">
+        <!-- Modal content will be populated by JavaScript -->
+      </div>
     </div>
   </div>
 
-  <!-- Day Selection Modal -->
-  <div id="daySelectionModal" class="modal hidden" role="dialog" aria-modal="true">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Add to Meal Plan</h3>
-        <button class="modal-close" id="cancelDaySelection">&times;</button>
+  <!-- Add to Plan Modal -->
+  <div id="planModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="planModalTitle">
+    <div class="absolute inset-0 bg-black/50" aria-hidden="true"></div>
+    <div class="modal-content relative z-10 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-soft overflow-hidden w-full max-w-md">
+      <div class="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-gray-200 dark:border-gray-800">
+        <h3 id="planModalTitle" class="text-lg font-semibold">Add to Meal Plan</h3>
+        <button id="planModalClose" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="Close">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
       </div>
-      <div class="modal-body">
-        <p>Choose which day you'd like to add this recipe to:</p>
-        
-        <div class="days-grid-selection" id="daysGridSelection">
-          <button class="day-option" data-day="monday">Monday</button>
-          <button class="day-option" data-day="tuesday">Tuesday</button>
-          <button class="day-option" data-day="wednesday">Wednesday</button>
-          <button class="day-option" data-day="thursday">Thursday</button>
-          <button class="day-option" data-day="friday">Friday</button>
-          <button class="day-option" data-day="saturday">Saturday</button>
-          <button class="day-option" data-day="sunday">Sunday</button>
+      <div class="p-4 sm:p-6">
+        <div class="space-y-4">
+          <div>
+            <label for="planDay" class="block text-sm font-medium mb-2">Select Day:</label>
+            <select id="planDay" class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors">
+              <option value="monday">Monday</option>
+              <option value="tuesday">Tuesday</option>
+              <option value="wednesday">Wednesday</option>
+              <option value="thursday">Thursday</option>
+              <option value="friday">Friday</option>
+              <option value="saturday">Saturday</option>
+              <option value="sunday">Sunday</option>
+            </select>
+          </div>
+          <div>
+            <label for="planMealType" class="block text-sm font-medium mb-2">Meal Type:</label>
+            <select id="planMealType" class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors">
+              <option value="breakfast">Breakfast</option>
+              <option value="lunch">Lunch</option>
+              <option value="dinner">Dinner</option>
+              <option value="snack">Snack</option>
+            </select>
+          </div>
+          <div class="flex gap-3 pt-4">
+            <button id="confirmAddToPlan" class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-colors">
+              Add to Plan
+            </button>
+            <button id="cancelAddToPlan" class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+              Cancel
+            </button>
+          </div>
         </div>
-        
-        <div class="modal-actions">
-          <button class="btn btn-outline" id="cancelDaySelectionBtn">
-            <i data-lucide="x"></i>
-            Cancel
-          </button>
-          <button class="btn btn-primary" id="confirmDaySelection" disabled>
-            <i data-lucide="check"></i>
-            Add to Selected Day
-          </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shopping List Modal -->
+  <div id="shoppingModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="shoppingModalTitle">
+    <div class="absolute inset-0 bg-black/50" aria-hidden="true"></div>
+    <div class="modal-content relative z-10 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-soft overflow-hidden w-full max-w-2xl max-h-[90vh]">
+      <div class="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-gray-200 dark:border-gray-800">
+        <h3 id="shoppingModalTitle" class="text-lg font-semibold">Shopping List</h3>
+        <button id="shoppingModalClose" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="Close">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="p-4 sm:p-6">
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <h4 class="font-semibold">Ingredients</h4>
+            <div class="flex gap-2">
+              <button id="printShoppingList" class="inline-flex items-center gap-2 px-3 py-1 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-sm">
+                <i data-lucide="printer" class="w-4 h-4"></i>
+                Print
+              </button>
+              <button id="clearShoppingList" class="inline-flex items-center gap-2 px-3 py-1 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-sm">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                Clear All
+              </button>
+            </div>
+          </div>
+          <div id="shoppingListContent" class="space-y-2 max-h-96 overflow-y-auto">
+            <!-- Shopping list items will be populated here -->
+          </div>
         </div>
       </div>
     </div>
@@ -468,51 +2222,157 @@
 
   <!-- ================= BOTTOM NAV ================= -->
   <nav class="bottom-nav">
-    <a href="index.html" class="nav-item nav-link" data-page="index">
-      <i data-lucide="home"></i>
+    <a href="index.html" class="nav-item">
+      <i data-lucide="home" class="w-5 h-5"></i>
       <span>Home</span>
     </a>
-    <a href="recipes.html" class="nav-item nav-link active" data-page="recipes">
-      <i data-lucide="book-open"></i>
+    <a href="recipes.html" class="nav-item active">
+      <i data-lucide="book-open" class="w-5 h-5"></i>
       <span>Recipes</span>
     </a>
-    <a href="planner.html" class="nav-item nav-link" data-page="planner">
-      <i data-lucide="calendar"></i>
+    <a href="planner.html" class="nav-item">
+      <i data-lucide="calendar" class="w-5 h-5"></i>
       <span>Planner</span>
     </a>
-    <a href="shoppinglist.html" class="nav-item nav-link" data-page="shoppinglist">
-      <i data-lucide="shopping-cart"></i>
+    <a href="shopping.html" class="nav-item">
+      <i data-lucide="shopping-cart" class="w-5 h-5"></i>
       <span>List</span>
     </a>
-    <a href="about.html" class="nav-item nav-link" data-page="about">
-      <i data-lucide="info"></i>
+    <a href="about.html" class="nav-item">
+      <i data-lucide="info" class="w-5 h-5"></i>
       <span>About</span>
     </a>
   </nav>
-<!-- FOOTER -->
-  <footer class="footer" role="contentinfo">
-    <div class="container">
-      <div class="footer-content">
-        <div class="footer-logo">
-          <i data-lucide="utensils"></i>
-          <span>Recipe Finder</span>
+
+  <!-- Beautiful Scroll to Top Button -->
+<button id="scrollTopBtn" class="scroll-top-btn group" aria-label="Scroll to Top">
+  <i data-lucide="utensils" class="w-5 h-5 transform group-hover:scale-110 group-hover:-translate-y-0.5 transition-transform duration-200"></i>
+  <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-white bg-black/80 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+    Back to Top
+  </span>
+</button>
+
+ <!-- Professional Compact Footer -->
+    <footer class="footer footer-compact mt-12 sm:mt-16">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 sm:gap-8">
+          <!-- Brand & Description -->
+          <div class="md:col-span-2">
+            <div class="flex items-center gap-2 mb-4">
+              <i data-lucide="utensils" class="w-6 h-6 text-emerald-400"></i>
+              <span class="font-poppins text-xl font-bold text-white">Spoonfull</span>
+            </div>
+            <p class="text-gray-400 mb-6 max-w-md text-sm">
+              Your modern kitchen companion for discovering recipes, tracking nutrition, and planning meals with ease. Cook smarter, eat healthier.
+            </p>
+            <div class="flex gap-3">
+              <a href="#" class="p-2 rounded-lg bg-gray-800 hover:bg-emerald-600 transition-colors transform hover:scale-110" aria-label="Twitter">
+                <i data-lucide="twitter" class="w-4 h-4 text-gray-400"></i>
+              </a>
+              <a href="#" class="p-2 rounded-lg bg-gray-800 hover:bg-emerald-600 transition-colors transform hover:scale-110" aria-label="Instagram">
+                <i data-lucide="instagram" class="w-4 h-4 text-gray-400"></i>
+              </a>
+              <a href="#" class="p-2 rounded-lg bg-gray-800 hover:bg-emerald-600 transition-colors transform hover:scale-110" aria-label="Facebook">
+                <i data-lucide="facebook" class="w-4 h-4 text-gray-400"></i>
+              </a>
+              <a href="#" class="p-2 rounded-lg bg-gray-800 hover:bg-emerald-600 transition-colors transform hover:scale-110" aria-label="YouTube">
+                <i data-lucide="youtube" class="w-4 h-4 text-gray-400"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Product Links -->
+          <div>
+            <h4 class="text-white font-semibold mb-4 text-sm">Product</h4>
+            <ul class="space-y-2">
+              <li>
+                <a href="recipes.html" class="text-gray-400 hover:text-white transition-colors text-sm">
+                  Recipe Finder
+                </a>
+              </li>
+              <li>
+                <a href="planner.html" class="text-gray-400 hover:text-white transition-colors text-sm">
+                  Meal Planner
+                </a>
+              </li>
+              <li>
+                <a href="shopping.html" class="text-gray-400 hover:text-white transition-colors text-sm">
+                  Shopping List
+                </a>
+              </li>
+              <li>
+                <a href="nutrition.html" class="text-gray-400 hover:text-white transition-colors text-sm">
+                  Nutrition Tracker
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Support -->
+          <div>
+            <h4 class="text-white font-semibold mb-4 text-sm">Support</h4>
+            <ul class="space-y-2">
+              <li>
+                <a href="about.html" class="text-gray-400 hover:text-white transition-colors text-sm">
+                  About Us
+                </a>
+              </li>
+              <li>
+                <a href="help.html" class="text-gray-400 hover:text-white transition-colors text-sm">
+                  Help Center
+                </a>
+              </li>
+              <li>
+                <a href="privacy.html" class="text-gray-400 hover:text-white transition-colors text-sm">
+                  Privacy Policy
+                </a>
+              </li>
+              <li>
+                <a href="terms.html" class="text-gray-400 hover:text-white transition-colors text-sm">
+                  Terms of Service
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
-        <p>
-          © <span id="year"></span> Recipe Finder + Nutrition Tracker — All rights reserved.<br>
-          Built with ❤️ by Henry Osuagwu
-        </p>
+
+        <div class="border-t border-gray-800 mt-6 sm:mt-8 pt-6 sm:pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div class="flex gap-4 sm:gap-6 text-xs">
+            <a href="privacy.html" class="text-gray-400 hover:text-white transition-colors">Privacy</a>
+            <a href="terms.html" class="text-gray-400 hover:text-white transition-colors">Terms</a>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors">Cookies</a>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors">Sitemap</a>
+          </div>
+          <div class="text-gray-400 text-xs">
+            © <span id="currentYear">2025</span> 
+      <span class="font-medium text-gray-700 dark:text-gray-300">Spoonfull</span>. 
+      All rights reserved.
+          </div>
+        </div>
       </div>
-      <small id="lastModified"></small>
-    </div>
-  </footer>
+    </footer>
 
-  <!-- Scroll to Top Button -->
-  <button id="scrollTopBtn" class="scroll-top-btn" aria-label="Scroll to Top">
-    <i data-lucide="chevron-up"></i>
-  </button>
+  <!-- JavaScript Files -->
+  <script src="js/main.js"></script>
+  <script src="js/recipe-manager.js"></script>
+  
+  <script>
+    // Sidebar version animation
+    document.addEventListener('DOMContentLoaded', function() {
+      const sidebarVersion = document.getElementById('sidebarVersion');
+      if (sidebarVersion) {
+        // Add animation classes after a short delay
+        setTimeout(() => {
+          sidebarVersion.classList.add('sv-animate', 'sv-stagger');
+        }, 300);
+      }
 
-  <!-- SCRIPTS -->
-  <script src="js/main.js" defer></script>
-  <script src="js/recipes.js" defer></script>
+      // Update current year in footer
+      const currentYear = document.getElementById('currentYear');
+      if (currentYear) {
+        currentYear.textContent = new Date().getFullYear();
+      }
+    });
+  </script>
 </body>
 </html>
