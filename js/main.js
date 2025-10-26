@@ -2520,7 +2520,7 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// Sidebar Version Block Animation
+// Sidebar Version Block Animation + Mobile Popover
 (function () {
   const sidebar = document.getElementById('sidebar');
   const versionBlock = document.getElementById('sidebarVersion');
@@ -2530,6 +2530,7 @@ if ('serviceWorker' in navigator) {
 
   if (!sidebar || !versionBlock) return;
 
+  // --- Animation ---
   function animateVersionBlock() {
     versionBlock.classList.remove('sv-animate', 'sv-stagger');
     versionBlock.style.opacity = '0';
@@ -2546,18 +2547,17 @@ if ('serviceWorker' in navigator) {
     if (isOpen()) animateVersionBlock();
   }
 
-  // Animate when sidebar opens via menu button
   openBtn && openBtn.addEventListener('click', () => {
     setTimeout(triggerIfOpen, 0);
   });
 
   [closeBtn, backdrop].forEach(el => {
     el && el.addEventListener('click', () => {
-      // no animation needed on close
+      // no-op on close; animation replays next open
+      hidePopover();
     });
   });
 
-  // Detect sidebar open class changes (programmatic opens)
   const observer = new MutationObserver(mutations => {
     for (const m of mutations) {
       if (m.attributeName === 'class' && isOpen()) {
@@ -2567,15 +2567,88 @@ if ('serviceWorker' in navigator) {
   });
   observer.observe(sidebar, { attributes: true });
 
-  // Animate if sidebar already open on page load
   document.addEventListener('DOMContentLoaded', triggerIfOpen);
+
+  // --- Mobile-friendly Popover for Version Info ---
+  const versionChip = versionBlock.querySelector('.version-tooltip');
+  let popover;
+
+  function ensurePopover() {
+    if (popover) return popover;
+    popover = document.createElement('div');
+    popover.className = 'sv-popover';
+    // Read the existing title attribute for content to avoid hardcoding
+    const content = (versionChip && versionChip.getAttribute('title')) || 'Version details';
+    popover.textContent = content;
+    // Place inside sidebarVersion for proper positioning context
+    versionBlock.appendChild(popover);
+    return popover;
+  }
+
+  function showPopover() {
+    if (!versionChip) return;
+    const p = ensurePopover();
+    // Position relative to the chip
+    const chipRect = versionChip.getBoundingClientRect();
+    const blockRect = versionBlock.getBoundingClientRect();
+
+    // Anchor horizontally at chip center within versionBlock
+    const centerX = chipRect.left + chipRect.width / 2 - blockRect.left;
+    p.style.left = `${Math.max(12, Math.min(centerX, blockRect.width - 12))}px`;
+    p.classList.add('show');
+  }
+
+  function hidePopover() {
+    if (popover) popover.classList.remove('show');
+  }
+
+  // Only attach tap/popover behavior on coarse pointers (touch screens)
+  const isTouch = window.matchMedia('(pointer: coarse)').matches;
+
+  if (versionChip && isTouch) {
+    // Accessibility: make it focusable
+    versionChip.setAttribute('tabindex', '0');
+    versionChip.setAttribute('role', 'button');
+    versionChip.setAttribute('aria-haspopup', 'dialog');
+    versionChip.setAttribute('aria-expanded', 'false');
+
+    const toggle = (e) => {
+      e.preventDefault();
+      const willShow = !(popover && popover.classList.contains('show'));
+      if (willShow) {
+        showPopover();
+        versionChip.setAttribute('aria-expanded', 'true');
+      } else {
+        hidePopover();
+        versionChip.setAttribute('aria-expanded', 'false');
+      }
+    };
+
+    versionChip.addEventListener('click', toggle);
+    versionChip.addEventListener('keydown', (e) => {
+      // Enter/Space toggles
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggle(e);
+      }
+      // Escape closes
+      if (e.key === 'Escape') {
+        hidePopover();
+        versionChip.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Close when tapping outside
+    document.addEventListener('click', (e) => {
+      if (!versionBlock.contains(e.target)) {
+        hidePopover();
+        versionChip.setAttribute('aria-expanded', 'false');
+      }
+    }, true);
+
+    // Close on resize/orientation change
+    window.addEventListener('resize', hidePopover);
+    window.addEventListener('orientationchange', hidePopover);
+  }
 })();
 const CACHE_NAME = 'spoonfull-v1';
-const urlsToCache = [
-  '/',
-  '/index.html',
-  '/styles.css',
-  '/app.js',
-  '/images/icon.png',
-  '/images/icon.png'
-];
