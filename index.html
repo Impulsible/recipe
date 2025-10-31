@@ -1383,64 +1383,313 @@
     </div>
   </div>
       <!-- Weather & Seasonal Section -->
-      <section class="mb-12">
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Weather Card - FIXED EMERALD GREEN -->
-        <div class="group relative overflow-hidden rounded-2xl p-6 bg-gradient-to-br from-emerald-500 to-green-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1 border border-emerald-400/20" id="weatherCard">
-            <!-- Subtle background pattern -->
-            <div class="absolute inset-0 opacity-10">
-                <div class="absolute top-0 right-0 w-16 h-16 bg-white rounded-full -translate-y-8 translate-x-8"></div>
-                <div class="absolute bottom-0 left-0 w-12 h-12 bg-white rounded-full translate-y-6 -translate-x-6"></div>
-            </div>
-            
-            <div class="relative">
-                <div class="flex items-center justify-between mb-4">
-                    <div>
-                        <h3 class="text-lg font-semibold text-white drop-shadow-sm">Cooking Weather</h3>
-                        <p class="text-emerald-100 text-sm mt-1" id="weatherLocation">Lagos, Nigeria</p>
-                    </div>
-                    <div class="text-2xl transform transition-transform duration-300 group-hover:scale-110" id="weatherIcon">🌤️</div>
-                </div>
-                
-                <div class="mb-4">
-                    <div class="text-3xl font-bold mb-2 text-white drop-shadow" id="weatherTemp">24°C</div>
-                    <p class="text-emerald-100 font-medium" id="weatherDescription">Perfect for indoor cooking!</p>
-                </div>
-
-                <!-- Weather Details -->
-                <div class="grid grid-cols-2 gap-3 text-sm">
-                    <div class="flex items-center gap-2 text-emerald-100">
-                        <i data-lucide="wind" class="w-4 h-4"></i>
-                        <span>12 km/h</span>
-                    </div>
-                    <div class="flex items-center gap-2 text-emerald-100">
-                        <i data-lucide="droplets" class="w-4 h-4"></i>
-                        <span>65%</span>
-                    </div>
-                </div>
-
-                <div class="mt-4 flex items-center gap-2 text-sm text-emerald-100">
-                    <i data-lucide="clock" class="w-4 h-4"></i>
-                    <span>Golden hour: 6:30 PM</span>
-                </div>
-            </div>
+      <!-- Weather & Seasonal Section -->
+<section class="mb-12">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+    
+    <!-- Weather Card - Green Theme -->
+    <div class="bg-emerald-50 dark:bg-emerald-900/20 rounded-xl p-4 shadow-sm border border-emerald-200 dark:border-emerald-800" id="weatherCard">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h3 class="text-base font-semibold text-emerald-900 dark:text-emerald-100">Current Weather</h3>
+          <p class="text-emerald-700 dark:text-emerald-300 text-xs mt-1" id="weatherCity">Lagos, Nigeria</p>
         </div>
+        <div class="text-2xl text-emerald-600 dark:text-emerald-400" id="weatherIcon">🌤️</div>
+      </div>
+      
+      <div class="mb-4">
+        <div class="text-3xl font-bold text-emerald-900 dark:text-emerald-100 mb-1" id="weatherTemp">24°C</div>
+        <p class="text-emerald-700 dark:text-emerald-300 text-sm" id="weatherDescription">Perfect for indoor cooking</p>
+      </div>
 
-          <!-- Seasonal Spotlight -->
-          <div class="lg:col-span-2 rounded-2xl p-6 bg-gradient-to-br from-orange-400 to-red-500 text-white cursor-pointer" id="seasonalCard">
-            <div class="flex items-center justify-between mb-4">
-              <h3 class="text-lg font-semibold">Seasonal Spotlight</h3>
-              <div class="text-2xl">🎃</div>
-            </div>
-            <h4 class="text-xl font-bold mb-2" id="seasonalRecipe">Pumpkin Spice Delights</h4>
-            <p class="text-orange-100 mb-4">Perfect autumn recipes featuring seasonal ingredients</p>
-            <button class="inline-flex items-center gap-2 px-4 py-2 bg-white text-orange-600 rounded-lg font-semibold hover:bg-orange-50 transition-colors">
-              <i data-lucide="chef-hat" class="w-4 h-4"></i>
-              Explore Seasonal
-            </button>
+      <!-- Weather Details Grid -->
+      <div class="grid grid-cols-2 gap-3 text-xs">
+        <div class="space-y-2">
+          <div class="flex justify-between">
+            <span class="text-emerald-700 dark:text-emerald-300">Feels like</span>
+            <span class="font-medium text-emerald-900 dark:text-emerald-100" id="weatherFeelsLike">26°C</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-emerald-700 dark:text-emerald-300">High / Low</span>
+            <span class="font-medium text-emerald-900 dark:text-emerald-100" id="weatherHighLow">28° / 20°</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-emerald-700 dark:text-emerald-300">Humidity</span>
+            <span class="font-medium text-emerald-900 dark:text-emerald-100" id="weatherHumidity">65%</span>
           </div>
         </div>
-      </section>
+        <div class="space-y-2">
+          <div class="flex justify-between">
+            <span class="text-emerald-700 dark:text-emerald-300">Wind</span>
+            <span class="font-medium text-emerald-900 dark:text-emerald-100" id="weatherWind">12 km/h</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-emerald-700 dark:text-emerald-300">UV Index</span>
+            <span class="font-medium text-emerald-900 dark:text-emerald-100" id="weatherUV">Moderate</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-emerald-700 dark:text-emerald-300">Sunset</span>
+            <span class="font-medium text-emerald-900 dark:text-emerald-100" id="weatherSunset">18:45</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cooking Recommendations Card - Orange Theme -->
+    <div class="bg-amber-50 dark:bg-amber-900/20 rounded-xl p-4 shadow-sm border border-amber-200 dark:border-amber-800">
+      <div class="flex items-center gap-2 mb-4">
+        <div class="p-1.5 bg-amber-100 dark:bg-amber-800 rounded-lg">
+          <i data-lucide="chef-hat" class="w-4 h-4 text-amber-700 dark:text-amber-300"></i>
+        </div>
+        <h3 class="text-base font-semibold text-amber-900 dark:text-amber-100">Cooking Tips</h3>
+      </div>
+      
+      <div class="space-y-3">
+        <div>
+          <p class="text-amber-700 dark:text-amber-300 text-xs font-medium mb-1">Today's Tip</p>
+          <p class="text-amber-800 dark:text-amber-200 text-sm" id="cookingTip">Perfect weather for light cooking and fresh ingredients!</p>
+        </div>
+        
+        <div>
+          <p class="text-amber-700 dark:text-amber-300 text-xs font-medium mb-1">Meal Suggestion</p>
+          <p class="text-amber-800 dark:text-amber-200 text-sm" id="mealSuggestion">Try grilled vegetables or fresh salads</p>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <p class="text-amber-600 dark:text-amber-400 text-xs mb-1">Mood</p>
+            <p class="text-amber-800 dark:text-amber-200 text-sm font-medium" id="cookingMood">😊 Light</p>
+          </div>
+          <div>
+            <p class="text-amber-600 dark:text-amber-400 text-xs mb-1">Methods</p>
+            <p class="text-amber-800 dark:text-amber-200 text-sm font-medium" id="idealCooking">Grilling</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seasonal & Energy Card - Brown Theme -->
+    <div class="bg-amber-50 dark:bg-amber-900/20 rounded-xl p-4 shadow-sm border border-amber-200 dark:border-amber-800">
+      <div class="flex items-center gap-2 mb-4">
+        <div class="p-1.5 bg-amber-100 dark:bg-amber-800 rounded-lg">
+          <i data-lucide="leaf" class="w-4 h-4 text-amber-700 dark:text-amber-300"></i>
+        </div>
+        <h3 class="text-base font-semibold text-amber-900 dark:text-amber-100">Seasonal</h3>
+      </div>
+      
+      <div class="space-y-3">
+        <div>
+          <p class="text-amber-700 dark:text-amber-300 text-xs font-medium mb-1">Current Season</p>
+          <div class="flex items-center justify-between">
+            <span class="text-lg font-bold text-amber-900 dark:text-amber-100" id="currentSeason">Summer</span>
+            <div class="flex gap-1">
+              <span class="text-xs bg-amber-200 dark:bg-amber-700 px-1.5 py-0.5 rounded">🌞</span>
+              <span class="text-xs bg-amber-200 dark:bg-amber-700 px-1.5 py-0.5 rounded">🍉</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-amber-600 dark:text-amber-400 text-xs font-medium mb-2">Recipes</p>
+          <ul class="text-sm space-y-1.5" id="seasonalRecipes">
+            <li class="flex items-center gap-1.5">
+              <div class="w-1.5 h-1.5 bg-amber-500 rounded-full"></div>
+              <span class="text-amber-800 dark:text-amber-200">Watermelon Salad</span>
+            </li>
+            <li class="flex items-center gap-1.5">
+              <div class="w-1.5 h-1.5 bg-amber-500 rounded-full"></div>
+              <span class="text-amber-800 dark:text-amber-200">Fish Tacos</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <p class="text-amber-600 dark:text-amber-400 text-xs mb-1">Difficulty</p>
+            <p class="text-amber-800 dark:text-amber-200 text-sm font-medium" id="cookingDifficulty">Easy</p>
+          </div>
+          <div>
+            <p class="text-amber-600 dark:text-amber-400 text-xs mb-1">Energy</p>
+            <p class="text-amber-800 dark:text-amber-200 text-sm font-medium" id="energyLevel">High</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Seasonal Spotlight Banner - Rotating Recipes -->
+<div class="bg-gradient-to-r from-emerald-50 to-amber-50 dark:from-emerald-900/20 dark:to-amber-900/20 rounded-xl p-4 shadow-sm border border-emerald-200 dark:border-amber-800 mt-4">
+    <div class="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left">
+        <div class="flex-1 mb-3 sm:mb-0 sm:mr-4">
+            <div class="flex items-center gap-2 mb-2 justify-center sm:justify-start">
+                <div class="p-1.5 bg-emerald-100 dark:bg-emerald-800 rounded-lg">
+                    <i data-lucide="sparkles" class="w-4 h-4 text-emerald-700 dark:text-emerald-300"></i>
+                </div>
+                <h3 class="text-base font-semibold text-emerald-900 dark:text-emerald-100">Seasonal Spotlight</h3>
+            </div>
+            <h4 class="text-lg font-bold text-amber-900 dark:text-amber-100 mb-1" id="seasonalRecipeTitle">Summer Fresh Recipes</h4>
+            <p class="text-emerald-700 dark:text-emerald-300 text-sm" id="seasonalRecipeDescription">
+                Discover refreshing dishes perfect for warm weather.
+            </p>
+        </div>
+        
+        <button 
+            id="exploreSeasonalRecipes" 
+            class="inline-flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-700 transition-colors mt-2 sm:mt-0 group"
+        >
+            <i data-lucide="chef-hat" class="w-4 h-4 group-hover:rotate-12 transition-transform"></i>
+            <span>Discover Recipes</span>
+        </button>
+    </div>
+</div>
+
+<style>
+/* Smooth transitions for recipe rotation */
+#seasonalRecipeTitle, #seasonalRecipeDescription {
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Button hover effects */
+.recipe-rotate-btn {
+    transition: all 0.3s ease;
+}
+
+.recipe-rotate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+}
+
+/* Loading animation */
+@keyframes recipe-rotate {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.1); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+
+.recipe-rotating {
+    animation: recipe-rotate 1s ease-in-out;
+}
+</style>
+
+<style>
+/* Weather icon animations */
+.animate-sunny {
+    animation: sunny-pulse 2s ease-in-out infinite;
+}
+
+.animate-cloudy {
+    animation: cloudy-float 3s ease-in-out infinite;
+}
+
+.animate-rainy {
+    animation: rainy-bounce 1.5s ease-in-out infinite;
+}
+
+.animate-snowy {
+    animation: snowy-fall 4s linear infinite;
+}
+
+.animate-windy {
+    animation: windy-sway 2s ease-in-out infinite;
+}
+
+.animate-stormy {
+    animation: stormy-flash 4s ease-in-out infinite;
+}
+
+@keyframes sunny-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes cloudy-float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-2px); }
+}
+
+@keyframes rainy-bounce {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(1px); }
+}
+
+@keyframes snowy-fall {
+    0% { transform: translateY(-3px) rotate(0deg); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateY(3px) rotate(90deg); opacity: 0; }
+}
+
+@keyframes windy-sway {
+    0%, 100% { transform: rotate(-2deg); }
+    50% { transform: rotate(2deg); }
+}
+
+@keyframes stormy-flash {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+/* Color transitions for weather conditions */
+.weather-sunny {
+    background-color: rgb(254 249 195) !important;
+    border-color: rgb(253 224 71) !important;
+}
+
+.weather-cloudy {
+    background-color: rgb(241 245 249) !important;
+    border-color: rgb(148 163 184) !important;
+}
+
+.weather-rainy {
+    background-color: rgb(224 242 254) !important;
+    border-color: rgb(125 211 252) !important;
+}
+
+.weather-snowy {
+    background-color: rgb(248 250 252) !important;
+    border-color: rgb(226 232 240) !important;
+}
+
+.weather-windy {
+    background-color: rgb(240 249 255) !important;
+    border-color: rgb(186 230 253) !important;
+}
+
+.weather-stormy {
+    background-color: rgb(30 41 59) !important;
+    border-color: rgb(51 65 85) !important;
+}
+
+/* Dark mode weather conditions */
+.dark .weather-sunny {
+    background-color: rgb(120 53 15) !important;
+    border-color: rgb(180 83 9) !important;
+}
+
+.dark .weather-cloudy {
+    background-color: rgb(51 65 85) !important;
+    border-color: rgb(71 85 105) !important;
+}
+
+.dark .weather-rainy {
+    background-color: rgb(30 58 138) !important;
+    border-color: rgb(37 99 235) !important;
+}
+
+.dark .weather-snowy {
+    background-color: rgb(71 85 105) !important;
+    border-color: rgb(100 116 139) !important;
+}
+
+.dark .weather-windy {
+    background-color: rgb(12 74 110) !important;
+    border-color: rgb(56 189 248) !important;
+}
+
+.dark .weather-stormy {
+    background-color: rgb(15 23 42) !important;
+    border-color: rgb(30 41 59) !important;
+}
+</style>
 
       <!-- Featured Recipes Section -->
       <section id="featured-recipes" class="mt-8 sm:mt-12">

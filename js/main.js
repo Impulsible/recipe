@@ -838,32 +838,26 @@ const spoonfullDashboard = {
             });
     },
 
- getUserLocation: function() {
-        return new Promise((resolve, reject) => {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    position => {
-                        resolve({
-                            lat: position.coords.latitude,
-                            lon: position.coords.longitude
-                        });
-                    },
-                    error => {
-                        console.log('Location access denied, using Lagos coordinates');
-                        // Default to Lagos, Nigeria coordinates
-                        resolve({ lat: 6.5244, lon: 3.3792 });
-                    },
-                    {
-                        timeout: 10000,
-                        enableHighAccuracy: false
-                    }
-                );
-            } else {
-                console.log('Geolocation not supported, using Lagos coordinates');
-                resolve({ lat: 6.5244, lon: 3.3792 });
-            }
+initWeather: function() {
+    // Use default location without requesting permission
+    const defaultLocation = { lat: 6.5244, lon: 3.3792 };
+    
+    this.fetchWeatherData(defaultLocation)
+        .then(weatherData => {
+            this.updateWeatherDisplay(weatherData);
+            this.updateCookingRecommendations(weatherData);
+            this.updateWeatherEffects(weatherData);
+            this.updateWeatherCardStyle(weatherData.condition);
+        })
+        .catch(error => {
+            console.log('Weather API failed, using enhanced mock data:', error);
+            const mockWeather = this.getEnhancedMockWeatherData();
+            this.updateWeatherDisplay(mockWeather);
+            this.updateCookingRecommendations(mockWeather);
+            this.updateWeatherEffects(mockWeather);
+            this.updateWeatherCardStyle(mockWeather.condition);
         });
-    },
+},
 
 
     async fetchWeatherData(location) {
@@ -1421,6 +1415,208 @@ const spoonfullDashboard = {
         }
     },
 
+// Add to your spoonfullDashboard object
+seasonalRecipes: [
+    {
+        title: "Summer Fresh Recipes",
+        description: "Discover refreshing dishes perfect for warm weather. Light, vibrant, and full of seasonal flavors.",
+        category: "summer",
+        emoji: "🌞",
+        filter: "summer"
+    },
+    {
+        title: "Comfort Food Classics", 
+        description: "Warm, hearty meals that bring comfort and satisfaction. Perfect for cozy evenings.",
+        category: "comfort",
+        emoji: "🍲",
+        filter: "comfort"
+    },
+    {
+        title: "Quick & Easy Meals",
+        description: "Simple recipes ready in 30 minutes or less. Perfect for busy weeknights.",
+        category: "quick",
+        emoji: "⚡",
+        filter: "quick"
+    },
+    {
+        title: "Healthy & Nutritious",
+        description: "Wholesome dishes packed with nutrients. Eat well without sacrificing flavor.",
+        category: "healthy", 
+        emoji: "🥗",
+        filter: "healthy"
+    },
+    {
+        title: "Global Cuisine",
+        description: "Explore flavors from around the world. Expand your culinary horizons.",
+        category: "global",
+        emoji: "🌍",
+        filter: "international"
+    },
+    {
+        title: "Vegetarian Delights",
+        description: "Plant-based recipes that are satisfying and delicious. Meat-free never tasted so good.",
+        category: "vegetarian",
+        emoji: "🥦",
+        filter: "vegetarian"
+    }
+],
+
+currentRecipeIndex: 0,
+
+initSeasonalRotation: function() {
+    // Set up the button click handler
+    const exploreButton = document.getElementById('exploreSeasonalRecipes');
+    if (exploreButton) {
+        exploreButton.addEventListener('click', () => {
+            this.rotateAndLoadRecipes();
+        });
+    }
+    
+    // Initialize with first recipe
+    this.updateSeasonalDisplay();
+},
+
+rotateAndLoadRecipes: function() {
+    console.log('Rotating to next recipe category...');
+    
+    // Rotate to next recipe category
+    this.currentRecipeIndex = (this.currentRecipeIndex + 1) % this.seasonalRecipes.length;
+    
+    // Update the display
+    this.updateSeasonalDisplay();
+    
+    // Show loading state
+    const button = document.getElementById('exploreSeasonalRecipes');
+    const originalText = button.innerHTML;
+    button.innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin"></i><span>Loading...</span>';
+    button.disabled = true;
+    
+    // Load recipes for the current category
+    setTimeout(() => {
+        this.loadRecipesByCategory(this.seasonalRecipes[this.currentRecipeIndex].filter);
+        
+        // Reset button after load
+        setTimeout(() => {
+            button.innerHTML = originalText;
+            button.disabled = false;
+            lucide.createIcons(); // Re-initialize icons
+        }, 1000);
+    }, 500);
+},
+
+updateSeasonalDisplay: function() {
+    const currentRecipe = this.seasonalRecipes[this.currentRecipeIndex];
+    const titleElement = document.getElementById('seasonalRecipeTitle');
+    const descriptionElement = document.getElementById('seasonalRecipeDescription');
+    
+    if (titleElement) {
+        titleElement.textContent = currentRecipe.title;
+        // Add smooth transition
+        titleElement.style.opacity = '0';
+        setTimeout(() => {
+            titleElement.style.opacity = '1';
+            titleElement.style.transition = 'opacity 0.3s ease';
+        }, 50);
+    }
+    
+    if (descriptionElement) {
+        descriptionElement.textContent = currentRecipe.description;
+        // Add smooth transition
+        descriptionElement.style.opacity = '0';
+        setTimeout(() => {
+            descriptionElement.style.opacity = '1';
+            descriptionElement.style.transition = 'opacity 0.3s ease';
+        }, 100);
+    }
+},
+
+loadRecipesByCategory: function(category) {
+    console.log(`Loading recipes for category: ${category}`);
+    
+    try {
+        // Method 1: Use your existing recipe manager with category filter
+        if (window.spoonfullApp && window.spoonfullApp.recipeManager) {
+            if (window.spoonfullApp.recipeManager.loadRecipesByCategory) {
+                window.spoonfullApp.recipeManager.loadRecipesByCategory(category);
+            } else if (window.spoonfullApp.recipeManager.loadRecipes) {
+                window.spoonfullApp.recipeManager.loadRecipes(category);
+            } else {
+                // Redirect to recipes page with category filter
+                window.location.href = `recipes.html?category=${category}`;
+            }
+        } else {
+            // Fallback: Redirect to recipes page
+            window.location.href = `recipes.html?category=${category}`;
+        }
+        
+        this.showToast(`Loading ${category} recipes...`, 'info');
+        
+    } catch (error) {
+        console.error('Error loading recipes by category:', error);
+        this.showToast('Error loading recipes. Please try again.', 'error');
+        
+        // Fallback redirect
+        window.location.href = 'recipes.html';
+    }
+},
+
+// Alternative: Direct API call with category
+loadRecipesByCategoryFromAPI: async function(category) {
+    try {
+        const response = await fetch(`/api/recipes?category=${category}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`API error: ${response.status}`);
+        }
+        
+        const recipes = await response.json();
+        this.displayRecipes(recipes, category);
+        
+    } catch (error) {
+        console.error(`Failed to fetch ${category} recipes:`, error);
+        this.showToast(`Failed to load ${category} recipes. Please try again.`, 'error');
+    }
+},
+
+displayRecipes: function(recipes, category) {
+    console.log(`Displaying ${recipes.length} ${category} recipes`);
+    
+    if (recipes && recipes.length > 0) {
+        // If you have a recipe modal or grid, populate it here
+        if (window.spoonfullApp && window.spoonfullApp.recipeManager) {
+            window.spoonfullApp.recipeManager.displayRecipes(recipes);
+        }
+        
+        this.showToast(`Loaded ${recipes.length} ${category} recipes!`, 'success');
+    } else {
+        this.showToast(`No ${category} recipes found.`, 'warning');
+    }
+},
+
+// Update your init function to include seasonal rotation
+init: function() {
+    if (!this.isIndexPage()) {
+        console.log('Not on index page, skipping dashboard initialization');
+        return;
+    }
+
+    this.initQuickActions();
+    this.initGoals();
+    this.initWeather();
+    this.initSeasonal();
+    this.initRecommendations();
+    this.updateDashboardStats();
+    this.setupEventListeners();
+    this.initBackToTop();
+    this.initSeasonalRotation(); // Add this line
+    console.log('Dashboard initialized');
+},
+    
     loadSeasonalSampleRecipes: function(season) {
         const seasonalRecipes = {
             spring: [
