@@ -838,7 +838,7 @@ const spoonfullDashboard = {
             });
     },
 
-    getUserLocation: function() {
+ getUserLocation: function() {
         return new Promise((resolve, reject) => {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
@@ -849,19 +849,26 @@ const spoonfullDashboard = {
                         });
                     },
                     error => {
-                        // Default to New York coordinates if location access denied
-                        resolve({ lat: 40.7128, lon: -74.0060 });
+                        console.log('Location access denied, using Lagos coordinates');
+                        // Default to Lagos, Nigeria coordinates
+                        resolve({ lat: 6.5244, lon: 3.3792 });
+                    },
+                    {
+                        timeout: 10000,
+                        enableHighAccuracy: false
                     }
                 );
             } else {
-                resolve({ lat: 40.7128, lon: -74.0060 });
+                console.log('Geolocation not supported, using Lagos coordinates');
+                resolve({ lat: 6.5244, lon: 3.3792 });
             }
         });
     },
 
+
     async fetchWeatherData(location) {
         // Using OpenWeatherMap API with provided API key
-        const API_KEY = 'd4cbb6feae5a4c9e927225239253010';
+        const API_KEY = '1e8c17a9d8864e285b79664791782aa3';
         const url = `https://api.openweathermap.org/data/2.5/weather?lat=${location.lat}&lon=${location.lon}&appid=${API_KEY}&units=metric`;
         
         try {
@@ -884,13 +891,22 @@ const spoonfullDashboard = {
                 low: Math.round(data.main.temp_min),
                 precipitation: data.rain ? (data.rain['1h'] || 0) : 0,
                 uvIndex: this.estimateUVIndex(data),
-                airQuality: this.estimateAirQuality(data)
+                airQuality: this.estimateAirQuality(data),
+                sunrise: new Date(data.sys.sunrise * 1000).toLocaleTimeString(undefined, { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                }),
+                sunset: new Date(data.sys.sunset * 1000).toLocaleTimeString(undefined, { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                })
             };
         } catch (error) {
             console.error('Error fetching weather data:', error);
             throw error;
         }
     },
+
 
     getWeatherCondition: function(weatherId) {
         if (weatherId >= 200 && weatherId < 300) return 'stormy';
@@ -939,7 +955,7 @@ const spoonfullDashboard = {
                 icon: "☀️", 
                 humidity: 45, 
                 windSpeed: 12, 
-                city: "Your Location",
+                city: "Lagos, Nigeria",
                 condition: "sunny",
                 feelsLike: 24,
                 high: 26,
@@ -954,7 +970,7 @@ const spoonfullDashboard = {
                 icon: "⛅", 
                 humidity: 60, 
                 windSpeed: 8, 
-                city: "Your Location",
+                city: "Lagos, Nigeria",
                 condition: "partly-cloudy",
                 feelsLike: 17,
                 high: 20,
@@ -969,7 +985,7 @@ const spoonfullDashboard = {
                 icon: "🌤️", 
                 humidity: 50, 
                 windSpeed: 10, 
-                city: "Your Location",
+                city: "Lagos, Nigeria",
                 condition: "clear",
                 feelsLike: 26,
                 high: 28,
@@ -1098,26 +1114,7 @@ const spoonfullDashboard = {
         
         // Add current condition class
         weatherCard.classList.add(`weather-${condition}`);
-        
-        // Update background gradient based on condition
-        const gradients = {
-            sunny: 'from-yellow-100 to-orange-50 border-yellow-200',
-            cloudy: 'from-blue-50 to-gray-100 border-gray-300',
-            rainy: 'from-blue-100 to-gray-200 border-blue-300',
-            snowy: 'from-blue-50 to-indigo-100 border-indigo-200',
-            windy: 'from-gray-100 to-blue-50 border-gray-400',
-            stormy: 'from-gray-200 to-blue-200 border-gray-500',
-            'partly-cloudy': 'from-blue-50 to-gray-100 border-blue-200',
-            clear: 'from-yellow-100 to-orange-50 border-yellow-200'
-        };
-        
-        // Remove existing gradient classes
-        weatherCard.className = weatherCard.className.replace(/from-[\w-]+ to-[\w-]+/g, '');
-        weatherCard.className = weatherCard.className.replace(/bg-gradient-to-br/g, '');
-        weatherCard.className = weatherCard.className.replace(/border-[\w-]+/g, '');
-        
-        // Add new gradient and border
-        weatherCard.classList.add('bg-gradient-to-br', gradients[condition] || gradients.sunny);
+
     },
 
     animateWeatherIcon: function(condition) {

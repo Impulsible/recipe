@@ -41,63 +41,28 @@ class RecipeManager {
 
     injectAdditionalStyles() {
         const styles = `
-            /* Enhanced Recently Viewed Cards */
-            .recently-viewed .recipe-card {
-                transition: all 0.3s ease;
-                border-radius: 0.75rem;
-                overflow: hidden;
-                background: white;
-                border: 1px solid #e5e7eb;
-                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            /* Enhanced List View Styles */
+            .recipe-list {
+                display: flex;
+                flex-direction: column;
+                gap: 1.5rem;
+                max-width: 100%;
             }
 
-            .dark .recently-viewed .recipe-card {
-                background: #1f2937;
-                border-color: #374151;
-            }
-
-            .recently-viewed .recipe-card:hover {
-                transform: translateY(-4px);
-                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-            }
-
-            .recently-viewed .recipe-card img {
-                height: 120px;
-                object-fit: cover;
-                width: 100%;
-            }
-
-            .recently-viewed .recipe-card h3 {
-                font-size: 0.875rem;
-                font-weight: 600;
-                margin-bottom: 0.5rem;
-                line-height: 1.2;
-            }
-
-            .recently-viewed .recipe-card .text-xs {
-                font-size: 0.75rem;
-            }
-
-            /* Enhanced List View */
             .recipe-list .recipe-card {
                 display: flex;
                 gap: 1.5rem;
                 padding: 1.5rem;
                 background: white;
                 border-radius: 1rem;
-                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
                 border: 1px solid #e5e7eb;
                 transition: all 0.3s ease;
             }
 
-            .dark .recipe-list .recipe-card {
-                background: #1f2937;
-                border-color: #374151;
-            }
-
             .recipe-list .recipe-card:hover {
                 transform: translateY(-2px);
-                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             }
 
             .recipe-list .recipe-card > .relative {
@@ -116,6 +81,22 @@ class RecipeManager {
                 padding: 0;
             }
 
+            .recipe-list .nutrition-preview {
+                grid-template-columns: repeat(4, 1fr);
+                max-width: 300px;
+            }
+
+            .recipe-list .flex.items-center.justify-between {
+                justify-content: flex-start;
+                gap: 2rem;
+            }
+
+            /* Dark mode support */
+            .dark .recipe-list .recipe-card {
+                background: #1f2937;
+                border-color: #374151;
+            }
+
             /* Responsive list view */
             @media (max-width: 768px) {
                 .recipe-list .recipe-card {
@@ -131,6 +112,153 @@ class RecipeManager {
                 .recipe-list .recipe-card img {
                     height: 200px;
                 }
+                
+                .recipe-list .nutrition-preview {
+                    grid-template-columns: repeat(3, 1fr);
+                    max-width: 100%;
+                }
+            }
+
+            /* Enhanced Hero Section */
+            .hero-section {
+                position: relative;
+                background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                color: white;
+                padding: 4rem 1rem;
+                text-align: center;
+                overflow: hidden;
+            }
+
+            .hero-section::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" opacity="0.1"><path fill="white" d="M500,100 C700,100 900,200 900,400 C900,600 700,700 500,700 C300,700 100,600 100,400 C100,200 300,100 500,100 Z"/></svg>') no-repeat center;
+                background-size: cover;
+            }
+
+            .hero-content {
+                position: relative;
+                z-index: 2;
+                max-width: 800px;
+                margin: 0 auto;
+            }
+
+            .hero-buttons {
+                display: flex;
+                gap: 1rem;
+                justify-content: center;
+                flex-wrap: wrap;
+                margin-top: 2rem;
+            }
+
+            .hero-button {
+                padding: 0.75rem 1.5rem;
+                border-radius: 0.75rem;
+                font-weight: 600;
+                transition: all 0.3s ease;
+                border: 2px solid transparent;
+            }
+
+            .hero-button.primary {
+                background: white;
+                color: #059669;
+            }
+
+            .hero-button.secondary {
+                background: transparent;
+                color: white;
+                border-color: white;
+            }
+
+            .hero-button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+            }
+
+            /* Recipe of the Day Enhancements */
+            .recipe-of-day-card {
+                background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+                border: 1px solid #d1fae5;
+                border-radius: 1rem;
+                padding: 2rem;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .dark .recipe-of-day-card {
+                background: linear-gradient(135deg, #052e16 0%, #1f2937 100%);
+                border-color: #065f46;
+            }
+
+            .recipe-of-day-badge {
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+                background: #10b981;
+                color: white;
+                padding: 0.5rem 1rem;
+                border-radius: 2rem;
+                font-size: 0.875rem;
+                font-weight: 600;
+            }
+
+            /* Enhanced Modal Styles */
+            .modal-content {
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+
+            .modal-header {
+                position: sticky;
+                top: 0;
+                background: white;
+                z-index: 10;
+                padding: 1.5rem 2rem;
+                border-bottom: 1px solid #e5e7eb;
+            }
+
+            .dark .modal-header {
+                background: #1f2937;
+                border-color: #374151;
+            }
+
+            .modal-body {
+                padding: 2rem;
+            }
+
+            /* Print Recipe Styles */
+            @media print {
+                .modal-header,
+                .modal-footer,
+                .action-buttons {
+                    display: none !important;
+                }
+                
+                .modal-content {
+                    max-height: none;
+                    overflow: visible;
+                }
+                
+                .modal-body {
+                    padding: 0;
+                }
+            }
+
+            /* Enhanced Complexity Badges */
+            .complexity-simple {
+                background: #10b981;
+            }
+
+            .complexity-moderate {
+                background: #f59e0b;
+            }
+
+            .complexity-advanced {
+                background: #ef4444;
             }
         `;
 
@@ -152,15 +280,6 @@ class RecipeManager {
             }, 300));
         }
 
-        // Clear search button
-        const clearSearch = document.getElementById('clearSearch');
-        if (clearSearch) {
-            clearSearch.addEventListener('click', () => {
-                searchField.value = '';
-                this.performSearch('');
-            });
-        }
-
         // Favorites toggle
         const favoritesSwitch = document.getElementById('favoritesToggle');
         if (favoritesSwitch) {
@@ -169,15 +288,22 @@ class RecipeManager {
             });
         }
 
-        // Random recipe buttons
-        const randomRecipeBtn = document.getElementById('heroRandomBtn');
+        // Random recipe buttons - FIXED
+        const randomRecipeBtn = document.getElementById('randomBtnToolbar');
         if (randomRecipeBtn) {
             randomRecipeBtn.addEventListener('click', () => {
                 this.selectRandomRecipe();
             });
         }
 
-        // Hero search button
+        const heroRandomBtn = document.getElementById('heroRandomBtn');
+        if (heroRandomBtn) {
+            heroRandomBtn.addEventListener('click', () => {
+                this.selectRandomRecipe();
+            });
+        }
+
+        // Hero search button - FIXED
         const heroSearchBtn = document.getElementById('heroSearchBtn');
         if (heroSearchBtn) {
             heroSearchBtn.addEventListener('click', () => {
@@ -186,30 +312,22 @@ class RecipeManager {
         }
 
         // View controls
-        const gridViewBtn = document.getElementById('gridViewBtn');
-        const listViewBtn = document.getElementById('listViewBtn');
-        
-        if (gridViewBtn) {
-            gridViewBtn.addEventListener('click', () => {
-                this.changeDisplayMode('grid');
+        const viewControls = document.querySelectorAll('.view-btn');
+        viewControls.forEach(control => {
+            control.addEventListener('click', (e) => {
+                this.changeDisplayMode(e.target.dataset.view);
             });
-        }
-        
-        if (listViewBtn) {
-            listViewBtn.addEventListener('click', () => {
-                this.changeDisplayMode('list');
-            });
-        }
+        });
 
         // Filter buttons
         const filterControls = document.querySelectorAll('.filter-btn');
         filterControls.forEach(control => {
             control.addEventListener('click', (e) => {
-                this.applyCategoryFilter(e.target.dataset.category);
+                this.applyFilter(e.target);
             });
         });
 
-        // Recipe of the day
+        // Recipe of the day - FIXED
         const viewDailyRecipe = document.getElementById('viewRecipeOfDay');
         if (viewDailyRecipe) {
             viewDailyRecipe.addEventListener('click', () => {
@@ -225,34 +343,12 @@ class RecipeManager {
         }
 
         // Modal close handlers
-        const modalClose = document.getElementById('modalClose');
-        if (modalClose) {
-            modalClose.addEventListener('click', () => {
+        const closeModalButtons = document.querySelectorAll('.modal-close, .modal-cancel');
+        closeModalButtons.forEach(button => {
+            button.addEventListener('click', () => {
                 this.closeModalWindow();
             });
-        }
-
-        const planModalClose = document.getElementById('planModalClose');
-        if (planModalClose) {
-            planModalClose.addEventListener('click', () => {
-                this.closeModalWindow();
-            });
-        }
-
-        const cancelAddToPlan = document.getElementById('cancelAddToPlan');
-        if (cancelAddToPlan) {
-            cancelAddToPlan.addEventListener('click', () => {
-                this.closeModalWindow();
-            });
-        }
-
-        // Confirm add to plan
-        const confirmAddToPlan = document.getElementById('confirmAddToPlan');
-        if (confirmAddToPlan) {
-            confirmAddToPlan.addEventListener('click', () => {
-                this.addToMealPlan();
-            });
-        }
+        });
 
         // Close modal when clicking backdrop
         const modals = document.querySelectorAll('.modal');
@@ -264,177 +360,19 @@ class RecipeManager {
             });
         });
 
-        // Advanced filters
-        const advancedFiltersBtn = document.getElementById('advancedFiltersBtn');
-        const advancedFilters = document.getElementById('advancedFilters');
-        if (advancedFiltersBtn && advancedFilters) {
-            advancedFiltersBtn.addEventListener('click', () => {
-                advancedFilters.classList.toggle('hidden');
+        // Print recipe button
+        const printButton = document.getElementById('printRecipe');
+        if (printButton) {
+            printButton.addEventListener('click', () => {
+                this.printRecipe();
             });
         }
 
-        const applyFilters = document.getElementById('applyFilters');
-        if (applyFilters) {
-            applyFilters.addEventListener('click', () => {
-                this.applyAdvancedFilters();
-            });
-        }
-
-        const resetFilters = document.getElementById('resetFilters');
-        if (resetFilters) {
-            resetFilters.addEventListener('click', () => {
-                this.resetAllFilters();
-            });
-        }
-
-        // Load more button
-        const loadMoreBtn = document.getElementById('loadMoreBtn');
-        if (loadMoreBtn) {
-            loadMoreBtn.addEventListener('click', () => {
-                this.loadMoreRecipes();
-            });
-        }
-
-        // Reset search
-        const resetSearch = document.getElementById('resetSearch');
-        if (resetSearch) {
-            resetSearch.addEventListener('click', () => {
-                this.resetAllFilters();
-            });
-        }
-
-        // Timer functionality
-        this.setupTimerHandlers();
-
-        // Shopping list functionality
-        this.setupShoppingListHandlers();
-    }
-
-    setupTimerHandlers() {
-        const startTimer = document.getElementById('startTimer');
-        const pauseTimer = document.getElementById('pauseTimer');
-        const resetTimer = document.getElementById('resetTimer');
-        const timerDuration = document.getElementById('timerDuration');
-        const timerDisplay = document.getElementById('timerDisplay');
-        const timerModalClose = document.getElementById('timerModalClose');
-
-        let timerInterval = null;
-        let timeLeft = 45 * 60; // 45 minutes in seconds
-        let isRunning = false;
-
-        if (timerModalClose) {
-            timerModalClose.addEventListener('click', () => {
-                this.closeModalWindow();
-                this.stopTimer();
-            });
-        }
-
-        if (startTimer) {
-            startTimer.addEventListener('click', () => {
-                if (!isRunning) {
-                    this.startTimer();
-                }
-            });
-        }
-
-        if (pauseTimer) {
-            pauseTimer.addEventListener('click', () => {
-                if (isRunning) {
-                    this.pauseTimer();
-                }
-            });
-        }
-
-        if (resetTimer) {
-            resetTimer.addEventListener('click', () => {
-                this.resetTimer();
-            });
-        }
-
-        if (timerDuration) {
-            timerDuration.addEventListener('change', (e) => {
-                const minutes = parseInt(e.target.value) || 45;
-                timeLeft = minutes * 60;
-                this.updateTimerDisplay();
-            });
-        }
-
-        // Store timer methods
-        this.startTimer = () => {
-            isRunning = true;
-            startTimer.classList.add('hidden');
-            pauseTimer.classList.remove('hidden');
-            
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                this.updateTimerDisplay();
-                
-                if (timeLeft <= 0) {
-                    this.stopTimer();
-                    this.showMessage("Timer finished! Time's up!", 'success');
-                    // Play notification sound if possible
-                    if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
-                        new Notification('Timer Finished', {
-                            body: 'Your cooking timer has finished!',
-                            icon: '/images/favicon.png'
-                        });
-                    }
-                }
-            }, 1000);
-        };
-
-        this.pauseTimer = () => {
-            isRunning = false;
-            startTimer.classList.remove('hidden');
-            pauseTimer.classList.add('hidden');
-            clearInterval(timerInterval);
-        };
-
-        this.stopTimer = () => {
-            isRunning = false;
-            startTimer.classList.remove('hidden');
-            pauseTimer.classList.add('hidden');
-            clearInterval(timerInterval);
-        };
-
-        this.resetTimer = () => {
-            this.stopTimer();
-            const minutes = parseInt(timerDuration.value) || 45;
-            timeLeft = minutes * 60;
-            this.updateTimerDisplay();
-        };
-
-        this.updateTimerDisplay = () => {
-            if (timerDisplay) {
-                const minutes = Math.floor(timeLeft / 60);
-                const seconds = timeLeft % 60;
-                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            }
-        };
-    }
-
-    setupShoppingListHandlers() {
-        const shoppingModalClose = document.getElementById('shoppingModalClose');
-        const printShoppingList = document.getElementById('printShoppingList');
-        const clearShoppingList = document.getElementById('clearShoppingList');
-
-        if (shoppingModalClose) {
-            shoppingModalClose.addEventListener('click', () => {
-                this.closeModalWindow();
-            });
-        }
-
-        if (printShoppingList) {
-            printShoppingList.addEventListener('click', () => {
-                this.printShoppingList();
-            });
-        }
-
-        if (clearShoppingList) {
-            clearShoppingList.addEventListener('click', () => {
-                if (confirm('Clear entire shopping list?')) {
-                    this.clearShoppingList();
-                }
+        // Share recipe button
+        const shareButton = document.getElementById('shareRecipe');
+        if (shareButton) {
+            shareButton.addEventListener('click', () => {
+                this.shareRecipe();
             });
         }
     }
@@ -446,6 +384,7 @@ class RecipeManager {
                 behavior: 'smooth',
                 block: 'center'
             });
+            // Focus after scroll
             setTimeout(() => {
                 searchInput.focus();
             }, 500);
@@ -562,7 +501,7 @@ class RecipeManager {
     getBackupRecipes() {
         return [
             {
-                identifier: 'classic-spaghetti-carbonara',
+                identifier: '1',
                 name: 'Classic Spaghetti Carbonara',
                 imageUrl: 'https://images.unsplash.com/photo-1621996346565-e3dbc353d2e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
                 summary: 'Creamy Italian pasta with eggs, cheese, and pancetta',
@@ -570,7 +509,7 @@ class RecipeManager {
                 cookingTime: 20,
                 servingSize: 4,
                 complexity: 'Moderate',
-                category: 'dinner',
+                category: 'Main Course',
                 origin: 'Italian',
                 components: ['400g spaghetti', '200g pancetta', '4 eggs', '100g Parmesan cheese', 'Black pepper', 'Salt'],
                 steps: [
@@ -586,7 +525,7 @@ class RecipeManager {
                 totalReviews: 128
             },
             {
-                identifier: 'fresh-garden-salad',
+                identifier: '2',
                 name: 'Fresh Garden Salad',
                 imageUrl: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
                 summary: 'Healthy salad with mixed greens and vinaigrette',
@@ -594,7 +533,7 @@ class RecipeManager {
                 cookingTime: 0,
                 servingSize: 2,
                 complexity: 'Simple',
-                category: 'lunch',
+                category: 'Salad',
                 origin: 'International',
                 components: ['Mixed greens', 'Cherry tomatoes', 'Cucumber', 'Red onion', 'Olive oil', 'Lemon juice', 'Salt', 'Pepper'],
                 steps: [
@@ -609,7 +548,7 @@ class RecipeManager {
                 totalReviews: 89
             },
             {
-                identifier: 'chicken-stir-fry',
+                identifier: '3',
                 name: 'Chicken Stir Fry',
                 imageUrl: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
                 summary: 'Quick and healthy chicken stir fry with vegetables',
@@ -617,7 +556,7 @@ class RecipeManager {
                 cookingTime: 10,
                 servingSize: 3,
                 complexity: 'Simple',
-                category: 'dinner',
+                category: 'Main Course',
                 origin: 'Asian',
                 components: ['2 chicken breasts', '2 bell peppers', '1 onion', '2 cloves garlic', 'Soy sauce', 'Ginger', 'Vegetable oil'],
                 steps: [
@@ -637,20 +576,18 @@ class RecipeManager {
 
     displayRecipes() {
         const recipeContainer = document.getElementById('recipeList');
-        const emptyState = document.getElementById('emptyState');
-        const loadMoreBtn = document.getElementById('loadMoreBtn');
-        
         if (!recipeContainer) return;
 
         if (this.displayedRecipes.length === 0) {
-            recipeContainer.innerHTML = '';
-            if (emptyState) emptyState.classList.remove('hidden');
-            if (loadMoreBtn) loadMoreBtn.classList.add('hidden');
+            recipeContainer.innerHTML = `
+                <div class="col-span-3 text-center py-12">
+                    <i data-lucide="search" class="w-12 h-12 text-gray-400 mx-auto mb-4"></i>
+                    <p class="text-gray-500">No recipes match your criteria. Try adjusting your search.</p>
+                </div>
+            `;
             return;
         }
 
-        if (emptyState) emptyState.classList.add('hidden');
-        
         recipeContainer.innerHTML = this.displayedRecipes.map(recipe => 
             this.uiState.displayMode === 'grid' 
                 ? this.generateRecipeCard(recipe)
@@ -658,15 +595,6 @@ class RecipeManager {
         ).join('');
         
         this.attachCardInteractions();
-        
-        // Show/hide load more button
-        if (loadMoreBtn) {
-            if (this.pagination.hasMoreItems && !this.uiState.showFavorites) {
-                loadMoreBtn.classList.remove('hidden');
-            } else {
-                loadMoreBtn.classList.add('hidden');
-            }
-        }
         
         if (window.lucide) {
             lucide.createIcons();
@@ -1409,43 +1337,20 @@ class RecipeManager {
     }
 
     applyRecipeFilters() {
-        let filteredRecipes = [...this.recipeCollection];
-
-        // Apply category filter
-        if (this.uiState.activeCategory !== 'all') {
-            filteredRecipes = filteredRecipes.filter(recipe => 
-                recipe.category.toLowerCase() === this.uiState.activeCategory.toLowerCase()
-            );
-        }
-
-        // Apply favorites filter
         if (this.uiState.showFavorites) {
             const favoriteRecipes = JSON.parse(localStorage.getItem('favorites')) || [];
-            filteredRecipes = filteredRecipes.filter(recipe => 
+            this.displayedRecipes = this.recipeCollection.filter(recipe => 
                 favoriteRecipes.includes(recipe.identifier)
             );
+        } else {
+            this.displayedRecipes = [...this.recipeCollection];
         }
-
-        // Apply search filter
-        if (this.uiState.searchTerm) {
-            const searchTerm = this.uiState.searchTerm.toLowerCase();
-            filteredRecipes = filteredRecipes.filter(recipe => 
-                recipe.name.toLowerCase().includes(searchTerm) ||
-                recipe.summary.toLowerCase().includes(searchTerm) ||
-                recipe.components.some(ingredient => ingredient.toLowerCase().includes(searchTerm)) ||
-                recipe.labels.some(label => label.toLowerCase().includes(searchTerm))
-            );
-        }
-
-        this.displayedRecipes = filteredRecipes;
     }
 
     performSearch(searchTerm) {
         this.pagination.currentPage = 1;
         this.uiState.searchTerm = searchTerm;
-        this.applyRecipeFilters();
-        this.displayRecipes();
-        this.updateResultsCounter();
+        this.fetchRecipes(searchTerm);
     }
 
     switchFavoritesView() {
@@ -1487,96 +1392,25 @@ class RecipeManager {
         }
 
         // Update active state of view buttons
-        const gridViewBtn = document.getElementById('gridViewBtn');
-        const listViewBtn = document.getElementById('listViewBtn');
+        document.querySelectorAll('.view-btn').forEach(button => {
+            button.classList.toggle('active', button.dataset.view === viewMode);
+        });
+    }
+
+    applyFilter(button) {
+        const filterCategory = button.dataset.filterType;
+        const filterValue = button.dataset.filterValue;
         
-        if (gridViewBtn && listViewBtn) {
-            gridViewBtn.classList.toggle('active', viewMode === 'grid');
-            listViewBtn.classList.toggle('active', viewMode === 'list');
-        }
-    }
+        if (!filterCategory) return;
 
-    applyCategoryFilter(category) {
-        this.uiState.activeCategory = category;
-        this.applyRecipeFilters();
-        this.displayRecipes();
-        this.updateResultsCounter();
-    }
-
-    applyAdvancedFilters() {
-        // Get filter values
-        const difficulty = document.getElementById('difficultyFilter').value;
-        const maxTime = document.getElementById('timeFilter').value;
-        const maxCalories = document.getElementById('caloriesFilter').value;
-
-        let filteredRecipes = [...this.recipeCollection];
-
-        // Apply difficulty filter
-        if (difficulty !== 'all') {
-            filteredRecipes = filteredRecipes.filter(recipe => 
-                recipe.complexity.toLowerCase() === difficulty.toLowerCase()
-            );
-        }
-
-        // Apply time filter
-        if (maxTime !== 'all') {
-            const maxTimeNum = parseInt(maxTime);
-            filteredRecipes = filteredRecipes.filter(recipe => 
-                (recipe.preparationTime + (recipe.cookingTime || 0)) <= maxTimeNum
-            );
-        }
-
-        // Apply calories filter
-        if (maxCalories !== 'all') {
-            const maxCaloriesNum = parseInt(maxCalories);
-            filteredRecipes = filteredRecipes.filter(recipe => 
-                recipe.nutritionalInfo.energy <= maxCaloriesNum
-            );
-        }
-
-        this.displayedRecipes = filteredRecipes;
-        this.displayRecipes();
-        this.updateResultsCounter();
-        this.showMessage('Advanced filters applied', 'success');
-    }
-
-    resetAllFilters() {
-        // Reset category filters
-        document.querySelectorAll('.filter-btn').forEach(btn => {
+        // Toggle active state
+        document.querySelectorAll(`[data-filter-type="${filterCategory}"]`).forEach(btn => {
             btn.classList.remove('active');
         });
-        document.querySelector('[data-category="all"]').classList.add('active');
-        
-        // Reset advanced filters
-        document.getElementById('difficultyFilter').value = 'all';
-        document.getElementById('timeFilter').value = 'all';
-        document.getElementById('caloriesFilter').value = 'all';
-        
-        // Reset search
-        document.getElementById('searchInput').value = '';
-        
-        // Reset UI state
-        this.uiState.activeCategory = 'all';
-        this.uiState.searchTerm = '';
-        this.uiState.showFavorites = false;
-        
-        // Reset favorites button
-        const favoritesSwitch = document.getElementById('favoritesToggle');
-        if (favoritesSwitch) {
-            favoritesSwitch.classList.remove('active');
-            favoritesSwitch.innerHTML = '<i data-lucide="heart" class="w-4 h-4"></i> Favorites';
-        }
-        
-        // Apply filters and refresh
-        this.applyRecipeFilters();
-        this.displayRecipes();
-        this.updateResultsCounter();
-        this.showMessage('All filters reset', 'info');
-    }
+        button.classList.add('active');
 
-    loadMoreRecipes() {
-        this.pagination.currentPage++;
-        this.fetchRecipes(this.uiState.searchTerm);
+        // Apply filter
+        this.applyRecipeFilters();
     }
 
     openModalWindow(modal) {
@@ -1601,43 +1435,6 @@ class RecipeManager {
             this.selectedRecipe = recipe;
             this.openModalWindow(modal);
         }
-    }
-
-    addToMealPlan() {
-        if (!this.selectedRecipe) return;
-
-        const day = document.getElementById('planDay').value;
-        const mealType = document.getElementById('planMealType').value;
-
-        // Get existing meal plan
-        const mealPlan = JSON.parse(localStorage.getItem('spoonfull_mealPlan')) || {};
-
-        // Initialize day if not exists
-        if (!mealPlan[day]) {
-            mealPlan[day] = {};
-        }
-
-        // Initialize meal type if not exists
-        if (!mealPlan[day][mealType]) {
-            mealPlan[day][mealType] = [];
-        }
-
-        // Add recipe to meal plan
-        mealPlan[day][mealType].push({
-            id: this.selectedRecipe.identifier,
-            name: this.selectedRecipe.name,
-            image: this.selectedRecipe.imageUrl,
-            time: this.selectedRecipe.preparationTime + (this.selectedRecipe.cookingTime || 0)
-        });
-
-        // Save back to localStorage
-        localStorage.setItem('spoonfull_mealPlan', JSON.stringify(mealPlan));
-
-        this.closeModalWindow();
-        this.showMessage(`Added "${this.selectedRecipe.name}" to ${day} ${mealType}`, 'success');
-        
-        // Trigger event for other components
-        window.dispatchEvent(new CustomEvent('mealPlanUpdated'));
     }
 
     launchTimer() {
@@ -1781,7 +1578,7 @@ class RecipeManager {
         if (!recipe) return;
 
         const nutritionData = JSON.parse(localStorage.getItem('nutritionData')) || {
-            dailyTargets: { energy: 2000, protein: 50, carbohydrates: 250, fats: 70 },
+            dailyTargets: { energy: 2000, protein: 50, carbohydrates: 300, fats: 70 },
             today: { energy: 0, protein: 0, carbohydrates: 0, fats: 0 },
             history: []
         };
@@ -1813,56 +1610,39 @@ class RecipeManager {
         if (!nutritionData) return;
 
         // Update summary numbers
-        const totalCalories = document.getElementById('totalCalories');
-        const totalProtein = document.getElementById('totalProtein');
-        const totalCarbs = document.getElementById('totalCarbs');
-        const totalFats = document.getElementById('totalFats');
-
-        if (totalCalories) totalCalories.textContent = nutritionData.today.energy;
-        if (totalProtein) totalProtein.textContent = nutritionData.today.protein + 'g';
-        if (totalCarbs) totalCarbs.textContent = nutritionData.today.carbohydrates + 'g';
-        if (totalFats) totalFats.textContent = nutritionData.today.fats + 'g';
+        document.querySelectorAll('.nutrition-summary-value').forEach(element => {
+            const field = element.dataset.field;
+            if (field && nutritionData.today[field] !== undefined) {
+                element.textContent = nutritionData.today[field];
+            }
+        });
 
         // Update progress bars
-        this.updateProgressBar('calories', nutritionData.today.energy, nutritionData.dailyTargets.energy);
-        this.updateProgressBar('protein', nutritionData.today.protein, nutritionData.dailyTargets.protein);
-        this.updateProgressBar('carbs', nutritionData.today.carbohydrates, nutritionData.dailyTargets.carbohydrates);
-        this.updateProgressBar('fats', nutritionData.today.fats, nutritionData.dailyTargets.fats);
+        document.querySelectorAll('.nutrition-progress-fill').forEach(element => {
+            const field = element.dataset.field;
+            if (field && nutritionData.dailyTargets[field] > 0) {
+                const percentage = Math.min((nutritionData.today[field] / nutritionData.dailyTargets[field]) * 100, 100);
+                element.style.width = `${percentage}%`;
+                
+                const statsElement = element.closest('.nutrition-progress-item').querySelector('.nutrition-progress-stats');
+                if (statsElement) {
+                    statsElement.textContent = `${nutritionData.today[field]}/${nutritionData.dailyTargets[field]}g`;
+                }
+            }
+        });
 
         // Update history
-        this.updateNutritionHistory(nutritionData.history);
+        this.updateNutritionHistory();
     }
 
-    updateProgressBar(type, current, target) {
-        const progressFill = document.querySelector(`.nutrition-progress-fill.${type}`);
-        const progressStats = document.querySelector(`.nutrition-progress-stats.${type}`);
-        
-        if (progressFill) {
-            const percentage = Math.min((current / target) * 100, 100);
-            progressFill.style.width = `${percentage}%`;
-        }
-        
-        if (progressStats) {
-            const left = target - current;
-            progressStats.textContent = `${current}/${target}${type === 'calories' ? '' : 'g'} (${left}${type === 'calories' ? '' : 'g'} left)`;
-        }
-    }
+    updateNutritionHistory() {
+        const nutritionData = JSON.parse(localStorage.getItem('nutritionData'));
+        if (!nutritionData) return;
 
-    updateNutritionHistory(history) {
-        const historyContainer = document.getElementById('nutritionHistoryList');
+        const historyContainer = document.querySelector('.nutrition-history-list');
         if (!historyContainer) return;
 
-        if (history.length === 0) {
-            historyContainer.innerHTML = `
-                <div class="text-center py-4 text-gray-500">
-                    <i data-lucide="utensils" class="w-8 h-8 mx-auto mb-2 opacity-50"></i>
-                    <p>No meals tracked today</p>
-                </div>
-            `;
-            return;
-        }
-
-        historyContainer.innerHTML = history.map(item => `
+        historyContainer.innerHTML = nutritionData.history.map(item => `
             <div class="nutrition-history-item">
                 <span class="nutrition-history-item-name">${item.recipeName}</span>
                 <div class="nutrition-history-item-stats">
@@ -1871,10 +1651,6 @@ class RecipeManager {
                 </div>
             </div>
         `).join('');
-
-        if (window.lucide) {
-            lucide.createIcons();
-        }
     }
 
     displayRatingInterface(recipeIdentifier) {
@@ -2123,7 +1899,7 @@ class RecipeManager {
         const recentToShow = recentlyViewed.slice(-4).reverse();
         
         recentContainer.innerHTML = recentToShow.map(recipe => `
-            <div class="recipe-card" data-recipe-id="${recipe.identifier}">
+            <div class="recipe-card">
                 <div class="relative">
                     <img src="${recipe.imageUrl}" alt="${recipe.name}" class="w-full h-32 object-cover">
                 </div>
@@ -2131,8 +1907,7 @@ class RecipeManager {
                     <h3 class="font-semibold text-sm mb-1 line-clamp-2">${recipe.name}</h3>
                     <div class="flex items-center justify-between text-xs text-gray-500">
                         <span>${recipe.preparationTime} min</span>
-                        <button class="view-recent-btn text-emerald-600 hover:text-emerald-700 transition-colors"
-                                data-recipe-id="${recipe.identifier}">
+                        <button onclick="window.recipeManager.showRecipeDetails('${recipe.identifier}')" class="text-emerald-600 hover:text-emerald-700">
                             View Again
                         </button>
                     </div>
@@ -2140,73 +1915,9 @@ class RecipeManager {
             </div>
         `).join('');
 
-        // Add event listeners to view recent buttons
-        document.querySelectorAll('.view-recent-btn').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const recipeId = e.currentTarget.dataset.recipeId;
-                this.showRecipeDetails(recipeId);
-            });
-        });
-
         if (window.lucide) {
             lucide.createIcons();
         }
-    }
-
-    printShoppingList() {
-        const shoppingList = JSON.parse(localStorage.getItem('shoppingList')) || [];
-        if (shoppingList.length === 0) {
-            this.showMessage('Shopping list is empty', 'info');
-            return;
-        }
-
-        const printWindow = window.open('', '_blank');
-        printWindow.document.write(`
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>Shopping List - Spoonfull</title>
-                <style>
-                    body { font-family: Arial, sans-serif; margin: 2rem; }
-                    .header { text-align: center; margin-bottom: 2rem; }
-                    .shopping-item { padding: 0.5rem 0; border-bottom: 1px solid #eee; }
-                    .shopping-item.completed { text-decoration: line-through; opacity: 0.6; }
-                    @media print { body { margin: 1rem; } }
-                </style>
-            </head>
-            <body>
-                <div class="header">
-                    <h1>Shopping List</h1>
-                    <p>Generated on ${new Date().toLocaleDateString()}</p>
-                </div>
-                
-                <div class="shopping-list">
-                    ${shoppingList.map(item => `
-                        <div class="shopping-item ${item.completed ? 'completed' : ''}">
-                            <input type="checkbox" ${item.completed ? 'checked' : ''} disabled>
-                            <span>${item.ingredient}</span>
-                            ${item.amount ? `<span style="color: #666; margin-left: 1rem;">${item.amount}</span>` : ''}
-                        </div>
-                    `).join('')}
-                </div>
-
-                <footer style="margin-top: 3rem; text-align: center; color: #666;">
-                    <p>Printed from Spoonfull Recipe App</p>
-                </footer>
-            </body>
-            </html>
-        `);
-        printWindow.document.close();
-        printWindow.focus();
-        setTimeout(() => {
-            printWindow.print();
-            printWindow.close();
-        }, 500);
-    }
-
-    clearShoppingList() {
-        localStorage.removeItem('shoppingList');
-        this.showMessage('Shopping list cleared', 'success');
     }
 }
 
@@ -2250,6 +1961,10 @@ class RecipeProfileManager {
         
         if (sidebarName) sidebarName.textContent = this.profile.name;
         if (sidebarEmail) sidebarEmail.textContent = this.profile.email;
+
+        // Update welcome name if exists
+        const welcomeName = document.getElementById('welcomeName');
+        if (welcomeName) welcomeName.textContent = this.profile.name;
     }
 
     updateRecipeStats() {
@@ -2258,6 +1973,12 @@ class RecipeProfileManager {
         const favoritesCount = document.getElementById('favorites');
         if (favoritesCount) {
             favoritesCount.textContent = favorites.length;
+        }
+
+        // Update sidebar favorites if exists
+        const sidebarFavorites = document.getElementById('sidebarFavorites');
+        if (sidebarFavorites) {
+            sidebarFavorites.textContent = favorites.length;
         }
 
         // Update progress
@@ -2548,7 +2269,6 @@ function initSidebar() {
     const closeSidebar = document.getElementById('closeSidebar');
     const sidebar = document.getElementById('sidebar');
     const backdrop = document.getElementById('backdrop');
-    const logoutBtn = document.getElementById('logoutBtn');
 
     const toggleSidebar = (show) => {
         if (show) {
@@ -2565,16 +2285,6 @@ function initSidebar() {
     if (menuBtn) menuBtn.addEventListener('click', () => toggleSidebar(true));
     if (closeSidebar) closeSidebar.addEventListener('click', () => toggleSidebar(false));
     if (backdrop) backdrop.addEventListener('click', () => toggleSidebar(false));
-
-    // Logout functionality
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
-            if (confirm('Are you sure you want to sign out?')) {
-                localStorage.removeItem('spoonfull_profile');
-                window.location.href = 'index.html';
-            }
-        });
-    }
 }
 
 // Scroll to Top Functionality
@@ -2599,6 +2309,61 @@ function initScrollToTop() {
             });
         });
     }
+}
+
+// Modal Management (non-recipe modals)
+function initModals() {
+    // Close modals when clicking outside
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal')) {
+            closeAllModals();
+        }
+    });
+
+    // Close modals with Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeAllModals();
+        }
+    });
+
+    // Timer modal functionality
+    const timerBtn = document.getElementById('timerBtn');
+    const timerModal = document.getElementById('timerModal');
+    const timerModalClose = document.getElementById('timerModalClose');
+    
+    if (timerBtn && timerModal) {
+        timerBtn.addEventListener('click', () => {
+            timerModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+    }
+
+    if (timerModalClose && timerModal) {
+        timerModalClose.addEventListener('click', () => {
+            timerModal.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+    }
+
+    // Shopping modal functionality
+    const shoppingModal = document.getElementById('shoppingModal');
+    const shoppingModalClose = document.getElementById('shoppingModalClose');
+    
+    if (shoppingModalClose && shoppingModal) {
+        shoppingModalClose.addEventListener('click', () => {
+            shoppingModal.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+    }
+}
+
+function closeAllModals() {
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+        modal.classList.remove('active');
+    });
+    document.body.style.overflow = '';
 }
 
 // Nutrition Tracker Functions
@@ -2742,6 +2507,29 @@ function showToast(message, type = 'info') {
     }
 }
 
+// Advanced Filters Toggle
+function initAdvancedFilters() {
+    const advancedFiltersBtn = document.getElementById('advancedFiltersBtn');
+    const advancedFilters = document.getElementById('advancedFilters');
+    
+    if (advancedFiltersBtn && advancedFilters) {
+        advancedFiltersBtn.addEventListener('click', () => {
+            advancedFilters.classList.toggle('hidden');
+            const icon = advancedFiltersBtn.querySelector('i');
+            if (icon) {
+                if (advancedFilters.classList.contains('hidden')) {
+                    icon.setAttribute('data-lucide', 'filter');
+                } else {
+                    icon.setAttribute('data-lucide', 'filter-x');
+                }
+                if (window.lucide) {
+                    lucide.createIcons();
+                }
+            }
+        });
+    }
+}
+
 // Recently Viewed Recipes
 function initRecentlyViewed() {
     const clearRecentBtn = document.getElementById('clearRecent');
@@ -2760,6 +2548,28 @@ function initRecentlyViewed() {
     
     if (window.recipeManager) {
         window.recipeManager.updateRecentlyViewed();
+    }
+}
+
+// Global functions for HTML onclick handlers
+function toggleFavorite(recipeId) {
+    if (window.recipeManager) {
+        window.recipeManager.toggleFavoriteStatus(recipeId);
+    }
+}
+
+function showRecipeDetails(recipeId) {
+    if (window.recipeManager) {
+        window.recipeManager.showRecipeDetails(recipeId);
+    }
+}
+
+function addToPlan(recipeId) {
+    if (window.recipeManager) {
+        const recipe = window.recipeManager.recipeCollection.find(r => r.identifier === recipeId);
+        if (recipe) {
+            window.recipeManager.openMealPlanModal(recipe);
+        }
     }
 }
 
@@ -2782,7 +2592,9 @@ document.addEventListener('DOMContentLoaded', function() {
     initDarkMode();
     initSidebar();
     initScrollToTop();
+    initModals();
     initNutritionTracker();
+    initAdvancedFilters();
     initRecentlyViewed();
 
     // Sidebar version animation
@@ -2824,4 +2636,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Make functions available globally
+window.toggleFavorite = toggleFavorite;
+window.showRecipeDetails = showRecipeDetails;
+window.addToPlan = addToPlan;
 window.showToast = showToast;

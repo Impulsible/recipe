@@ -1130,19 +1130,18 @@
     </button>
   </div>
 
-   <!-- Sidebar Version Footer -->
-    <div id="sidebarVersion" class="px-4 pb-4 text-center text-xs text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-800 pt-3 opacity-0 translate-y-1">
-      <div class="flex items-center justify-center gap-1.5" data-animate="item">
-        <i data-lucide="cpu" class="w-4 h-4 text-green-500"></i>
-        <span class="font-semibold text-gray-700 dark:text-gray-300">Spoonfull</span>
-      </div>
-      <div class="mt-1 text-[11px] text-gray-400 dark:text-gray-500" data-animate="item">
-        Version <span class="font-medium text-green-600 dark:text-green-400">2.1.0</span>
-      </div>
-      <small class="block mt-1 italic text-[10px] text-gray-400 dark:text-gray-500 hover:text-green-500 transition-colors" data-animate="item">
-        Seasoned to perfection by Henry Osuagwu
-      </small>
+  <div id="sidebarVersion" class="px-4 pb-4 text-center text-xs text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-800 pt-3 opacity-0 translate-y-1">
+    <div class="flex items-center justify-center gap-1.5" data-animate="item">
+      <i data-lucide="cpu" class="w-4 h-4 text-green-500"></i>
+      <span class="font-semibold text-gray-700 dark:text-gray-300">Spoonfull</span>
     </div>
+    <div class="mt-1 text-[11px] text-gray-400 dark:text-gray-500" data-animate="item">
+      Version <span class="font-medium text-green-600 dark:text-green-400">2.1.0</span>
+    </div>
+    <small class="block mt-1 italic text-[10px] text-gray-400 dark:text-gray-500 hover:text-green-500 transition-colors" data-animate="item">
+      Seasoned to perfection by Henry Osuagwu
+    </small>
+  </div>
 </aside>
 
     <!-- Backdrop -->
@@ -1385,20 +1384,47 @@
   </div>
       <!-- Weather & Seasonal Section -->
       <section class="mb-12">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <!-- Weather Card -->
-          <div class="rounded-2xl p-6 bg-gradient-to-br from-blue-500 to-purple-600 text-white cursor-pointer" id="weatherCard">
-            <div class="flex items-center justify-between mb-4">
-              <h3 class="text-lg font-semibold">Cooking Weather</h3>
-              <div id="weatherIcon">🌤️</div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Weather Card - FIXED EMERALD GREEN -->
+        <div class="group relative overflow-hidden rounded-2xl p-6 bg-gradient-to-br from-emerald-500 to-green-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1 border border-emerald-400/20" id="weatherCard">
+            <!-- Subtle background pattern -->
+            <div class="absolute inset-0 opacity-10">
+                <div class="absolute top-0 right-0 w-16 h-16 bg-white rounded-full -translate-y-8 translate-x-8"></div>
+                <div class="absolute bottom-0 left-0 w-12 h-12 bg-white rounded-full translate-y-6 -translate-x-6"></div>
             </div>
-            <div class="text-3xl font-bold mb-2" id="weatherTemp">24°C</div>
-            <p class="text-blue-100" id="weatherDescription">Perfect for indoor cooking!</p>
-            <div class="mt-4 flex items-center gap-2 text-sm">
-              <i data-lucide="clock" class="w-4 h-4"></i>
-              <span>Golden hour: 6:30 PM</span>
+            
+            <div class="relative">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h3 class="text-lg font-semibold text-white drop-shadow-sm">Cooking Weather</h3>
+                        <p class="text-emerald-100 text-sm mt-1" id="weatherLocation">Lagos, Nigeria</p>
+                    </div>
+                    <div class="text-2xl transform transition-transform duration-300 group-hover:scale-110" id="weatherIcon">🌤️</div>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="text-3xl font-bold mb-2 text-white drop-shadow" id="weatherTemp">24°C</div>
+                    <p class="text-emerald-100 font-medium" id="weatherDescription">Perfect for indoor cooking!</p>
+                </div>
+
+                <!-- Weather Details -->
+                <div class="grid grid-cols-2 gap-3 text-sm">
+                    <div class="flex items-center gap-2 text-emerald-100">
+                        <i data-lucide="wind" class="w-4 h-4"></i>
+                        <span>12 km/h</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-emerald-100">
+                        <i data-lucide="droplets" class="w-4 h-4"></i>
+                        <span>65%</span>
+                    </div>
+                </div>
+
+                <div class="mt-4 flex items-center gap-2 text-sm text-emerald-100">
+                    <i data-lucide="clock" class="w-4 h-4"></i>
+                    <span>Golden hour: 6:30 PM</span>
+                </div>
             </div>
-          </div>
+        </div>
 
           <!-- Seasonal Spotlight -->
           <div class="lg:col-span-2 rounded-2xl p-6 bg-gradient-to-br from-orange-400 to-red-500 text-white cursor-pointer" id="seasonalCard">
@@ -1439,6 +1465,8 @@
             </div>
           </div>
         </div>
+
+        
 
         <div id="recipeList" class="recipe-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6" aria-live="polite">
           <!-- Recipe cards will be populated by JavaScript -->
@@ -1546,7 +1574,7 @@
 </div>
 
 <!-- Beautiful Scroll to Top Button -->
-<button id="scrollTopBtn" class="scroll-top-btn group fixed bottom-8 right-8 z-40 p-3 bg-emerald-500 text-white rounded-full shadow-lg hover:bg-emerald-600 transition-all duration-300 opacity-0 translate-y-10 scale-50 pointer-events-none" aria-label="Scroll to Top">
+<button id="scrollTopBtn" class="scroll-top-btn group" aria-label="Scroll to Top">
   <i data-lucide="utensils" class="w-5 h-5 transform group-hover:scale-110 group-hover:-translate-y-0.5 transition-transform duration-200"></i>
   <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-white bg-black/80 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
     Back to Top
